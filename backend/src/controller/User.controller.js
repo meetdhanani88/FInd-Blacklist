@@ -12,9 +12,9 @@ exports.SignUp = (req,res) => {
         if(err) return res.status(400).json(err)
         if(user){
             const pass = 'PlayBoy'
-            const hashPass = await user.passwordBcrypt(pass)
+            
            await User.findOneAndUpdate({email :user.email},{
-                Password : hashPass  
+                Password : pass  
            })
             return res.status(200).json({
                 message : 'Successfully send Password To Admin Email'
@@ -30,34 +30,58 @@ exports.SignUp = (req,res) => {
   }
   
 };
-exports.SignIn = (req,res)=>{
-    const {email,password} = req.body
-  try {
-    User.findOne({ email: email,Role:'Admin'}).exec(async(err, user) => {
+// exports.SignIn = (req,res)=>{
+//     const {email,password} = req.body
+//   try {
+//     User.findOne({ email: email,Role:'Admin'}).exec(async(err, user) => {
         
-        if(err) return res.status(400).json(err)
-        if(user){
-            if(user.Password === password){
-                const token = await jwt.sign({user:user},process.env.JWT_KEY,{expiresIn:'1d'})
-                return res.status(200).json({
-                    message : 'Login Successfully..',
-                    user : user,
-                    token : token
-                })
-            }else{
-                return res.status(400).json({
-                    message : 'Password Is Wrong'
+//         if(err) return res.status(400).json(err)
+//         if(user){
+//             if(user.Password === password){
+//                 const token = await jwt.sign({user:user},process.env.JWT_KEY,{expiresIn:'1d'})
+//                 return res.status(200).json({
+//                     message: 'Successfully send Password To Admin Email'
+//                 })
+//             } else {
+//                 return res.status(404).json({
+//                     message: 'You are not Allow for Admin Access'
+//                 })
+//             }
+//         });
+//     } catch (err) {
+//         return res.status(400).json(err)
+//     }
+
+// };
+exports.SignIn = (req, res) => {
+    const { email, password } = req.body
+    try {
+        User.findOne({ email: email, Role: 'Admin' }).exec(async (err, user) => {
+
+            if (err) return res.status(400).json(err)
+            if (user) {
+                
+                if (user.Password === password) {
+                    const token = await jwt.sign({ user: user }, process.env.JWT_KEY, { expiresIn: '1d' })
+                    return res.status(200).json({
+                        message: 'Login Successfully',
+                        user: user,
+                        token: token
+                    })
+                } else {
+                    return res.status(400).json({
+                        message: 'Password Is Wrong'
+                    })
+                }
+            } else {
+                return res.status(404).json({
+                    message: 'You are not Allow for Admin Access'
                 })
             }
-        }else{
-            return res.status(404).json({
-                message : 'You are not Allow for Admin Access'
-            })
-        }
-    });
-  }catch(err){
-      return res.status(400).json(err)
-  }
+        });
+    } catch (err) {
+        return res.status(400).json(err)
+    }
 }
 
 exports.ResetPassword = (req,res)=>{
