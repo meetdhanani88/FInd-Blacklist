@@ -38,15 +38,19 @@ const userSchema = new mongoose.Schema({
     },
 })
 
-userSchema.methods = {
-    passwordBcrypt : async function(password){
-        return await bcrypt.hash(this.Password,10)
-    },
-    authenticate : async function(pass){
-        return  await bcrypt.compare(pass,this.Password)
+// userSchema.methods = {
+//     passwordBcrypt : async function(password){
+//         return await bcrypt.hash(this.Password,10)
+//     },
+//     authenticate : async function(pass){
+//         return  await bcrypt.compare(pass,this.Password)
         
-    }
-}
+//     },
+//     comOldPassword : async function(pass){
+//         return await bcrypt.compare(pass,this.Password)
+//     }
+// }
+
 
 module.exports = mongoose.model('User',userSchema)
 
