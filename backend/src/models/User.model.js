@@ -41,18 +41,13 @@ const userSchema = new mongoose.Schema({
 userSchema.methods = {
     passwordBcrypt : async function(password){
         return await bcrypt.hash(this.Password,10)
+    },
+    authenticate : async function(pass){
+        return  await bcrypt.compare(pass,this.Password)
+        
     }
 }
-// userSchema.pre('findOneAndUpdate',(next)=>{
-//     console.log(this.Password);
-//     bcrypt.hash(this.Password, 10, (err, hash) => {
-//         if (err) {
-//           return next(err);
-//         }
-//         this.Password = hash;
-//         return next();
-//       });
-// })
+
 module.exports = mongoose.model('User',userSchema)
 
 
