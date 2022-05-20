@@ -30,29 +30,8 @@ exports.SignUp = (req,res) => {
   }
   
 };
-// exports.SignIn = (req,res)=>{
-//     const {email,password} = req.body
-//   try {
-//     User.findOne({ email: email,Role:'Admin'}).exec(async(err, user) => {
-        
-//         if(err) return res.status(400).json(err)
-//         if(user){
-//             if(user.Password === password){
-//                 const token = await jwt.sign({user:user},process.env.JWT_KEY,{expiresIn:'1d'})
-//                 return res.status(200).json({
-//                     message: 'Successfully send Password To Admin Email'
-//                 })
-//             } else {
-//                 return res.status(404).json({
-//                     message: 'You are not Allow for Admin Access'
-//                 })
-//             }
-//         });
-//     } catch (err) {
-//         return res.status(400).json(err)
-//     }
 
-// };
+
 exports.SignIn = (req, res) => {
     const { email, password } = req.body
     try {
