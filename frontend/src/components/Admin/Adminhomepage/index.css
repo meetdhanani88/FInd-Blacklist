@@ -1,0 +1,9 @@
+/* .activeNavoption{
+    background-color:#85F4FF;
+    color: rgba(0, 0, 0, 1);
+} */
+.active{
+    background-color:#85F4FF;
+    border-radius: 20px;
+    color: rgba(0, 0, 0, 1);
+}

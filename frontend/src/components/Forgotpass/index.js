@@ -19,14 +19,14 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import axiosInstance from '../../config';
 import { LoginAction } from '../../redux/reducersSlice/Loginslice';
-import { useNavigate } from 'react-router-dom'
-
+//import useMediaQuery from '@mui/material/useMediaQuery';
+import ForwardToInboxOutlinedIcon from '@mui/icons-material/ForwardToInboxOutlined';
 
 
 const theme = createTheme();
 
-function LogIn() {
-    const nav = useNavigate();
+function Forgotpass() {
+
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
     const Loginuser = useSelector((state) => state.Login.Loginuser);
@@ -35,6 +35,9 @@ function LogIn() {
     // const [loading, setloading] = useState(false)
     const [suceessmsg, setsuceessmsg] = useState(false)
     const [errmsg, seterrmsg] = useState(false)
+    const [EmailSent, setEmailSent] = useState(false)
+
+    //const matches = useMediaQuery('(min-width:600px)')
 
 
     //password validation
@@ -59,14 +62,23 @@ function LogIn() {
             .matches(lengthRegEx, "Must contain 6 characters!")
             .required("Required!")
     })
+    const validationSchema2 = Yup.object({
+
+        email: Yup.string().email('Invalid Email').required('email is required'),
+
+    })
 
 
 
     const postlogin = async () => {
-
         let res = await axiosInstance.post("/user/SignIn", values)
         return res.data;
     }
+    const postEmail = async () => {
+        return await new Promise((resolve, reject) => setTimeout(resolve, 1000))
+
+    }
+
 
     const { mutate, isLoading } = useMutation(postlogin, {
         onSuccess: data => {
@@ -75,8 +87,6 @@ function LogIn() {
             localStorage.setItem('token', data.token)
             setsuceessmsg(data.message)
             seterrmsg("");
-            nav("/adminhomepage")
-
         },
         onError: (data) => {
             seterrmsg(data.response.data.message);
@@ -87,6 +97,24 @@ function LogIn() {
         }
     });
 
+    const mutation = useMutation(postEmail, {
+        onSuccess: data => {
+            console.log(data);
+            setEmailSent(true);
+
+            // dispatch(LoginAction.Login(data.user));
+            // localStorage.setItem('token', data.token)
+            setsuceessmsg("Password sent on Email")
+            seterrmsg("");
+        },
+        onError: (data) => {
+            seterrmsg("Something Went Wrong. Retry!");
+            setsuceessmsg("");
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries('user Signup');
+        }
+    });
 
     const handelLogin = () => {
         console.log(values);
@@ -94,17 +122,39 @@ function LogIn() {
 
     }
 
+    const sentEmail = () => {
+        console.log(values);
+        mutation.mutate();
+    }
 
 
-    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid } = useFormik({
-        initialValues: {
 
-            email: '',
-            password: ''
-        },
-        validationSchema,
-        onSubmit: handelLogin
-    })
+    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid } = useFormik(
+
+        EmailSent ?
+            {
+                initialValues: {
+
+                    email: '',
+                    password: ''
+                },
+                validationSchema,
+                onSubmit: handelLogin
+            } :
+            {
+                initialValues: {
+
+                    email: '',
+                    password: ''
+
+                },
+                validationSchema2,
+                onSubmit: sentEmail
+            }
+
+    )
+
+
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
@@ -125,13 +175,11 @@ function LogIn() {
                         alignItems: 'center',
                     }}
                 >
-
                     <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                        <LoginRoundedIcon></LoginRoundedIcon>
+                        <ForwardToInboxOutlinedIcon></ForwardToInboxOutlinedIcon>
                     </Avatar>
-
                     <Typography component="h1" variant="h5">
-                        Log in
+                        Forget Password
                     </Typography>
 
                     {errmsg && !suceessmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
@@ -140,7 +188,7 @@ function LogIn() {
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
 
-                            <Grid item xs={12}>
+                            <Grid item xs={12} >
                                 <TextField
                                     error={(errors.email && touched.email) ? true : false}
                                     required
@@ -152,14 +200,17 @@ function LogIn() {
                                     value={values.email}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    //sx={matches ? { width: "25rem" } : { width: "26rem" }}
+                                    sx={!EmailSent ? { width: "25rem" } : {}}
+
                                 />
                             </Grid>
 
                             {errors.email && touched.email ? (
-                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.email}</Alert>
+                                <div>{errors.email}</div>
                             ) : null}
 
-                            <Grid item xs={12}>
+                            {EmailSent && <Grid item xs={12}>
                                 <TextField
                                     type='password'
                                     error={(errors.password && touched.password) ? true : false}
@@ -172,34 +223,45 @@ function LogIn() {
                                     value={values.password}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+
                                 />
                             </Grid>
+                            }
                             {errors.password && touched.password ? (
                                 <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.password}</Alert>
                             ) : null}
 
-
                         </Grid>
 
-                        <LoadingButton
+                        {!EmailSent ? <LoadingButton
                             sx={{ mt: 3, mb: 2 }}
-                            disabled={!dirty || !isValid}
-                            onClick={handelLogin}
+                            disabled={(!dirty || !isValid)}
+                            onClick={EmailSent ? handelLogin : sentEmail}
                             fullWidth
-                            loading={isLoading}
+                            loading={mutation.isLoading}
                             variant="contained"
                         >
-                            Log In
-                        </LoadingButton>
-
+                            Sent Password on Email
+                        </LoadingButton> :
+                            <LoadingButton
+                                sx={{ mt: 3, mb: 2 }}
+                                disabled={(!isValid || values.password === '')}
+                                onClick={EmailSent ? handelLogin : sentEmail}
+                                fullWidth
+                                loading={isLoading}
+                                variant="contained"
+                            >
+                                Log In
+                            </LoadingButton>
+                        }
                         <Grid container justifyContent="space-between">
                             <Grid item>
-                                <RouterLink to={"/forgotpass"} style={{
+                                <RouterLink to={"/Login"} style={{
                                     textDecoration: "none", color: "#1976d2"
                                 }}>
 
                                     <Typography paragraph>
-                                        Forgot password
+                                        Login
                                     </Typography>
                                 </RouterLink>
 
@@ -219,10 +281,9 @@ function LogIn() {
                         </Grid>
                     </Box>
                 </Box>
-
             </Container>
         </ThemeProvider>
     );
 }
 
-export default LogIn;
+export default Forgotpass;

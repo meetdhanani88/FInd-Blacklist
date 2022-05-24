@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const Loginslice = createSlice({
     name: "Login",
-    initialState: { Login: false, token: "", Loginuser: {} },
+    initialState: { Login: false, token: "", Loginuser: {}, ResetpassMsg: "" },
 
     reducers: {
         getToken(state) {
@@ -11,7 +11,10 @@ const Loginslice = createSlice({
         Login(state, action) {
             state.Login = true;
             state.Loginuser = action.payload;
-        }
+        },
+        // setResetsuccess(state, action) {
+        //     state.ResetpassMsg = action.payload
+        // }
     }
 })
 /* this function will return object(reducer && actions) */
