@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Link as RouterLink } from "react-router-dom"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -13,23 +13,24 @@ import { useFormik } from 'formik'
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import * as Yup from 'yup'
-import { useDispatch, useSelector } from "react-redux"
+import { /*useDispatch*/ useSelector } from "react-redux"
 import { useQueryClient, useMutation } from 'react-query'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import axiosInstance from '../../config';
-import { LoginAction } from '../../redux/reducersSlice/Loginslice';
-import { useNavigate } from 'react-router-dom'
-
+//import { LoginAction } from '../../redux/reducersSlice/Loginslice';
+import Toast from '../../Helper/Toast';
 
 
 const theme = createTheme();
 
-function LogIn() {
-    const nav = useNavigate();
+function ResetPass() {
+
     const queryClient = useQueryClient()
-    const dispatch = useDispatch();
+    //    const dispatch = useDispatch();
     const Loginuser = useSelector((state) => state.Login.Loginuser);
+    const navigate = useNavigate()
+
     console.log(Loginuser);
 
     // const [loading, setloading] = useState(false)
@@ -46,7 +47,35 @@ function LogIn() {
     const validationSchema = Yup.object({
 
         email: Yup.string().email('Invalid Email').required('email is required'),
-        password: Yup.string()
+
+        oldpassword: Yup.string()
+            .matches(
+                lowercaseRegEx,
+                "Must contain one lowercase alphabetical character!"
+            )
+            .matches(
+                uppercaseRegEx,
+                "Must contain one uppercase alphabetical character!"
+            )
+            .matches(numericRegEx, "Must contain one numeric character!")
+            .matches(lengthRegEx, "Must contain 6 characters!")
+            .required("Required!"),
+
+        newpassword: Yup.string()
+            .matches(
+                lowercaseRegEx,
+                "Must contain one lowercase alphabetical character!"
+            )
+            .matches(
+                uppercaseRegEx,
+                "Must contain one uppercase alphabetical character!"
+            )
+            .matches(numericRegEx, "Must contain one numeric character!")
+            .matches(lengthRegEx, "Must contain 6 characters!")
+            .required("Required!"),
+
+        confirmnewpassword: Yup.string()
+            .oneOf([Yup.ref('newpassword'), null], 'Passwords must match')
             .matches(
                 lowercaseRegEx,
                 "Must contain one lowercase alphabetical character!"
@@ -58,27 +87,35 @@ function LogIn() {
             .matches(numericRegEx, "Must contain one numeric character!")
             .matches(lengthRegEx, "Must contain 6 characters!")
             .required("Required!")
-    })
 
+    })
 
 
     const postlogin = async () => {
 
-        let res = await axiosInstance.post("/user/SignIn", values)
+        let res = await axiosInstance.post("/user/ResetPassword", {
+            email: values.email,
+            password: values.oldpassword,
+            newPassword: values.newpassword
+        })
         return res.data;
     }
 
     const { mutate, isLoading } = useMutation(postlogin, {
         onSuccess: data => {
-            console.log(data);
-            dispatch(LoginAction.Login(data.user));
-            localStorage.setItem('token', data.token)
+            console.log(data.message);
+            // dispatch(LoginAction.Login(data.user));
+            // localStorage.setItem('token', data.token)
+
             setsuceessmsg(data.message)
+            Toast({ message: `${data.message}` })
+            Toast({ message: "Login With New Password ", delay: 500 })
             seterrmsg("");
-            nav("/adminhomepage")
+            navigate("/login")
 
         },
         onError: (data) => {
+            console.log(data.response.data.message);
             seterrmsg(data.response.data.message);
             setsuceessmsg("");
         },
@@ -88,7 +125,7 @@ function LogIn() {
     });
 
 
-    const handelLogin = () => {
+    const handelReset = () => {
         console.log(values);
         mutate();
 
@@ -100,11 +137,18 @@ function LogIn() {
         initialValues: {
 
             email: '',
-            password: ''
+            oldpassword: '',
+            newpassword: "",
+            confirmnewpassword: ''
         },
         validationSchema,
-        onSubmit: handelLogin
+        onSubmit: handelReset
     })
+
+
+
+
+
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
@@ -125,13 +169,11 @@ function LogIn() {
                         alignItems: 'center',
                     }}
                 >
-
                     <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
-                        <LoginRoundedIcon></LoginRoundedIcon>
+                        <LockResetRoundedIcon></LockResetRoundedIcon>
                     </Avatar>
-
                     <Typography component="h1" variant="h5">
-                        Log in
+                        Reset Password
                     </Typography>
 
                     {errmsg && !suceessmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
@@ -162,20 +204,59 @@ function LogIn() {
                             <Grid item xs={12}>
                                 <TextField
                                     type='password'
-                                    error={(errors.password && touched.password) ? true : false}
+                                    error={(errors.oldpassword && touched.oldpassword) ? true : false}
                                     required
                                     fullWidth
-                                    id="password"
-                                    label="Password"
-                                    name="password"
-                                    autoComplete="password"
-                                    value={values.password}
+                                    id="oldpassword"
+                                    label="Enter Your Old Password"
+                                    name="oldpassword"
+                                    autoComplete="oldpassword"
+                                    value={values.oldpassword}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                 />
                             </Grid>
-                            {errors.password && touched.password ? (
-                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.password}</Alert>
+                            {errors.oldpassword && touched.oldpassword ? (
+                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.oldpassword}</Alert>
+                            ) : null}
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    type='password'
+                                    error={(errors.newpassword && touched.newpassword) ? true : false}
+                                    required
+                                    fullWidth
+                                    id="newpassword"
+                                    label="Enter Your New Password"
+                                    name="newpassword"
+                                    autoComplete="newpassword"
+                                    value={values.newpassword}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                            </Grid>
+
+                            {errors.newpassword && touched.newpassword ? (
+                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.newpassword}</Alert>
+                            ) : null}
+
+                            <Grid item xs={12}>
+                                <TextField
+                                    type='password'
+                                    error={(errors.confirmnewpassword && touched.confirmnewpassword) ? true : false}
+                                    required
+                                    fullWidth
+                                    id="confirmnewpassword"
+                                    label="Confirm Your New Password"
+                                    name="confirmnewpassword"
+                                    autoComplete="confirmnewpassword"
+                                    value={values.confirmnewpassword}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                />
+                            </Grid>
+                            {errors.confirmnewpassword && touched.confirmnewpassword ? (
+                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.confirmnewpassword}</Alert>
                             ) : null}
 
 
@@ -184,12 +265,12 @@ function LogIn() {
                         <LoadingButton
                             sx={{ mt: 3, mb: 2 }}
                             disabled={!dirty || !isValid}
-                            onClick={handelLogin}
+                            onClick={handelReset}
                             fullWidth
                             loading={isLoading}
                             variant="contained"
                         >
-                            Log In
+                            Reset Password
                         </LoadingButton>
 
                         <Grid container justifyContent="space-between">
@@ -204,13 +285,14 @@ function LogIn() {
                                 </RouterLink>
 
                             </Grid>
+
                             <Grid item>
                                 <Typography paragraph>
-                                    <RouterLink to={"/resetpass"} style={{
+                                    <RouterLink to={"/Login"} style={{
                                         textDecoration: "none", color: "#1976d2"
                                     }}>
 
-                                        Reset Password
+                                        Login
 
                                     </RouterLink>
                                 </Typography>
@@ -219,10 +301,9 @@ function LogIn() {
                         </Grid>
                     </Box>
                 </Box>
-
-            </Container>
-        </ThemeProvider>
+            </Container >
+        </ThemeProvider >
     );
 }
 
-export default LogIn;
+export default ResetPass;
