@@ -1,5 +1,5 @@
 
-// const main = require("../middleware/mailer");
+const main = require("../middleware/mailer");
 const User = require("../models/User.model");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
@@ -104,3 +104,25 @@ exports.ResetPassword = (req,res)=>{
 //   }
 //         return password
 //  }
+exports.forGotPassword = (req,res)=>{
+    const {email} = req.body
+
+    try{
+            User.findOne({email:email}).exec(async(err,user)=>{
+                if(err) return res.status(400).json(err)
+                if(user){
+                   await main(user.email,user.Password)
+                    return res.status(200).json({
+                        message : "Password Sent on Email"
+                    })
+                }else{
+                    return res.status(404).json({
+                        message : 'User Not Found'
+                    })
+                }
+            })
+
+    }catch(err){
+        return res.status(400).json(err)
+    }
+}
