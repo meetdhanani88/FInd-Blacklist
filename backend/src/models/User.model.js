@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
         type : String,
         trim : true
     },
-    Expiry_Date : {
+    Expiry_Date : { 
         type : Date,
         trim : true
     },
@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
         type : String,
         trim : true
     },
-})
+},{timestamps:true})
 
 // userSchema.methods = {
 //     passwordBcrypt : async function(password){
