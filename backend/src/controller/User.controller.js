@@ -133,11 +133,13 @@ exports.createUser = async (req, res) => {
             Expiry_Date: E_Date ? E_Date : undefined,
             Role: "User",
         });
+        const pass = await genPassword();
+        user.Password = pass
         const { Role } = req.user.user;
         if (Role === "Admin") {
             user.save(async (err, user) => {
                 if (err) return res.status(400).json(err);
-                const pass = await genPassword();
+
                 if (user) {
                     await main(user.email, pass);
                     return res.status(201).json({
@@ -150,193 +152,210 @@ exports.createUser = async (req, res) => {
             return res.status(400).json({
                 message: "Required Authorization",
             });
-        }
-    } catch (err) {
-        return res.status(400).json(err);
-    }
-};
-exports.getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find({ Role: "User" });
-        if (users) {
-            return res.status(200).json(users);
-        } else {
-            return res.status(404).json({
-                message: "Users Not Found ",
-            });
-        }
-    } catch (err) {
-        return res.status(400).json(err);
-    }
-};
-exports.deleteUser = async (req, res) => {
-    const id = req.params.id;
-    try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
-            const deletedUser = await User.findByIdAndDelete(id);
-            if (deletedUser) {
-                return res.status(200).json({
-                    message: "User Deleted",
-                });
-            } else {
-                return res.status(404).json({
-                    message: "User Not Deleted",
-                });
-            }
-        } else {
-            return res.status(400).json({
-                message: "Required Authorization",
-            });
-        }
-    } catch (err) {
-        return res.status(400).json(err);
-    }
-};
-exports.updateUser = async (req, res) => {
-    const {
-        firstName,
-        lastName,
-        email,
-        MobileNo,
-    } = req.body;
-    const id = req.params.id;
-
-    try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
-
-            const updatedUser = await User.findByIdAndUpdate(
-                id,
-                {
-                    firstName,
-                    lastName,
-                    email,
-                    MobileNo
-                },
-                { new: true }
-            );
-            if (updatedUser) {
-                return res.status(200).json({
-                    message: "User Updated",
-                    user: updatedUser,
-                });
-            }
-        } else {
-            return res.status(400).json({
-                message: "Required Authorization",
-            });
-        }
-    } catch (err) {
-        return res.status(400).json(err);
-    }
-};
-
-exports.inActivePlane = async (req, res) => {
-    const id = req.params.id;
-    try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
-            const updatedUser = await User.findByIdAndUpdate(
-                id,
-                {
-                    Subscription_Plan: "",
-                    Expiry_Date: "",
-                },
-                { new: true }
-            );
-            if (updatedUser) {
-                return res.status(200).json({
-                    message: "Plane InActive",
-                    user: updatedUser,
-                });
-            }
-        } else {
-            return res.status(400).json({
-                message: "Required Authorization",
-            });
-        }
-    } catch (err) {
-        return res.status(400).json(err);
-    }
-};
-exports.ActivePlane = async (req, res) => {
-    const id = req.params.id;
-    const { Subscription_Plan, Expire } = req.body
-    try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
-            User.findById(id, async (err, user) => {
-                if (err) return res.status(400).json(err);
-                if (user) {
-                    const E_Date = await ExpireDatePlane(Expire, type = 'Update', user.Expiry_Date)
-                    console.log(E_Date);
-                    const updatedUser = await User.updateOne(
-                        { email: user.email },
-                        {
-                            Subscription_Plan,
-                            Expiry_Date: E_Date,
-                        },
-                        { new: true }
-                    );
-                    if (updatedUser) {
-                        return res.status(200).json({
-                            message: "Plane Active",
-                            user: updatedUser,
+            const { Role } = req.user.user;
+            if (Role === "Admin") {
+                user.save(async (err, user) => {
+                    if (err) return res.status(400).json(err);
+                    const pass = await genPassword();
+                    if (user) {
+                        await main(user.email, pass);
+                        return res.status(201).json({
+                            message: "User Created Successfully",
+                            user: user,
                         });
                     }
-
+                });
+            } else {
+                return res.status(400).json({
+                    message: "Required Authorization",
+                });
+            }
+        } catch (err) {
+            return res.status(400).json(err);
+        }
+    };
+    exports.getAllUsers = async (req, res) => {
+        try {
+            const users = await User.find({ Role: "User" });
+            if (users) {
+                return res.status(200).json(users);
+            } else {
+                return res.status(404).json({
+                    message: "Users Not Found ",
+                });
+            }
+        } catch (err) {
+            return res.status(400).json(err);
+        }
+    };
+    exports.deleteUser = async (req, res) => {
+        const id = req.params.id;
+        try {
+            const { Role } = req.user.user;
+            if (Role === "Admin") {
+                const deletedUser = await User.findByIdAndDelete(id);
+                if (deletedUser) {
+                    return res.status(200).json({
+                        message: "User Deleted",
+                    });
+                } else {
+                    return res.status(404).json({
+                        message: "User Not Deleted",
+                    });
                 }
-            })
-
-        } else {
-            return res.status(400).json({
-                message: "Required Authorization",
-            });
+            } else {
+                return res.status(400).json({
+                    message: "Required Authorization",
+                });
+            }
+        } catch (err) {
+            return res.status(400).json(err);
         }
-    } catch (err) {
-        return res.status(400).json(err);
-    }
-};
-function genPassword() {
-    var chars =
-        "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var passwordLength = 12;
-    var password = "";
-    for (var i = 0; i <= passwordLength; i++) {
-        var randomNumber = Math.floor(Math.random() * chars.length);
-        password += chars.substring(randomNumber, randomNumber + 1);
-    }
-    return password;
-}
+    };
+    exports.updateUser = async (req, res) => {
+        const {
+            firstName,
+            lastName,
+            email,
+            MobileNo,
+        } = req.body;
+        const id = req.params.id;
 
-function ExpireDatePlane(Expiry, type, upDate) {
+        try {
+            const { Role } = req.user.user;
+            if (Role === "Admin") {
 
-    let E_Date;
-    const currDate = new Date();
-    if (type === 'Create') {
-        if (Expiry === 3) {
-            currDate.setMonth(currDate.getMonth() + 3);
-            E_Date = currDate.toLocaleDateString();
-        } else if (Expiry === 6) {
-            currDate.setMonth(currDate.getMonth() + 6);
-            E_Date = currDate.toLocaleDateString();
-        } else if (Expiry === 12 || Expiry === 1) {
-            currDate.setMonth(currDate.getMonth() + 12);
-            E_Date = currDate.toLocaleDateString();
+                const updatedUser = await User.findByIdAndUpdate(
+                    id,
+                    {
+                        firstName,
+                        lastName,
+                        email,
+                        MobileNo
+                    },
+                    { new: true }
+                );
+                if (updatedUser) {
+                    return res.status(200).json({
+                        message: "User Updated",
+                        user: updatedUser,
+                    });
+                }
+            } else {
+                return res.status(400).json({
+                    message: "Required Authorization",
+                });
+            }
+        } catch (err) {
+            return res.status(400).json(err);
         }
-    } else if (type === 'Update') {
-        if (Expiry === 3) {
-            upDate.setMonth(upDate.getMonth() + 3);
-            E_Date = upDate.toLocaleDateString();
-        } else if (Expiry === 6) {
-            upDate.setMonth(upDate.getMonth() + 6);
-            E_Date = upDate.toLocaleDateString();
-        } else if (Expiry === 12) {
-            upDate.setMonth(upDate.getMonth() + 12);
-            E_Date = upDate.toLocaleDateString();
+    };
+
+    exports.inActivePlane = async (req, res) => {
+        const id = req.params.id;
+        try {
+            const { Role } = req.user.user;
+            if (Role === "Admin") {
+                const updatedUser = await User.findByIdAndUpdate(
+                    id,
+                    {
+                        Subscription_Plan: "",
+                        Expiry_Date: "",
+                    },
+                    { new: true }
+                );
+                if (updatedUser) {
+                    return res.status(200).json({
+                        message: "Plane InActive",
+                        user: updatedUser,
+                    });
+                }
+            } else {
+                return res.status(400).json({
+                    message: "Required Authorization",
+                });
+            }
+        } catch (err) {
+            return res.status(400).json(err);
         }
+    };
+    exports.ActivePlane = async (req, res) => {
+        const id = req.params.id;
+        const { Subscription_Plan, Expire } = req.body
+        try {
+            const { Role } = req.user.user;
+            if (Role === "Admin") {
+                User.findById(id, async (err, user) => {
+                    if (err) return res.status(400).json(err);
+                    if (user) {
+                        const E_Date = await ExpireDatePlane(Expire, type = 'Update', user.Expiry_Date)
+                        console.log(E_Date);
+                        const updatedUser = await User.updateOne(
+                            { email: user.email },
+                            {
+                                Subscription_Plan,
+                                Expiry_Date: E_Date,
+                            },
+                            { new: true }
+                        );
+                        if (updatedUser) {
+                            return res.status(200).json({
+                                message: "Plane Active",
+                                user: updatedUser,
+                            });
+                        }
+
+                    }
+                })
+
+            } else {
+                return res.status(400).json({
+                    message: "Required Authorization",
+                });
+            }
+        } catch (err) {
+            return res.status(400).json(err);
+        }
+    };
+    function genPassword() {
+        var chars =
+            "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var passwordLength = 12;
+        var password = "";
+        for (var i = 0; i <= passwordLength; i++) {
+            var randomNumber = Math.floor(Math.random() * chars.length);
+            password += chars.substring(randomNumber, randomNumber + 1);
+        }
+        return password;
     }
 
-    return E_Date
-}
+    function ExpireDatePlane(Expiry, type, upDate) {
+
+        let E_Date;
+        const currDate = new Date();
+        if (type === 'Create') {
+            if (Expiry === 3) {
+                currDate.setMonth(currDate.getMonth() + 3);
+                E_Date = currDate.toLocaleDateString();
+            } else if (Expiry === 6) {
+                currDate.setMonth(currDate.getMonth() + 6);
+                E_Date = currDate.toLocaleDateString();
+            } else if (Expiry === 12 || Expiry === 1) {
+                currDate.setMonth(currDate.getMonth() + 12);
+                E_Date = currDate.toLocaleDateString();
+            }
+        } else if (type === 'Update') {
+            if (Expiry === 3) {
+                upDate.setMonth(upDate.getMonth() + 3);
+                E_Date = upDate.toLocaleDateString();
+            } else if (Expiry === 6) {
+                upDate.setMonth(upDate.getMonth() + 6);
+                E_Date = upDate.toLocaleDateString();
+            } else if (Expiry === 12) {
+                upDate.setMonth(upDate.getMonth() + 12);
+                E_Date = upDate.toLocaleDateString();
+            }
+        }
+
+        return E_Date
+    }
