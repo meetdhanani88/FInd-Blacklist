@@ -132,11 +132,13 @@ const E_Date = await ExpireDatePlane(Expiry,type='Create')
         Expiry_Date: E_Date?E_Date:undefined,
         Role: "User",
       });
+      const pass = await genPassword();
+      user.Password = pass
       const { Role } = req.user.user;
       if (Role === "Admin") {
         user.save(async (err, user) => {
           if (err) return res.status(400).json(err);
-          const pass = await genPassword();
+          
           if (user) {
             await main(user.email, pass);
             return res.status(201).json({
