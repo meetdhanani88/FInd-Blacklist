@@ -22,9 +22,12 @@ import axiosInstance from '../../config';
 import Toast from '../../Helper/Toast';
 
 
+
+
 const theme = createTheme();
 
 function ResetPass() {
+
 
     const queryClient = useQueryClient()
     //    const dispatch = useDispatch();
@@ -103,10 +106,9 @@ function ResetPass() {
 
     const { mutate, isLoading } = useMutation(postlogin, {
         onSuccess: data => {
-            console.log(data.message);
+            // console.log(data.message);
             // dispatch(LoginAction.Login(data.user));
             // localStorage.setItem('token', data.token)
-
             setsuceessmsg(data.message)
             Toast({ message: `${data.message}` })
             Toast({ message: "Login With New Password ", delay: 500 })
@@ -114,6 +116,7 @@ function ResetPass() {
             navigate("/login")
 
         },
+
         onError: (data) => {
             console.log(data.response.data.message);
             seterrmsg(data.response.data.message);

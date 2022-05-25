@@ -9,15 +9,53 @@ import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Box, InputLabel, MenuItem, Select, FormControl, Alert } from '@mui/material';
-
-
+import axiosInstance from '../../../config';
+import { useMutation, useQueryClient } from 'react-query';
+import Toast from '../../../Helper/Toast';
 
 const Adduser = ({ openpop, handleClosepop }) => {
 
     const [plan, setplan] = React.useState(0);
     const [suceessmsg, setsuceessmsg] = React.useState(false)
-    const [errmsg, seterrmsg] = React.useState(false)
+    const [errmsg, seterrmsg] = React.useState(false);
+    const queryClient = useQueryClient()
 
+
+
+    async function Createuser() {
+
+        const res = await axiosInstance.post('/user/createUser', {
+            firstName: values.firstname,
+            lastName: values.lastname,
+            email: values.email,
+            MobileNo: values.mobileno,
+            Expiry: plan,
+            Subscription_Plan: "gold"
+        })
+
+        return res;
+
+    }
+    const mutation = useMutation(Createuser, {
+        onSuccess: data => {
+            console.log(data);
+            setplan(0);
+            handleReset();
+            handleClosepop();
+
+            Toast({ message: "Email sent on User Account" });
+
+
+        },
+        onError: (data) => {
+            console.log(data);
+            // seterrmsg(data.response.data.message);
+            // setsuceessmsg("");
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries('craeayeuser');
+        }
+    })
 
     const handleplanChange = (event) => {
         setplan(event.target.value);
@@ -30,7 +68,11 @@ const Adduser = ({ openpop, handleClosepop }) => {
             ...values,
             selectedplan: plan
         }
-        console.log(finaldata);
+        console.log("finaldata", finaldata);
+
+        mutation.mutate();
+
+
     }
 
     const validationSchema = Yup.object({
@@ -41,7 +83,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
         mobileno: Yup.string().min(10, "Minimum Length 10").required("mobile no is require"),
     })
 
-    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid } = useFormik({
+    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid, handleReset } = useFormik({
         initialValues: {
 
             firstname: '',
@@ -163,7 +205,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
 
                     <DialogActions>
                         <Button onClick={handleClosepop} >Cancel</Button>
-                        <Button onClick={handelAdduser} disabled={!isValid}>Add User</Button>
+                        <Button onClick={handelAdduser} disabled={!isValid || values.firstname === ''}>Add User</Button>
                     </DialogActions>
                 </Box>
 

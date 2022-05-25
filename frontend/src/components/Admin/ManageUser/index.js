@@ -34,6 +34,8 @@ import ModeEdit from '@mui/icons-material/ModeEdit';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Adduser from './Adduser';
+import { useQuery } from "react-query"
+import axiosInstance from '../../../config';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -109,43 +111,48 @@ function TablePaginationActions(props) {
     );
 }
 
-TablePaginationActions.propTypes = {
-    count: PropTypes.number.isRequired,
-    onPageChange: PropTypes.func.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
-};
+// TablePaginationActions.propTypes = {
+//     count: PropTypes.number.isRequired,
+//     onPageChange: PropTypes.func.isRequired,
+//     page: PropTypes.number.isRequired,
+//     rowsPerPage: PropTypes.number.isRequired,
+// };
 
-function createData(Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription) {
-    return { Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription };
+// function createData(Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription) {
+//     return { Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription };
+// }
+
+// const rows = [
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+
+
+// ].sort((a, b) => a.Firstname.localeCompare(b.Firstname))
+
+async function getusertList() {
+    const userlist = await axiosInstance.get("/user/getAllUsers")
+    return userlist
 }
-
-const rows = [
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-
-
-].sort((a, b) => a.Firstname.localeCompare(b.Firstname))
 
 function CustomPaginationActionsTable() {
     const [page, setPage] = React.useState(0);
@@ -153,6 +160,15 @@ function CustomPaginationActionsTable() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [openpop, setOpenpop] = React.useState(false);
+    const query = useQuery('getuserlist', getusertList)
+
+
+
+    // console.log(query?.data?.data);
+
+    const rows = query?.data?.data
+    console.log(rows);
+
 
     const handleClickOpenpop = (scrollType) => {
         setOpenpop(true);
@@ -224,80 +240,86 @@ function CustomPaginationActionsTable() {
 
                             <TableBody>
                                 {(rowsPerPage > 0
-                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     : rows
-                                ).map((row, i) => (
-                                    <TableRow key={i}>
-                                        <TableCell style={{ width: 50 }} >
-                                            {row.Firstname}
-                                        </TableCell>
-                                        <TableCell style={{ width: 50 }} >
-                                            {row.Lastname}
-                                        </TableCell>
-                                        <TableCell style={{ width: 100 }} >
-                                            {row.Email}
-                                        </TableCell>
-                                        <TableCell style={{ width: 100 }} >
-                                            {row.MobileNo}
-                                        </TableCell>
-                                        <TableCell style={{ width: 70 }} >
-                                            {row.SubscriptionPlan}
-                                        </TableCell>
-                                        <TableCell style={{ width: 70 }} >
-                                            {row.PlanExpiryDate}
-                                        </TableCell>
-                                        <TableCell style={{ width: 70 }} >
-                                            <IconButton
-                                                aria-label="edit"
-                                                id="basic-button"
-                                                aria-controls={open ? 'basic-menu' : undefined}
-                                                aria-haspopup="true"
-                                                aria-expanded={open ? 'true' : undefined}
-                                                onClick={handleClick}
-                                                style={{ boxShadow: "none" }}
-                                            >
-                                                <FilterListIcon color='error' />
+                                )?.map((row, i) => {
 
-                                            </IconButton>
-                                            <Menu
-                                                id="basic-menu"
-                                                anchorEl={anchorEl}
-                                                open={open}
-                                                onClose={handleClose}
-                                                MenuListProps={{
-                                                    'aria-labelledby': 'basic-button',
-                                                }}
-                                                sx={{
-                                                    '& .MuiMenu-paper': {
-                                                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
-                                                    }
-                                                }}
+                                    var date = row?.Expiry_Date ? new Date(row.Expiry_Date) : null;
 
-                                            >
-                                                <MenuItem onClick={handleClose}>
-                                                    <ListItemIcon>
-                                                        <ModeEdit fontSize="small" color="info" />
-                                                    </ListItemIcon>
-                                                    <ListItemText>Edit User</ListItemText>
-                                                </MenuItem>
-                                                <MenuItem onClick={handleClose}>
-                                                    <ListItemIcon>
-                                                        <DeleteIcon fontSize="small" color="error" />
-                                                    </ListItemIcon>
-                                                    <ListItemText>Delete User</ListItemText>
-                                                </MenuItem>
-                                                <MenuItem onClick={handleClose}>
-                                                    <ListItemIcon>
-                                                        <SubscriptionsIcon fontSize="small" color='success' />
-                                                    </ListItemIcon>
-                                                    <ListItemText>Edit Subscription</ListItemText>
-                                                </MenuItem>
 
-                                            </Menu>
-                                        </TableCell>
+                                    return (
+                                        <TableRow key={i}>
+                                            <TableCell style={{ width: 50 }} >
+                                                {row.firstName}
+                                            </TableCell>
+                                            <TableCell style={{ width: 50 }} >
+                                                {row.lastName}
+                                            </TableCell>
+                                            <TableCell style={{ width: 100 }} >
+                                                {row.email}
+                                            </TableCell>
+                                            <TableCell style={{ width: 100 }} >
+                                                {row.MobileNo}
+                                            </TableCell>
+                                            <TableCell style={{ width: 70 }} >
+                                                {row.Subscription_Plan}
+                                            </TableCell>
+                                            <TableCell style={{ width: 70 }} >
+                                                {date ? date?.toISOString().substring(0, 10) : null}
+                                            </TableCell>
+                                            <TableCell style={{ width: 70 }} >
+                                                <IconButton
+                                                    aria-label="edit"
+                                                    id="basic-button"
+                                                    aria-controls={open ? 'basic-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                    onClick={handleClick}
+                                                    style={{ boxShadow: "none" }}
+                                                >
+                                                    <FilterListIcon color='error' />
 
-                                    </TableRow>
-                                ))}
+                                                </IconButton>
+                                                <Menu
+                                                    id="basic-menu"
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    MenuListProps={{
+                                                        'aria-labelledby': 'basic-button',
+                                                    }}
+                                                    sx={{
+                                                        '& .MuiMenu-paper': {
+                                                            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+                                                        }
+                                                    }}
+
+                                                >
+                                                    <MenuItem onClick={handleClose}>
+                                                        <ListItemIcon>
+                                                            <ModeEdit fontSize="small" color="info" />
+                                                        </ListItemIcon>
+                                                        <ListItemText>Edit User</ListItemText>
+                                                    </MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                                                        <ListItemIcon>
+                                                            <DeleteIcon fontSize="small" color="error" />
+                                                        </ListItemIcon>
+                                                        <ListItemText>Delete User</ListItemText>
+                                                    </MenuItem>
+                                                    <MenuItem onClick={handleClose}>
+                                                        <ListItemIcon>
+                                                            <SubscriptionsIcon fontSize="small" color='success' />
+                                                        </ListItemIcon>
+                                                        <ListItemText>Edit Subscription</ListItemText>
+                                                    </MenuItem>
+
+                                                </Menu>
+                                            </TableCell>
+
+                                        </TableRow>
+                                    )
+                                })}
 
                                 {emptyRows > 0 && (
                                     <TableRow style={{ height: 53 * emptyRows }}>
@@ -311,7 +333,7 @@ function CustomPaginationActionsTable() {
                                     <TablePagination
                                         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                                         colSpan={7}
-                                        count={rows.length}
+                                        count={rows ? rows?.length : 0}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         SelectProps={{

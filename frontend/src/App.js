@@ -1,4 +1,4 @@
-
+import React, { useEffect } from 'react';
 import './App.css';
 import { QueryClient, QueryClientProvider, } from 'react-query'
 import LogIn from './components/LogIn';
@@ -11,18 +11,29 @@ import ManageUser from './components/Admin/ManageUser';
 import ManageBlacklistVendor from './components/Admin/ManageBlacklistVendor';
 import ManageBlacklistReq from './components/Admin/ManageBlacklistReq';
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
+import { useDispatch, useSelector } from 'react-redux';
+import { LoginAction } from './redux/reducersSlice/Loginslice';
 
 const queryClient = new QueryClient()
 
 
 function App() {
+  const dispatch = useDispatch()
+  const token = useSelector(state => state.Login.token)
+  useEffect(() => {
+    dispatch(LoginAction.getToken())
+  }, [])
+
+
   return (
     <div className="App">
       <StyledEngineProvider injectFirst>
         <QueryClientProvider client={queryClient}>
           <Routes>
 
-            <Route path="/" element={<Navigate to={"/login"}></Navigate>}></Route>
+            <Route path="/" element={
+              token ? <Navigate to={"/adminhomepage"} /> : <Navigate to={"/login"} />
+            }></Route>
             <Route path="/login" element={<LogIn></LogIn>}></Route>
             <Route path="/forgotpass" element={<Forgotpass></Forgotpass>}></Route>
             <Route path="/resetpass" element={<ResetPass></ResetPass>}></Route>

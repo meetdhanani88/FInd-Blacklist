@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import { Link as RouterLink } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+// import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -21,11 +21,14 @@ import axiosInstance from '../../config';
 import { LoginAction } from '../../redux/reducersSlice/Loginslice';
 //import useMediaQuery from '@mui/material/useMediaQuery';
 import ForwardToInboxOutlinedIcon from '@mui/icons-material/ForwardToInboxOutlined';
+import Toast from '../../Helper/Toast';
+import { useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme();
 
 function Forgotpass() {
+    const nav = useNavigate();
 
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
@@ -88,8 +91,10 @@ function Forgotpass() {
             console.log(data);
             dispatch(LoginAction.Login(data.user));
             localStorage.setItem('token', data.token)
+            Toast({ message: `${data.message}` })
             setsuceessmsg(data.message)
             seterrmsg("");
+            nav("/adminhomepage")
         },
         onError: (data) => {
             seterrmsg(data.response.data.message);

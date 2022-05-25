@@ -19,7 +19,9 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import axiosInstance from '../../config';
 import { LoginAction } from '../../redux/reducersSlice/Loginslice';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import Toast from '../../Helper/Toast';
+
 
 
 
@@ -73,6 +75,7 @@ function LogIn() {
             console.log(data);
             dispatch(LoginAction.Login(data.user));
             localStorage.setItem('token', data.token)
+            Toast({ message: `${data.message}` })
             setsuceessmsg(data.message)
             seterrmsg("");
             nav("/adminhomepage")
