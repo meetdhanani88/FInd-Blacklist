@@ -29,7 +29,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
             lastName: values.lastname,
             email: values.email,
             MobileNo: values.mobileno,
-            Expiry: 0,
+            Expiry: plan,
             Subscription_Plan: "gold"
         })
 
@@ -43,7 +43,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
             handleReset();
             handleClosepop();
 
-            Toast({ message: "Email sent on User Account" });
+            Toast({ message: "User Created & Password sent on Email" });
 
 
         },
