@@ -1,72 +1,341 @@
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import Grid from '@mui/material/Grid'
+import "./index.css"
+import PropTypes from 'prop-types';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import TableHead from '@mui/material/TableHead';
+import { tableCellClasses } from '@mui/material/TableCell';
+import { styled } from '@mui/material/styles';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { Grid } from '@mui/material';
+import { Typography } from '@mui/material';
+import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ModeEdit from '@mui/icons-material/ModeEdit';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Adduser from './Adduser';
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+    },
+}));
 
-const columns = [
-    { field: 'id', headerName: 'ID', width: 100 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
-    {
-        field: 'age',
-        headerName: 'Age',
-        type: 'number',
-        width: 90,
-    },
-    {
-        field: 'fullName',
-        headerName: 'Full name',
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        width: 160,
-        valueGetter: (params) =>
-            `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
-];
+const userlistcss = {
+    //background: "#fff",
+    //color: "#fff",
+    fontFamily: "Ubuntu,sans-serif",
+    //textShadow:
+    // "2px 2px 0 #86a8e7, 2px -2px 0 #86a8e7, -2px 2px 0 #86a8e7, -2px -2px 0 #86a8e7, 2px 0 0 #86a8e7, 0 2px 0 #86a8e7, -2px 0 0 #86a8e7, 0 -2px 0 #86a8e7",
+    letterSpacing: "8px",
+    ml: "35px"
+}
+
+function TablePaginationActions(props) {
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange } = props;
+
+    const handleFirstPageButtonClick = (event) => {
+        onPageChange(event, 0);
+    };
+
+    const handleBackButtonClick = (event) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton
+                onClick={handleBackButtonClick}
+                disabled={page === 0}
+                aria-label="previous page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </Box>
+    );
+}
+
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+};
+
+function createData(Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription) {
+    return { Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription };
+}
 
 const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
+    createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
 
-export default function DataTable() {
+
+].sort((a, b) => a.Firstname.localeCompare(b.Firstname))
+
+function CustomPaginationActionsTable() {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const [openpop, setOpenpop] = React.useState(false);
+
+    const handleClickOpenpop = (scrollType) => {
+        setOpenpop(true);
+    };
+
+    const handleClosepop = () => {
+        setOpenpop(false);
+    };
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     return (
-        <Grid container spacing={2} >
-            <Grid item lg={6} md={12} sm={12} xs={12}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
-                    autoHeight={true}
-                    autoPageSize={true}
-                    columnBuffer={0}
-                />
+        <>
+            <Adduser openpop={openpop} handleClosepop={handleClosepop}></Adduser>
+
+            <Grid container justifyContent={"center"} alignItems="center">
+
+                <Grid container item xs={11} sx={{ mt: 1 }} justifyContent="space-between">
+
+                    {/* for future like logo or anything */}
+                    <Grid item>
+                        <div sx={{ display: "none" }}></div>
+                    </Grid>
+
+                    <Grid item >
+                        <Typography variant="h4" component="div" sx={userlistcss} >
+                            User List
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Button variant='outlined' startIcon={<AddIcon></AddIcon>} color="primary" onClick={handleClickOpenpop}>Add User</Button>
+                    </Grid>
+
+                </Grid>
+
+                <Grid item xs={11} sx={{ my: 1 }}>
+                    <TableContainer component={Paper} >
+                        <Table sx={{ minWidth: 1000 }} aria-label="custom pagination table">
+                            <TableHead>
+                                <TableRow >
+                                    <StyledTableCell >First Name</StyledTableCell>
+                                    <StyledTableCell>Last Name</StyledTableCell>
+                                    <StyledTableCell >Email Address</StyledTableCell>
+                                    <StyledTableCell>Mobile No</StyledTableCell>
+                                    <StyledTableCell>Subscription Plan</StyledTableCell>
+                                    <StyledTableCell>Plan Expire</StyledTableCell>
+                                    <StyledTableCell>Actions</StyledTableCell>
+
+                                </TableRow>
+                            </TableHead>
+
+                            <TableBody>
+                                {(rowsPerPage > 0
+                                    ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                    : rows
+                                ).map((row, i) => (
+                                    <TableRow key={i}>
+                                        <TableCell style={{ width: 50 }} >
+                                            {row.Firstname}
+                                        </TableCell>
+                                        <TableCell style={{ width: 50 }} >
+                                            {row.Lastname}
+                                        </TableCell>
+                                        <TableCell style={{ width: 100 }} >
+                                            {row.Email}
+                                        </TableCell>
+                                        <TableCell style={{ width: 100 }} >
+                                            {row.MobileNo}
+                                        </TableCell>
+                                        <TableCell style={{ width: 70 }} >
+                                            {row.SubscriptionPlan}
+                                        </TableCell>
+                                        <TableCell style={{ width: 70 }} >
+                                            {row.PlanExpiryDate}
+                                        </TableCell>
+                                        <TableCell style={{ width: 70 }} >
+                                            <IconButton
+                                                aria-label="edit"
+                                                id="basic-button"
+                                                aria-controls={open ? 'basic-menu' : undefined}
+                                                aria-haspopup="true"
+                                                aria-expanded={open ? 'true' : undefined}
+                                                onClick={handleClick}
+                                                style={{ boxShadow: "none" }}
+                                            >
+                                                <FilterListIcon color='error' />
+
+                                            </IconButton>
+                                            <Menu
+                                                id="basic-menu"
+                                                anchorEl={anchorEl}
+                                                open={open}
+                                                onClose={handleClose}
+                                                MenuListProps={{
+                                                    'aria-labelledby': 'basic-button',
+                                                }}
+                                                sx={{
+                                                    '& .MuiMenu-paper': {
+                                                        boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+                                                    }
+                                                }}
+
+                                            >
+                                                <MenuItem onClick={handleClose}>
+                                                    <ListItemIcon>
+                                                        <ModeEdit fontSize="small" color="info" />
+                                                    </ListItemIcon>
+                                                    <ListItemText>Edit User</ListItemText>
+                                                </MenuItem>
+                                                <MenuItem onClick={handleClose}>
+                                                    <ListItemIcon>
+                                                        <DeleteIcon fontSize="small" color="error" />
+                                                    </ListItemIcon>
+                                                    <ListItemText>Delete User</ListItemText>
+                                                </MenuItem>
+                                                <MenuItem onClick={handleClose}>
+                                                    <ListItemIcon>
+                                                        <SubscriptionsIcon fontSize="small" color='success' />
+                                                    </ListItemIcon>
+                                                    <ListItemText>Edit Subscription</ListItemText>
+                                                </MenuItem>
+
+                                            </Menu>
+                                        </TableCell>
+
+                                    </TableRow>
+                                ))}
+
+                                {emptyRows > 0 && (
+                                    <TableRow style={{ height: 53 * emptyRows }}>
+                                        <TableCell colSpan={6} />
+                                    </TableRow>
+                                )}
+                            </TableBody>
+
+                            <TableFooter>
+                                <TableRow >
+                                    <TablePagination
+                                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                        colSpan={7}
+                                        count={rows.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        SelectProps={{
+                                            inputProps: {
+                                                'aria-label': 'rows per page',
+                                            },
+                                            native: true,
+                                        }}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
+                                        ActionsComponent={TablePaginationActions}
+                                    />
+                                </TableRow>
+                            </TableFooter>
+
+                        </Table>
+                    </TableContainer>
+                </Grid>
 
             </Grid>
-            <Grid item lg={6} md={12} sm={12} xs={12}  >
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
-                    autoHeight={true}
-                    autoPageSize={true}
-                    columnBuffer={0}
-                />
-
-            </Grid>
-
-
-        </Grid>
+        </>
 
 
     );
 }
+
+export default CustomPaginationActionsTable;

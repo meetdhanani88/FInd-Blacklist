@@ -1,0 +1,176 @@
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { Box, InputLabel, MenuItem, Select, FormControl, Alert } from '@mui/material';
+
+
+
+const Adduser = ({ openpop, handleClosepop }) => {
+
+    const [plan, setplan] = React.useState(0);
+    const [suceessmsg, setsuceessmsg] = React.useState(false)
+    const [errmsg, seterrmsg] = React.useState(false)
+
+
+    const handleplanChange = (event) => {
+        setplan(event.target.value);
+    };
+
+    function handelAdduser() {
+
+
+        const finaldata = {
+            ...values,
+            selectedplan: plan
+        }
+        console.log(finaldata);
+    }
+
+    const validationSchema = Yup.object({
+
+        firstname: Yup.string().required("firstname is required"),
+        lastname: Yup.string().required("lastname is required"),
+        email: Yup.string().email('Invalid Email').required('email is required'),
+        mobileno: Yup.string().min(10, "Minimum Length 10").required("mobile no is require"),
+    })
+
+    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid } = useFormik({
+        initialValues: {
+
+            firstname: '',
+            lastname: '',
+            email: '',
+            mobileno: '',
+        },
+        validationSchema,
+        onSubmit: handelAdduser
+    })
+
+    return (
+        <div>
+            <Dialog open={openpop} onClose={handleClosepop} maxWidth="sm" scroll='paper'
+
+                aria-labelledby="scroll-dialog-title"
+                aria-describedby="scroll-dialog-description"
+            >
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <DialogTitle id="scroll-dialog-title">Add New User</DialogTitle>
+
+                    <DialogContent dividers >
+                        <DialogContentText  >
+                            Add New user for giving acess to Find-Blacklist.
+                        </DialogContentText>
+
+
+
+                        <TextField
+                            error={(errors.firstname && touched.firstname) ? true : false}
+                            required
+
+                            margin="dense"
+                            id="firstname"
+                            label="First Name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            sx={{ maxWidth: 700 }}
+                            value={values.firstname}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {errors.firstname && touched.firstname ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.firstname}</Alert>
+                        ) : null}
+                        <TextField
+                            required
+                            error={(errors.lastname && touched.lastname) ? true : false}
+                            margin="dense"
+                            id="lastname"
+                            label="Last Name"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            sx={{ maxWidth: 700 }}
+                            value={values.lastname}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {errors.lastname && touched.lastname ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.lastname}</Alert>
+                        ) : null}
+                        <TextField
+                            error={(errors.email && touched.email) ? true : false}
+                            required
+                            margin="dense"
+                            id="email"
+                            label="Email Address"
+                            type="email"
+                            fullWidth
+                            variant="standard"
+                            sx={{ maxWidth: 700 }}
+                            value={values.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {errors.email && touched.email ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.email}</Alert>
+                        ) : null}
+
+                        <TextField
+                            error={(errors.mobileno && touched.mobileno) ? true : false}
+                            required
+                            margin="dense"
+                            id="mobileno"
+                            label="Mobile No"
+                            type="number"
+                            fullWidth
+                            variant="standard"
+                            sx={{ maxWidth: 700 }}
+                            value={values.mobileno}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {errors.mobileno && touched.mobileno ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.mobileno}</Alert>
+                        ) : null}
+
+
+                        <FormControl size='medium' sx={{ mt: 2, minWidth: 200 }} >
+
+                            <InputLabel id="demo-simple-select-label">Subscription Plan</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="subplan"
+                                label="Subscription Plan"
+                                value={plan}
+                                onChange={handleplanChange}
+                            >
+                                <MenuItem value={0}>None</MenuItem>
+                                <MenuItem value={12}>Premium Plan (1 Year)</MenuItem>
+                                <MenuItem value={6}>Gold Plan (6 Months)</MenuItem>
+                                <MenuItem value={3}>Silver Plan (3 Months)</MenuItem>
+                            </Select>
+
+                        </FormControl>
+                    </DialogContent>
+
+                    <DialogActions>
+                        <Button onClick={handleClosepop} >Cancel</Button>
+                        <Button onClick={handelAdduser} disabled={!isValid}>Add User</Button>
+                    </DialogActions>
+                </Box>
+
+
+            </Dialog>
+        </div>
+    )
+}
+
+export default Adduser;

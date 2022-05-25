@@ -75,7 +75,10 @@ function Forgotpass() {
         return res.data;
     }
     const postEmail = async () => {
-        return await new Promise((resolve, reject) => setTimeout(resolve, 1000))
+        let res = await axiosInstance.post("/user/forGotPassword", {
+            email: values.email
+        })
+        return res.data;
 
     }
 
@@ -104,11 +107,11 @@ function Forgotpass() {
 
             // dispatch(LoginAction.Login(data.user));
             // localStorage.setItem('token', data.token)
-            setsuceessmsg("Password sent on Email")
+            setsuceessmsg(data.message)
             seterrmsg("");
         },
         onError: (data) => {
-            seterrmsg("Something Went Wrong. Retry!");
+            seterrmsg(data.response.data.message);
             setsuceessmsg("");
         },
         onSettled: () => {
