@@ -38,7 +38,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
     }
     const mutation = useMutation(Createuser, {
         onSuccess: data => {
-            console.log(data);
+            
             setplan(0);
             handleReset();
             handleClosepop();
@@ -48,7 +48,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
 
         },
         onError: (data) => {
-            console.log(data);
+           
             // seterrmsg(data.response.data.message);
             // setsuceessmsg("");
         },
