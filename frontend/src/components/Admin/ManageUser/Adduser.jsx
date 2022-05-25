@@ -29,7 +29,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
             lastName: values.lastname,
             email: values.email,
             MobileNo: values.mobileno,
-            Expiry: plan,
+            Expiry: 0,
             Subscription_Plan: "gold"
         })
 
