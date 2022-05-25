@@ -15,7 +15,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import "./index.css"
 
-const pages = ['Manage User', 'Manage Blacklisted Vendor', 'Manage blacklist request'];
+const pages = ['Users', 'Blacklisted Vendor', 'Blacklist Request'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const active = {
@@ -218,8 +218,8 @@ const AdminHomepage = () => {
                                 onClose={handleCloseUserMenu}
                             >
 
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu} >
+                                {settings.map((setting, i) => (
+                                    <MenuItem key={i} onClick={handleCloseUserMenu} >
                                         <Typography textAlign="center">{setting}</Typography>
                                     </MenuItem>
                                 ))}

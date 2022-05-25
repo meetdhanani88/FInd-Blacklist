@@ -10,6 +10,7 @@ import AdminHomepage from './components/Admin/Adminhomepage';
 import ManageUser from './components/Admin/ManageUser';
 import ManageBlacklistVendor from './components/Admin/ManageBlacklistVendor';
 import ManageBlacklistReq from './components/Admin/ManageBlacklistReq';
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 
 const queryClient = new QueryClient()
 
@@ -17,25 +18,27 @@ const queryClient = new QueryClient()
 function App() {
   return (
     <div className="App">
-      <QueryClientProvider client={queryClient}>
-        <Routes>
+      <StyledEngineProvider injectFirst>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
 
-          <Route path="/" element={<Navigate to={"/login"}></Navigate>}></Route>
-          <Route path="/login" element={<LogIn></LogIn>}></Route>
-          <Route path="/forgotpass" element={<Forgotpass></Forgotpass>}></Route>
-          <Route path="/resetpass" element={<ResetPass></ResetPass>}></Route>
-          <Route path="/adminhomepage" element={<AdminHomepage></AdminHomepage>}>
+            <Route path="/" element={<Navigate to={"/login"}></Navigate>}></Route>
+            <Route path="/login" element={<LogIn></LogIn>}></Route>
+            <Route path="/forgotpass" element={<Forgotpass></Forgotpass>}></Route>
+            <Route path="/resetpass" element={<ResetPass></ResetPass>}></Route>
+            <Route path="/adminhomepage" element={<AdminHomepage></AdminHomepage>}>
 
-            <Route index element={<ManageUser />} />
-            <Route path="manageblacklistvendor" element={<ManageBlacklistVendor />} />
-            <Route path="manageblacklistreq" element={<ManageBlacklistReq />} />
+              <Route index element={<ManageUser />} />
+              <Route path="manageblacklistvendor" element={<ManageBlacklistVendor />} />
+              <Route path="manageblacklistreq" element={<ManageBlacklistReq />} />
 
 
-          </Route>
+            </Route>
 
-        </Routes>
-      </QueryClientProvider>
-      <ToastContainer />
+          </Routes>
+        </QueryClientProvider>
+        <ToastContainer />
+      </StyledEngineProvider>
     </div>
 
   );
