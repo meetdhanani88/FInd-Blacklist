@@ -318,36 +318,7 @@ function genPassword() {
     return password;
 }
 
-// function ExpireDatePlane(Expiry, type, upDate) {
 
-//     let E_Date;
-//     const currDate = new Date();
-//     if (type === 'Create') {
-//         if (Expiry === 3) {
-//             currDate.setMonth(currDate.getMonth() + 3);
-//             E_Date = currDate.toLocaleDateString();
-//         } else if (Expiry === 6) {
-//             currDate.setMonth(currDate.getMonth() + 6);
-//             E_Date = currDate.toLocaleDateString();
-//         } else if (Expiry === 12 || Expiry === 1) {
-//             currDate.setMonth(currDate.getMonth() + 12);
-//             E_Date = currDate.toLocaleDateString();
-//         }
-//     } else if (type === 'Update') {
-//         if (Expiry === 3) {
-//             upDate.setMonth(upDate.getMonth() + 3);
-//             E_Date = upDate.toLocaleDateString();
-//         } else if (Expiry === 6) {
-//             upDate.setMonth(upDate.getMonth() + 6);
-//             E_Date = upDate.toLocaleDateString();
-//         } else if (Expiry === 12) {
-//             upDate.setMonth(upDate.getMonth() + 12);
-//             E_Date = upDate.toLocaleDateString();
-//         }
-//     }
-
-//     return E_Date
-// }
 function ExpireDatePlane(Expiry, type, upDate) {
 
     let E_Date;
