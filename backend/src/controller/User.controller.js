@@ -2,6 +2,7 @@ const main = require("../middleware/mailer");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+var moment = require('moment');
 
 exports.SignUp = (req, res) => {
     const { email } = req.body;
@@ -122,7 +123,8 @@ exports.createUser = async (req, res) => {
         req.body;
 
     const E_Date = await ExpireDatePlane(Expiry, type = 'Create')
-
+   
+    console.log(E_Date);
 
     try {
 
@@ -316,20 +318,18 @@ function genPassword() {
     return password;
 }
 
+
 function ExpireDatePlane(Expiry, type, upDate) {
 
     let E_Date;
-    const currDate = new Date();
-    if (type === 'Create') {
-        if (Expiry === 3) {
-            currDate.setMonth(currDate.getMonth() + 3);
-            E_Date = currDate.toLocaleDateString();
+    
+        if (type === 'Create') {
+        if (Expiry === 3) {      
+            E_Date = moment().add(3, 'M').format('YYYY-MM-DD');
         } else if (Expiry === 6) {
-            currDate.setMonth(currDate.getMonth() + 6);
-            E_Date = currDate.toLocaleDateString();
+            E_Date =moment().add(6, 'M').format('YYYY-MM-DD');
         } else if (Expiry === 12 || Expiry === 1) {
-            currDate.setMonth(currDate.getMonth() + 12);
-            E_Date = currDate.toLocaleDateString();
+            E_Date = moment().add(12, 'M').format('YYYY-MM-DD');
         }
     } else if (type === 'Update') {
         if (Expiry === 3) {
