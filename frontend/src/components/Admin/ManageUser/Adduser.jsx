@@ -23,16 +23,16 @@ const Adduser = ({ openpop, handleClosepop }) => {
 
 
     async function Createuser() {
-
+        
         const res = await axiosInstance.post('/user/createUser', {
             firstName: values.firstname,
             lastName: values.lastname,
             email: values.email,
             MobileNo: values.mobileno,
-            Expiry: 0,
+            Expiry: plan,
             Subscription_Plan: "gold"
         })
-
+       
         return res;
 
     }
