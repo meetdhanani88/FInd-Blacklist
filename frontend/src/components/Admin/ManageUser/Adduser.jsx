@@ -12,9 +12,10 @@ import { Box, InputLabel, MenuItem, Select, FormControl, Alert } from '@mui/mate
 import axiosInstance from '../../../config';
 import { useMutation, useQueryClient } from 'react-query';
 import Toast from '../../../Helper/Toast';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
-const Adduser = ({ openpop, handleClosepop }) => {
+const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
 
     const [plan, setplan] = React.useState(0);
 
@@ -86,9 +87,9 @@ const Adduser = ({ openpop, handleClosepop }) => {
             email: values.email,
             MobileNo: values.mobileno,
             Expiry: plan,
-            Subscription_Plan: "gold"
 
-        })
+        }
+        )
         console.log("res", res);
         return res;
 
@@ -96,10 +97,11 @@ const Adduser = ({ openpop, handleClosepop }) => {
     }
     const mutation = useMutation(Createuser, {
         onSuccess: data => {
-
+            Listofuser.refetch();
             setplan(0);
             handleReset();
             handleClosepop();
+
             Toast({ message: "User Created & Password sent on Email" });
 
         },
@@ -262,7 +264,8 @@ const Adduser = ({ openpop, handleClosepop }) => {
 
                     <DialogActions>
                         <Button onClick={handleClosepop} >Cancel</Button>
-                        <Button onClick={handelAdduser} disabled={!isValid || values.firstname === ''}>Add User</Button>
+
+                        <LoadingButton loading={mutation.isLoading} onClick={handelAdduser} disabled={!isValid || values.firstname === ''}>Add User</LoadingButton>
                     </DialogActions>
                 </Box>
 

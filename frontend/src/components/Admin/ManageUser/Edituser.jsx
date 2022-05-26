@@ -27,6 +27,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
     useLayoutEffect(() => {
         console.log(userlist, userEditId);
         const editdata = userlist.filter(item => item._id === userEditId);
+
         setEdituserdata(editdata[0])
     }, [userlist, userEditId])
 
@@ -48,7 +49,6 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
             console.log(data)
             handleReset();
             handleCloseEdituserpop();
-
             Toast({ message: "User Edited" });
 
 

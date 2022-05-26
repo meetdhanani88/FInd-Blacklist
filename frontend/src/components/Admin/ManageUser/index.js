@@ -155,15 +155,13 @@ function TablePaginationActions(props) {
 // ].sort((a, b) => a.Firstname.localeCompare(b.Firstname))
 
 async function getusertList() {
-    const userlist = await axiosInstance.get("/user/getAllUsers", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    })
+    const userlist = await axiosInstance.get("/user/getAllUsers")
     return userlist
 }
 async function deleteUser(id) {
-    const res = await axiosInstance.post(`/user/deleteUser/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-    })
+    const res = await axiosInstance.post(`/user/deleteUser/${id}`
+
+    )
     return res
 }
 
@@ -186,6 +184,8 @@ function CustomPaginationActionsTable() {
             setAnchorEl(null);
         },
         onError: (data) => {
+
+            console.log(data);
             Toast({ message: "Something wrong", type: "error" })
 
         },
@@ -206,9 +206,9 @@ function CustomPaginationActionsTable() {
 
     useEffect(() => {
 
-        if (rows?.length > 1) {
-            dispatch(LoginAction.userList(rows))
-        }
+
+        dispatch(LoginAction.userList(rows))
+
 
 
     }, [rows, dispatch])
@@ -237,6 +237,7 @@ function CustomPaginationActionsTable() {
 
     const handleClosepop = () => {
         setOpenpop(false);
+
     };
     const handleCloseEdituserpop = () => {
         setopenEdituserpop(false)
@@ -265,7 +266,7 @@ function CustomPaginationActionsTable() {
 
     return (
         <>
-            <Adduser openpop={openpop} handleClosepop={handleClosepop}></Adduser>
+            <Adduser openpop={openpop} handleClosepop={handleClosepop} Listofuser={query}></Adduser>
             {openEdituserpop && <Edituser openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop}></Edituser>}
 
             <Grid container justifyContent={"center"} alignItems="center">
