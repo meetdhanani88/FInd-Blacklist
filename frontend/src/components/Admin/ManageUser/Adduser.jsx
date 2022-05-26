@@ -25,61 +25,15 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
 
 
     async function Createuser() {
+        let sp;
+        if (plan === 3) {
+            sp = "Silver"
+        } else if (plan === 6) {
+            sp = "Gold"
+        } else if (plan === 12 || plan === 1) {
+            sp = "Premium"
+        }
 
-        // if (plan === 0) {
-        //     const res = await axiosInstance.post('/user/createUser', {
-        //         firstName: values.firstname,
-        //         lastName: values.lastname,
-        //         email: values.email,
-        //         MobileNo: values.mobileno,
-        //         Expiry: plan,
-
-        //     })
-
-        //     return res;
-        // }
-        // else if (plan === 3) {
-        //     const res = await axiosInstance.post('/user/createUser', {
-        //         firstName: values.firstname,
-        //         lastName: values.lastname,
-        //         email: values.email,
-        //         MobileNo: values.mobileno,
-        //         Expiry: plan,
-        //         Subscription_Plan: "silver"
-
-        //     })
-
-        //     return res;
-        // }
-        // else if (plan === 6) {
-        //     const res = await axiosInstance.post('/user/createUser', {
-        //         firstName: values.firstname,
-        //         lastName: values.lastname,
-        //         email: values.email,
-        //         MobileNo: values.mobileno,
-        //         Expiry: plan,
-        //         Subscription_Plan: "Gold"
-
-        //     })
-
-        //     return res;
-
-        // }
-        // else if (plan === 12) {
-        //     const res = await axiosInstance.post('/user/createUser', {
-        //         firstName: values.firstname,
-        //         lastName: values.lastname,
-        //         email: values.email,
-        //         MobileNo: values.mobileno,
-        //         Expiry: plan,
-        //         Subscription_Plan: "Platinium"
-
-        //     })
-
-        //     return res;
-
-
-        // }
 
         const res = await axiosInstance.post('/user/createUser', {
             firstName: values.firstname,
@@ -87,10 +41,10 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
             email: values.email,
             MobileNo: values.mobileno,
             Expiry: plan,
+            Subscription_Plan: sp
 
-        }
-        )
-        console.log("res", res);
+        })
+
         return res;
 
 
@@ -126,7 +80,7 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
             ...values,
             selectedplan: plan
         }
-        console.log("finaldata", finaldata);
+
 
         mutation.mutate();
 
