@@ -1,6 +1,6 @@
 import * as React from 'react';
 import "./index.css"
-import PropTypes from 'prop-types';
+
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -20,7 +20,7 @@ import TableHead from '@mui/material/TableHead';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
+
 import { Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
@@ -32,14 +32,14 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ModeEdit from '@mui/icons-material/ModeEdit';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Adduser from './Adduser';
-import { useQuery } from "react-query"
+import { useQuery, useMutation, useQueryClient } from "react-query"
 import axiosInstance from '../../../config';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
 import { useEffect } from 'react';
 import Edituser from './Edituser';
+import Toast from '../../../Helper/Toast';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -155,8 +155,16 @@ function TablePaginationActions(props) {
 // ].sort((a, b) => a.Firstname.localeCompare(b.Firstname))
 
 async function getusertList() {
-    const userlist = await axiosInstance.get("/user/getAllUsers")
+    const userlist = await axiosInstance.get("/user/getAllUsers", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
     return userlist
+}
+async function deleteUser(id) {
+    const res = await axiosInstance.post(`/user/deleteUser/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    })
+    return res
 }
 
 function CustomPaginationActionsTable() {
@@ -168,7 +176,27 @@ function CustomPaginationActionsTable() {
     const [openEdituserpop, setopenEdituserpop] = React.useState(false);
     const query = useQuery('getuserlist', getusertList);
     const dispatch = useDispatch();
-    const rowid = React.useRef();
+    const queryClient = useQueryClient()
+
+    const deletemutation = useMutation((id) => deleteUser(id), {
+        onSuccess: data => {
+            console.log(data);
+            Toast({ message: "Deleted User Successfully" })
+            query.refetch();
+            setAnchorEl(null);
+        },
+        onError: (data) => {
+            Toast({ message: "Something wrong", type: "error" })
+
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries("userdeleted")
+
+        }
+    }
+
+    )
+
 
 
 
@@ -189,10 +217,14 @@ function CustomPaginationActionsTable() {
 
 
     const Edituserfun = (btnid) => {
-        console.log(btnid.id);
+
         dispatch(LoginAction.GetuserEditId(btnid.id))
         handleClose();
         handleClickOpenEdituserpop()
+
+    }
+    const Deleteuserfun = (btnid) => {
+        deletemutation.mutate(btnid.id)
 
     }
 
@@ -209,6 +241,7 @@ function CustomPaginationActionsTable() {
     const handleCloseEdituserpop = () => {
         setopenEdituserpop(false)
     };
+
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -233,7 +266,7 @@ function CustomPaginationActionsTable() {
     return (
         <>
             <Adduser openpop={openpop} handleClosepop={handleClosepop}></Adduser>
-            <Edituser openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop}></Edituser>
+            {openEdituserpop && <Edituser openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop}></Edituser>}
 
             <Grid container justifyContent={"center"} alignItems="center">
 
@@ -342,7 +375,7 @@ function CustomPaginationActionsTable() {
 
                                                         <ListItemText>Edit User</ListItemText>
                                                     </MenuItem>
-                                                    <MenuItem onClick={handleClose}>
+                                                    <MenuItem onClick={() => Deleteuserfun(anchorEl)}>
                                                         <ListItemIcon>
                                                             <DeleteIcon fontSize="small" color="error" />
                                                         </ListItemIcon>

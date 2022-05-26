@@ -8,31 +8,31 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Box, InputLabel, MenuItem, Select, FormControl, Alert } from '@mui/material';
+import { Box, Alert } from '@mui/material';
 import axiosInstance from '../../../config';
 import { useMutation, useQueryClient } from 'react-query';
 import Toast from '../../../Helper/Toast';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 
 const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
 
     const [Edituserdata, setEdituserdata] = React.useState({});
-    const [suceessmsg, setsuceessmsg] = React.useState(false)
+
     const [errmsg, seterrmsg] = React.useState(false);
     const queryClient = useQueryClient()
     const userlist = useSelector(state => state.Login.userlist)
     const userEditId = useSelector(state => state.Login.userEditId)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         console.log(userlist, userEditId);
         const editdata = userlist.filter(item => item._id === userEditId);
         setEdituserdata(editdata[0])
     }, [userlist, userEditId])
 
-    async function Createuser() {
+    async function EditCreateduser() {
 
-        const res = await axiosInstance.post('/user/createUser', {
+        const res = await axiosInstance.post(`/user/updateUser/${Edituserdata._id}`, {
             firstName: values.firstname,
             lastName: values.lastname,
             email: values.email,
@@ -43,39 +43,35 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
         return res;
 
     }
-    const mutation = useMutation(Createuser, {
+    const mutation = useMutation(EditCreateduser, {
         onSuccess: data => {
-
-
+            console.log(data)
             handleReset();
             handleCloseEdituserpop();
 
-            Toast({ message: "User Created & Password sent on Email" });
+            Toast({ message: "User Edited" });
 
 
         },
         onError: (data) => {
 
-            // seterrmsg(data.response.data.message);
-            // setsuceessmsg("");
+            seterrmsg(data.response.data.message);
+
         },
         onSettled: () => {
-            queryClient.invalidateQueries('craeayeuser');
+            queryClient.invalidateQueries('userEdited');
         }
     })
 
-    const handleplanChange = (event) => {
 
-    };
-
-    function handelAdduser() {
+    function handelEdiuser() {
 
 
-        const finaldata = {
-            ...values,
+        // const finaldata = {
+        //     ...values,
 
-        }
-        console.log("finaldata", finaldata);
+        // }
+        // console.log("finaldata", finaldata);
 
         mutation.mutate();
 
@@ -90,16 +86,17 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
         mobileno: Yup.string().min(10, "Minimum Length 10").required("mobile no is require"),
     })
 
-    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid, handleReset } = useFormik({
+    const { errors, values, handleBlur, handleSubmit, handleChange, touched, isValid, handleReset } = useFormik({
         initialValues: {
 
-            firstname: '',
-            lastname: '',
-            email: '',
-            mobileno: '',
+            firstname: Edituserdata.firstName,
+            lastname: Edituserdata.lastName,
+            email: Edituserdata.email,
+            mobileno: Edituserdata.MobileNo,
         },
         validationSchema,
-        onSubmit: handelAdduser
+        onSubmit: handelEdiuser,
+        enableReinitialize: true
     })
 
     return (
@@ -110,11 +107,12 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
                 aria-describedby="scroll-dialog-description"
             >
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                    <DialogTitle id="scroll-dialog-title">Add New User</DialogTitle>
+                    <DialogTitle id="scroll-dialog-title">Edit Existing UserData </DialogTitle>
 
                     <DialogContent dividers >
+                        {errmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
                         <DialogContentText  >
-                            Add New user for giving acess to Find-Blacklist.
+                            Edit User
                         </DialogContentText>
 
 
@@ -130,7 +128,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.firstname}
+                            value={values.firstname || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
@@ -147,7 +145,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.lastname}
+                            value={values.lastname || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
@@ -164,7 +162,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.email}
+                            value={values.email || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
@@ -182,7 +180,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.mobileno}
+                            value={values.mobileno || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
@@ -194,7 +192,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
 
                     <DialogActions>
                         <Button onClick={handleCloseEdituserpop} >Cancel</Button>
-                        <Button onClick={handelAdduser} disabled={!isValid || values.firstname === ''}>Add User</Button>
+                        <Button onClick={handelEdiuser} disabled={!isValid || values.firstname === ''}>Edit User</Button>
                     </DialogActions>
                 </Box>
 
@@ -204,4 +202,5 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
     )
 }
 
-export default Edituser;
+
+export default Edituser; 

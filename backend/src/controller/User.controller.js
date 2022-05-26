@@ -116,54 +116,14 @@ exports.forGotPassword = (req, res) => {
         return res.status(400).json(err);
     }
 };
-// exports.createUser = async (req, res) => {
-//     const { firstName, lastName, email, MobileNo, Subscription_Plan, Expiry } =
-//         req.body;
-//     console.log(firstName, lastName, email, MobileNo, Subscription_Plan, Expiry);
-//     const E_Date = await ExpireDatePlane(Expiry, type = 'Create')
-//     console.log(E_Date);
-//     try {
 
-//         const user = await User({
-//             firstName,
-//             lastName,
-//             email,
-//             MobileNo,
-//             Subscription_Plan,
-//             Expiry_Date: E_Date ? E_Date : undefined,
-//             Role: "User",
-//         });
-//         const pass = await genPassword();
-//         user.Password = pass
-//         const { Role } = req.user.user;
-//         if (Role === "Admin") {
-//             user.save(async (err, user) => {
-//                 if (err) return res.status(400).json(err);
-
-//                 if (user) {
-//                     await main(user.email, pass);
-//                     return res.status(201).json({
-//                         message: "User Created Successfully",
-//                         user: user,
-//                     });
-//                 }
-//             });
-//         } else {
-//             return res.status(400).json({
-//                 message: "Required Authorization",
-//             });
-
-//         }
-//     } catch (err) {
-//         return res.status(400).json(err);
-//     }
-// }
 exports.createUser = async (req, res) => {
     const { firstName, lastName, email, MobileNo, Subscription_Plan, Expiry } =
         req.body;
 
     const E_Date = await ExpireDatePlane(Expiry, type = 'Create')
-  
+
+
     try {
 
         const user = await User({
@@ -178,6 +138,7 @@ exports.createUser = async (req, res) => {
         const pass = await genPassword();
         user.Password = pass
         const { Role } = req.user.user;
+        console.log(Role);
         if (Role === "Admin") {
             user.save(async (err, user) => {
                 if (err) return res.status(400).json(err);

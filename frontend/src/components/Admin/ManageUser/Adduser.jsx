@@ -13,17 +13,73 @@ import axiosInstance from '../../../config';
 import { useMutation, useQueryClient } from 'react-query';
 import Toast from '../../../Helper/Toast';
 
+
 const Adduser = ({ openpop, handleClosepop }) => {
 
     const [plan, setplan] = React.useState(0);
-    const [suceessmsg, setsuceessmsg] = React.useState(false)
+
     const [errmsg, seterrmsg] = React.useState(false);
     const queryClient = useQueryClient()
 
 
 
     async function Createuser() {
-        
+
+        // if (plan === 0) {
+        //     const res = await axiosInstance.post('/user/createUser', {
+        //         firstName: values.firstname,
+        //         lastName: values.lastname,
+        //         email: values.email,
+        //         MobileNo: values.mobileno,
+        //         Expiry: plan,
+
+        //     })
+
+        //     return res;
+        // }
+        // else if (plan === 3) {
+        //     const res = await axiosInstance.post('/user/createUser', {
+        //         firstName: values.firstname,
+        //         lastName: values.lastname,
+        //         email: values.email,
+        //         MobileNo: values.mobileno,
+        //         Expiry: plan,
+        //         Subscription_Plan: "silver"
+
+        //     })
+
+        //     return res;
+        // }
+        // else if (plan === 6) {
+        //     const res = await axiosInstance.post('/user/createUser', {
+        //         firstName: values.firstname,
+        //         lastName: values.lastname,
+        //         email: values.email,
+        //         MobileNo: values.mobileno,
+        //         Expiry: plan,
+        //         Subscription_Plan: "Gold"
+
+        //     })
+
+        //     return res;
+
+        // }
+        // else if (plan === 12) {
+        //     const res = await axiosInstance.post('/user/createUser', {
+        //         firstName: values.firstname,
+        //         lastName: values.lastname,
+        //         email: values.email,
+        //         MobileNo: values.mobileno,
+        //         Expiry: plan,
+        //         Subscription_Plan: "Platinium"
+
+        //     })
+
+        //     return res;
+
+
+        // }
+
         const res = await axiosInstance.post('/user/createUser', {
             firstName: values.firstname,
             lastName: values.lastname,
@@ -31,26 +87,26 @@ const Adduser = ({ openpop, handleClosepop }) => {
             MobileNo: values.mobileno,
             Expiry: plan,
             Subscription_Plan: "gold"
+
         })
-       
+        console.log("res", res);
         return res;
+
 
     }
     const mutation = useMutation(Createuser, {
         onSuccess: data => {
-            
+
             setplan(0);
             handleReset();
             handleClosepop();
-
             Toast({ message: "User Created & Password sent on Email" });
-
 
         },
         onError: (data) => {
-           
-            // seterrmsg(data.response.data.message);
-            // setsuceessmsg("");
+
+            seterrmsg(data.response.data.message);
+
         },
         onSettled: () => {
             queryClient.invalidateQueries('craeayeuser');
@@ -83,7 +139,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
         mobileno: Yup.string().min(10, "Minimum Length 10").required("mobile no is require"),
     })
 
-    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid, handleReset } = useFormik({
+    const { errors, values, handleBlur, handleSubmit, handleChange, touched, isValid, handleReset } = useFormik({
         initialValues: {
 
             firstname: '',
@@ -106,6 +162,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
                     <DialogTitle id="scroll-dialog-title">Add New User</DialogTitle>
 
                     <DialogContent dividers >
+                        {errmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
                         <DialogContentText  >
                             Add New user for giving acess to Find-Blacklist.
                         </DialogContentText>
