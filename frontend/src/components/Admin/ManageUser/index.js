@@ -206,9 +206,9 @@ function CustomPaginationActionsTable() {
 
     useEffect(() => {
 
-        if (rows?.length > 1) {
+        
             dispatch(LoginAction.userList(rows))
-        }
+        
 
 
     }, [rows, dispatch])
