@@ -10,14 +10,18 @@ const vendorSchema = new mongoose.Schema({
         required : true,
         trim : true
     },
-    Reason : {
+    ReasonForUser : {
         type : String,
-        required : true,
+        trim : true
+    },
+    ReasonForAdmin : {
+        type : String,
         trim : true
     },
     BlackList_Status : {
         type : String,
-        trim : true
+        trim : true,
+        enum:[true,false]
     },
     image : {
         type : String,
@@ -29,11 +33,12 @@ const vendorSchema = new mongoose.Schema({
         ref : 'User',
         required:true
     },
-    Requested_Type: { 
-        type : Date,
+    Requested_Status: { 
+        type : String,
         trim : true,
-        enum :['Accept','Reject']
-    }
+        enum :['Accept','Reject','Pending']
+    },
+
    
 },{timestamps:true})
 

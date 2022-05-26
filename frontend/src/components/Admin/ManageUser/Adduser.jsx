@@ -32,7 +32,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
             Expiry: plan,
             Subscription_Plan: "gold"
         })
-       
+       console.log(res);
         return res;
 
     }
