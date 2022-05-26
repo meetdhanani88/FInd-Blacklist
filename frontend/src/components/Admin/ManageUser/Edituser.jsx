@@ -25,7 +25,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
     const userEditId = useSelector(state => state.Login.userEditId)
 
     useLayoutEffect(() => {
-        
+
         const editdata = userlist.filter(item => item._id === userEditId);
 
         setEdituserdata(editdata[0])

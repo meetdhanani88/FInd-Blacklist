@@ -1,6 +1,6 @@
 import * as React from 'react';
 import "./index.css"
-
+import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -20,12 +20,11 @@ import TableHead from '@mui/material/TableHead';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import { Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import FilterListIcon from '@mui/icons-material/FilterList';
+
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -115,44 +114,6 @@ function TablePaginationActions(props) {
         </Box>
     );
 }
-
-// TablePaginationActions.propTypes = {
-//     count: PropTypes.number.isRequired,
-//     onPageChange: PropTypes.func.isRequired,
-//     page: PropTypes.number.isRequired,
-//     rowsPerPage: PropTypes.number.isRequired,
-// };
-
-// function createData(Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription) {
-//     return { Firstname, Lastname, Email, MobileNo, SubscriptionPlan, PlanExpiryDate, EditUser, DeleteUser, EditSubscription };
-// }
-
-// const rows = [
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-//     createData('Dhanani', 'Meet', 'meetdhanani89@gmail.com', "8460409963", "Gold", "01/02/2022", "true", "true", "true"),
-
-
-// ].sort((a, b) => a.Firstname.localeCompare(b.Firstname))
 
 async function getusertList() {
     const userlist = await axiosInstance.get("/user/getAllUsers")
@@ -349,7 +310,7 @@ function CustomPaginationActionsTable() {
                                                     style={{ boxShadow: "none" }}
 
                                                 >
-                                                    <FilterListIcon color='error' />
+                                                    <MenuIcon color='error' />
 
                                                 </IconButton>
                                                 {/* <p style={{}} ref={rowid}>{row._id}</p> */}

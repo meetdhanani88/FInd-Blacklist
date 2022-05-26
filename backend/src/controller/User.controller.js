@@ -138,7 +138,7 @@ exports.createUser = async (req, res) => {
         const pass = await genPassword();
         user.Password = pass
         const { Role } = req.user.user;
-        
+
         if (Role === "Admin") {
             user.save(async (err, user) => {
                 if (err) return res.status(400).json(err);

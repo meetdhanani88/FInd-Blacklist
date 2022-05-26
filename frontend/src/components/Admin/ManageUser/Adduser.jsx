@@ -74,14 +74,6 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
     };
 
     function handelAdduser() {
-
-
-        const finaldata = {
-            ...values,
-            selectedplan: plan
-        }
-
-
         mutation.mutate();
 
 
