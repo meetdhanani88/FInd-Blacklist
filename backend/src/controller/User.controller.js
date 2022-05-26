@@ -34,7 +34,7 @@ exports.SignUp = (req, res) => {
 exports.SignIn = (req, res) => {
     const { email, password } = req.body;
     try {
-        User.findOne({ email: email, Role: "Admin" }).exec(async (err, user) => {
+        User.findOne({ email: email }).exec(async (err, user) => {
             if (err) return res.status(400).json(err);
             if (user) {
                 if (user.Password === password) {
@@ -53,7 +53,7 @@ exports.SignIn = (req, res) => {
                 }
             } else {
                 return res.status(404).json({
-                    message: "You are not Allow for Admin Access",
+                    message: "User Not found",
                 });
             }
         });

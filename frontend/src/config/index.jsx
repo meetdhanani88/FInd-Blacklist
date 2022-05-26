@@ -6,7 +6,7 @@ const token = localStorage.getItem("token")
 const axiosInstance = axios.create({
     baseURL: baseURL,
     headers: {
-        "Authorization": token ? `Bearer ${token}` : ''
+        "Authorization": token ? `Bearer ${localStorage.getItem("token")}` : ''
     }
 })
 export default axiosInstance

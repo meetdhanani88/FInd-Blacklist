@@ -12,15 +12,23 @@ import { Box, InputLabel, MenuItem, Select, FormControl, Alert } from '@mui/mate
 import axiosInstance from '../../../config';
 import { useMutation, useQueryClient } from 'react-query';
 import Toast from '../../../Helper/Toast';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-const Adduser = ({ openpop, handleClosepop }) => {
+const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
 
-    const [plan, setplan] = React.useState(0);
+    const [Edituserdata, setEdituserdata] = React.useState({});
     const [suceessmsg, setsuceessmsg] = React.useState(false)
     const [errmsg, seterrmsg] = React.useState(false);
     const queryClient = useQueryClient()
+    const userlist = useSelector(state => state.Login.userlist)
+    const userEditId = useSelector(state => state.Login.userEditId)
 
-
+    useEffect(() => {
+        console.log(userlist, userEditId);
+        const editdata = userlist.filter(item => item._id === userEditId);
+        setEdituserdata(editdata[0])
+    }, [userlist, userEditId])
 
     async function Createuser() {
 
@@ -29,8 +37,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
             lastName: values.lastname,
             email: values.email,
             MobileNo: values.mobileno,
-            Expiry: plan,
-            Subscription_Plan: "gold"
+
         })
 
         return res;
@@ -38,17 +45,17 @@ const Adduser = ({ openpop, handleClosepop }) => {
     }
     const mutation = useMutation(Createuser, {
         onSuccess: data => {
-            
-            setplan(0);
+
+
             handleReset();
-            handleClosepop();
+            handleCloseEdituserpop();
 
             Toast({ message: "User Created & Password sent on Email" });
 
 
         },
         onError: (data) => {
-           
+
             // seterrmsg(data.response.data.message);
             // setsuceessmsg("");
         },
@@ -58,7 +65,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
     })
 
     const handleplanChange = (event) => {
-        setplan(event.target.value);
+
     };
 
     function handelAdduser() {
@@ -66,7 +73,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
 
         const finaldata = {
             ...values,
-            selectedplan: plan
+
         }
         console.log("finaldata", finaldata);
 
@@ -97,7 +104,7 @@ const Adduser = ({ openpop, handleClosepop }) => {
 
     return (
         <div>
-            <Dialog open={openpop} onClose={handleClosepop} maxWidth="sm" scroll='paper'
+            <Dialog open={openEdituserpop} onClose={handleCloseEdituserpop} maxWidth="sm" scroll='paper'
 
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
@@ -183,28 +190,10 @@ const Adduser = ({ openpop, handleClosepop }) => {
                             <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.mobileno}</Alert>
                         ) : null}
 
-
-                        <FormControl size='medium' sx={{ mt: 2, minWidth: 200 }} >
-
-                            <InputLabel id="demo-simple-select-label">Subscription Plan</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="subplan"
-                                label="Subscription Plan"
-                                value={plan}
-                                onChange={handleplanChange}
-                            >
-                                <MenuItem value={0}>None</MenuItem>
-                                <MenuItem value={12}>Premium Plan (1 Year)</MenuItem>
-                                <MenuItem value={6}>Gold Plan (6 Months)</MenuItem>
-                                <MenuItem value={3}>Silver Plan (3 Months)</MenuItem>
-                            </Select>
-
-                        </FormControl>
                     </DialogContent>
 
                     <DialogActions>
-                        <Button onClick={handleClosepop} >Cancel</Button>
+                        <Button onClick={handleCloseEdituserpop} >Cancel</Button>
                         <Button onClick={handelAdduser} disabled={!isValid || values.firstname === ''}>Add User</Button>
                     </DialogActions>
                 </Box>
@@ -215,4 +204,4 @@ const Adduser = ({ openpop, handleClosepop }) => {
     )
 }
 
-export default Adduser;
+export default Edituser;

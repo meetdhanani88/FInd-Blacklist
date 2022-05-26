@@ -36,6 +36,11 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Adduser from './Adduser';
 import { useQuery } from "react-query"
 import axiosInstance from '../../../config';
+import { useDispatch, useSelector } from 'react-redux';
+import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
+import { useEffect } from 'react';
+import Edituser from './Edituser';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -160,22 +165,49 @@ function CustomPaginationActionsTable() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const [openpop, setOpenpop] = React.useState(false);
-    const query = useQuery('getuserlist', getusertList)
+    const [openEdituserpop, setopenEdituserpop] = React.useState(false);
+    const query = useQuery('getuserlist', getusertList);
+    const dispatch = useDispatch();
+    const rowid = React.useRef();
 
 
+
+    const rows = query?.data?.data
+    // console.log(rows);
+
+
+    useEffect(() => {
+
+        if (rows?.length > 1) {
+            dispatch(LoginAction.userList(rows))
+        }
+
+
+    }, [rows, dispatch])
 
     // console.log(query?.data?.data);
 
-    const rows = query?.data?.data
-    console.log(rows);
 
+    const Edituserfun = (btnid) => {
+        console.log(btnid.id);
+        dispatch(LoginAction.GetuserEditId(btnid.id))
+        handleClose();
+        handleClickOpenEdituserpop()
+
+    }
 
     const handleClickOpenpop = (scrollType) => {
         setOpenpop(true);
     };
+    const handleClickOpenEdituserpop = () => {
+        setopenEdituserpop(true)
+    };
 
     const handleClosepop = () => {
         setOpenpop(false);
+    };
+    const handleCloseEdituserpop = () => {
+        setopenEdituserpop(false)
     };
 
     const handleClick = (event) => {
@@ -201,6 +233,7 @@ function CustomPaginationActionsTable() {
     return (
         <>
             <Adduser openpop={openpop} handleClosepop={handleClosepop}></Adduser>
+            <Edituser openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop}></Edituser>
 
             <Grid container justifyContent={"center"} alignItems="center">
 
@@ -238,17 +271,19 @@ function CustomPaginationActionsTable() {
                                 </TableRow>
                             </TableHead>
 
-                            <TableBody>
+                            {rows?.length > 0 && <TableBody>
                                 {(rowsPerPage > 0
                                     ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                     : rows
                                 )?.map((row, i) => {
 
-                                    var date = row?.Expiry_Date ? new Date(row.Expiry_Date) : null;
+
+                                    let date = row?.Expiry_Date ? new Date(row.Expiry_Date) : null;
 
 
                                     return (
-                                        <TableRow key={i}>
+
+                                        <TableRow key={row?._id}>
                                             <TableCell style={{ width: 50 }} >
                                                 {row.firstName}
                                             </TableCell>
@@ -268,18 +303,22 @@ function CustomPaginationActionsTable() {
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
+
+
                                                 <IconButton
                                                     aria-label="edit"
-                                                    id="basic-button"
+                                                    id={row._id}
                                                     aria-controls={open ? 'basic-menu' : undefined}
                                                     aria-haspopup="true"
                                                     aria-expanded={open ? 'true' : undefined}
                                                     onClick={handleClick}
                                                     style={{ boxShadow: "none" }}
+
                                                 >
                                                     <FilterListIcon color='error' />
 
                                                 </IconButton>
+                                                {/* <p style={{}} ref={rowid}>{row._id}</p> */}
                                                 <Menu
                                                     id="basic-menu"
                                                     anchorEl={anchorEl}
@@ -295,10 +334,12 @@ function CustomPaginationActionsTable() {
                                                     }}
 
                                                 >
-                                                    <MenuItem onClick={handleClose}>
+
+                                                    <MenuItem onClick={() => Edituserfun(anchorEl)}>
                                                         <ListItemIcon>
                                                             <ModeEdit fontSize="small" color="info" />
                                                         </ListItemIcon>
+
                                                         <ListItemText>Edit User</ListItemText>
                                                     </MenuItem>
                                                     <MenuItem onClick={handleClose}>
@@ -326,7 +367,7 @@ function CustomPaginationActionsTable() {
                                         <TableCell colSpan={6} />
                                     </TableRow>
                                 )}
-                            </TableBody>
+                            </TableBody>}
 
                             <TableFooter>
                                 <TableRow >
