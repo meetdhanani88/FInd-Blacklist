@@ -14,6 +14,7 @@ const Loginslice = createSlice({
         },
         userList(state, action) {
             state.userlist = action.payload;
+            console.log(state.userlist);
 
 
         },

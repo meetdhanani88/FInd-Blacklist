@@ -38,6 +38,7 @@ import { useDispatch } from 'react-redux';
 import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
 import { useEffect } from 'react';
 import Edituser from './Edituser';
+import EditSubscription from './EditSubscription';
 import Toast from '../../../Helper/Toast';
 
 
@@ -133,6 +134,7 @@ function CustomPaginationActionsTable() {
     const open = Boolean(anchorEl);
     const [openpop, setOpenpop] = React.useState(false);
     const [openEdituserpop, setopenEdituserpop] = React.useState(false);
+    const [openEditsubuserpop, setopenEditsubuserpop] = React.useState(false);
     const query = useQuery('getuserlist', getusertList);
     const dispatch = useDispatch();
     const queryClient = useQueryClient()
@@ -184,6 +186,13 @@ function CustomPaginationActionsTable() {
         handleClickOpenEdituserpop()
 
     }
+
+    const Editsubrfun = (btn) => {
+        dispatch(LoginAction.GetuserEditId(btn.id))
+        handleClose();
+        setopenEditsubuserpop(true)
+
+    }
     const Deleteuserfun = (btnid) => {
         deletemutation.mutate(btnid.id)
 
@@ -229,6 +238,8 @@ function CustomPaginationActionsTable() {
         <>
             <Adduser openpop={openpop} handleClosepop={handleClosepop} Listofuser={query}></Adduser>
             {openEdituserpop && <Edituser openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop}></Edituser>}
+
+            {openEditsubuserpop && <EditSubscription openEdituserpop={openEditsubuserpop} handleCloseEdituserpop={() => setopenEditsubuserpop(false)}></EditSubscription>}
 
             <Grid container justifyContent={"center"} alignItems="center">
 
@@ -343,7 +354,7 @@ function CustomPaginationActionsTable() {
                                                         </ListItemIcon>
                                                         <ListItemText>Delete User</ListItemText>
                                                     </MenuItem>
-                                                    <MenuItem onClick={handleClose}>
+                                                    <MenuItem onClick={() => Editsubrfun(anchorEl)}>
                                                         <ListItemIcon>
                                                             <SubscriptionsIcon fontSize="small" color='success' />
                                                         </ListItemIcon>

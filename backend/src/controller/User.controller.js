@@ -123,8 +123,8 @@ exports.createUser = async (req, res) => {
         req.body;
 
     const E_Date = await ExpireDatePlane(Expiry, type = 'Create')
-   
-    console.log(E_Date);
+
+
 
     try {
 
@@ -322,12 +322,12 @@ function genPassword() {
 function ExpireDatePlane(Expiry, type, upDate) {
 
     let E_Date;
-    
-        if (type === 'Create') {
-        if (Expiry === 3) {      
+
+    if (type === 'Create') {
+        if (Expiry === 3) {
             E_Date = moment().add(3, 'M').format('YYYY-MM-DD');
         } else if (Expiry === 6) {
-            E_Date =moment().add(6, 'M').format('YYYY-MM-DD');
+            E_Date = moment().add(6, 'M').format('YYYY-MM-DD');
         } else if (Expiry === 12 || Expiry === 1) {
             E_Date = moment().add(12, 'M').format('YYYY-MM-DD');
         }
