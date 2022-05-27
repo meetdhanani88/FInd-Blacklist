@@ -18,16 +18,17 @@ const vendorSchema = new mongoose.Schema({
         type : String,
         trim : true
     },
-    BlackList_Status : {
-        type : String,
-        trim : true,
-        enum:[true,false]
-    },
+    
     image : {
         type : String,
         trim : true
     },
     Requested_User : {
+        type : mongoose.Schema.Types.ObjectId,
+        trim : true,
+        ref : 'User'
+    },
+    Admin : {
         type : mongoose.Schema.Types.ObjectId,
         trim : true,
         ref : 'User',
