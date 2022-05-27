@@ -1,21 +1,20 @@
 const Vendor = require('../models/Vender.model')
 const moment = require('moment');
 const fs = require('fs')
-const Path = require('path');
-
+const Path = require('path')
 exports.VendorPendingReq = async (req, res) => {
     const { vendorName, Address, ReasonForUser } = req.body
-
+    const vendorValues = {
+        vendorName, Address, ReasonForUser,
+        Requested_User: req.user.user,
+        Requested_Status: 'Pending',
+    }
+    if (req.file) {
+        vendorValues.image = req.file.filename
+    }
 
     try {
-        const vendor = await Vendor({
-            vendorName,
-            Address,
-            ReasonForUser,
-            Requested_User: req.user.user,
-            Requested_Status: 'Pending',
-            image: req.file.filename
-        })
+        const vendor = await Vendor(vendorValues)
 
         await vendor.save((err, vendor) => {
             if (err) return res.status(400).json(err)
@@ -93,7 +92,7 @@ exports.AddToBlackList = async (req, res) => {
             if (err) return res.status(400).json(err)
             if (vendor) {
                 return res.status(200).json({
-                    message: 'Successfully sent Request to Admin',
+                    message: 'Successfully Added to Blacklist',
                     vendor: vendor
                 })
             }
