@@ -74,16 +74,19 @@ exports.ListOfBlackListReq = (req, res) => {
 }
 exports.AddToBlackList = async (req, res) => {
     const { vendorName, Address, ReasonForAdmin } = req.body
+    const venderValues = {
+        vendorName, Address, ReasonForAdmin, Admin: req.user.user,
+        Requested_Status: 'Accept',
+        dateOfBlackListed: moment()
+    }
+
+    if (req.file) {
+        venderValues.image = req.file.filename
+    }
+
     try {
-        const vendor = await Vendor({
-            vendorName,
-            Address,
-            ReasonForAdmin,
-            Admin: req.user.user,
-            Requested_Status: 'Accept',
-            dateOfBlackListed: moment(),
-            image: req.file.filename
-        })
+
+        const vendor = await Vendor(venderValues)
 
         await vendor.save((err, vendor) => {
             if (err) return res.status(400).json(err)
