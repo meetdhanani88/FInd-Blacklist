@@ -255,7 +255,7 @@ exports.inActivePlan = async (req, res) => {
             );
             if (updatedUser) {
                 return res.status(200).json({
-                    message: "Plane InActive",
+                    message: "Plan InActive",
                     user: updatedUser,
                 });
             }
@@ -289,7 +289,7 @@ exports.ActivePlan = async (req, res) => {
                     );
                     if (updatedUser) {
                         return res.status(200).json({
-                            message: "Plane Active",
+                            message: "Plan Active",
                             user: updatedUser,
                         });
                     }
