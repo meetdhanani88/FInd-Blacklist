@@ -1,5 +1,5 @@
 const Vendor = require('../models/Vender.model')
-
+const moment = require('moment');
 exports.VendorPendingReq =async (req,res)=>{
     const {vendorName,Address,ReasonForUser,image} = req.body
     try{
@@ -27,15 +27,19 @@ exports.VendorPendingReq =async (req,res)=>{
 }
 exports.BlackListStatusUpdate =async (req,res)=>{
     const {Requested_Status,ReasonForAdmin} = req.body
+    const updateValue = {
+        Requested_Status,ReasonForAdmin
+    }
+    if(Requested_Status === 'Accept'){
+        updateValue.dateOfBlackListed = moment().format('YYYY-MM-DD');
+    }
     const id = req.params.id
-    let Admin = req.user.user._id
-    
+    updateValue.Admin = req.user.user._id
+   
     try{
-       const updatedStatus = await Vendor.findByIdAndUpdate(id,{
-        ReasonForAdmin,
-        Requested_Status,
-        Admin
-       }, { new: true })
+       const updatedStatus = await Vendor.findByIdAndUpdate(id,
+        updateValue
+       , { new: true })
        
        if(updatedStatus){
         return res.status(200).json({
@@ -71,7 +75,8 @@ exports.AddToBlackList =async (req,res)=>{
             Address,
             ReasonForAdmin,
             Admin : req.user.user,
-            Requested_Status : 'Accept'
+            Requested_Status : 'Accept',
+            dateOfBlackListed : moment()
         })
         
         await vendor.save((err,vendor)=>{

@@ -2,7 +2,7 @@ const main = require("../middleware/mailer");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-var moment = require('moment');
+const moment = require('moment');
 
 exports.SignUp = (req, res) => {
     const { email } = req.body;

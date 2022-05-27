@@ -39,12 +39,13 @@ const vendorSchema = new mongoose.Schema({
         trim : true,
         enum :['Accept','Reject','Pending']
     },
+    dateOfBlackListed :{
+        type : Date,
+        trim : true
+    }
 
    
-},{timestamps:true})
-
-
-
+},{})
 module.exports = mongoose.model('Vendors',vendorSchema)
 
 
