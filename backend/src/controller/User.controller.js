@@ -2,7 +2,7 @@ const main = require("../middleware/mailer");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-var moment = require('moment');
+const moment = require('moment');
 
 exports.SignUp = (req, res) => {
     const { email } = req.body;
@@ -122,7 +122,7 @@ exports.createUser = async (req, res) => {
     const { firstName, lastName, email, MobileNo, Subscription_Plan, Expiry } =
         req.body;
 
-    const E_Date = await ExpireDatePlane(Expiry, type = 'Create')
+    const E_Date = await ExpireDatePlane(Expiry)
 
 
 
@@ -240,7 +240,7 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-exports.inActivePlane = async (req, res) => {
+exports.inActivePlan = async (req, res) => {
     const id = req.params.id;
     try {
         const { Role } = req.user.user;
@@ -255,7 +255,7 @@ exports.inActivePlane = async (req, res) => {
             );
             if (updatedUser) {
                 return res.status(200).json({
-                    message: "Plane InActive",
+                    message: "Plan InActive",
                     user: updatedUser,
                 });
             }
@@ -268,7 +268,7 @@ exports.inActivePlane = async (req, res) => {
         return res.status(400).json(err);
     }
 };
-exports.ActivePlane = async (req, res) => {
+exports.ActivePlan = async (req, res) => {
     const id = req.params.id;
     const { Subscription_Plan, Expire } = req.body
     try {
@@ -277,7 +277,7 @@ exports.ActivePlane = async (req, res) => {
             User.findById(id, async (err, user) => {
                 if (err) return res.status(400).json(err);
                 if (user) {
-                    const E_Date = await ExpireDatePlane(Expire, type = 'Update', user.Expiry_Date)
+                    const E_Date = await ExpireDatePlane(Expire)
                     console.log(E_Date);
                     const updatedUser = await User.updateOne(
                         { email: user.email },
@@ -289,7 +289,7 @@ exports.ActivePlane = async (req, res) => {
                     );
                     if (updatedUser) {
                         return res.status(200).json({
-                            message: "Plane Active",
+                            message: "Plan Active",
                             user: updatedUser,
                         });
                     }
@@ -319,30 +319,25 @@ function genPassword() {
 }
 
 
-function ExpireDatePlane(Expiry, type, upDate) {
+function ExpireDatePlane(Expiry, type) {
 
     let E_Date;
+<<<<<<< HEAD
 
     if (type === 'Create') {
         if (Expiry === 3) {
+=======
+
+
+        if (Expiry === 3) {
+>>>>>>> 9df595185ce55980eb163643cddd97e2b3cd2c2c
             E_Date = moment().add(3, 'M').format('YYYY-MM-DD');
         } else if (Expiry === 6) {
             E_Date = moment().add(6, 'M').format('YYYY-MM-DD');
         } else if (Expiry === 12 || Expiry === 1) {
             E_Date = moment().add(12, 'M').format('YYYY-MM-DD');
-        }
-    } else if (type === 'Update') {
-        if (Expiry === 3) {
-            upDate.setMonth(upDate.getMonth() + 3);
-            E_Date = upDate.toLocaleDateString();
-        } else if (Expiry === 6) {
-            upDate.setMonth(upDate.getMonth() + 6);
-            E_Date = upDate.toLocaleDateString();
-        } else if (Expiry === 12) {
-            upDate.setMonth(upDate.getMonth() + 12);
-            E_Date = upDate.toLocaleDateString();
-        }
-    }
 
-    return E_Date
-}
+        }
+
+        return E_Date
+    }
