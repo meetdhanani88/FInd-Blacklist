@@ -31,8 +31,7 @@ const vendorSchema = new mongoose.Schema({
     Admin : {
         type : mongoose.Schema.Types.ObjectId,
         trim : true,
-        ref : 'User',
-        required:true
+        ref : 'User'
     },
     Requested_Status: { 
         type : String,

@@ -1,14 +1,19 @@
 const Vendor = require('../models/Vender.model')
 const moment = require('moment');
+const fs = require('fs')
+const Path = require('path')
 exports.VendorPendingReq =async (req,res)=>{
-    const {vendorName,Address,ReasonForUser,image} = req.body
+    const {vendorName,Address,ReasonForUser} = req.body
+    
+   
     try{
         const vendor = await Vendor({
             vendorName,
             Address,
             ReasonForUser,
             Requested_User : req.user.user,
-            Requested_Status : 'Pending'
+            Requested_Status : 'Pending',
+            image : req.file.filename
         })
         
         await vendor.save((err,vendor)=>{
@@ -68,7 +73,7 @@ exports.ListOfBlackListReq = (req,res)=>{
     }
 }
 exports.AddToBlackList =async (req,res)=>{
-    const {vendorName,Address,ReasonForAdmin,image} = req.body
+    const {vendorName,Address,ReasonForAdmin} = req.body
     try{
         const vendor = await Vendor({
             vendorName,
@@ -76,7 +81,8 @@ exports.AddToBlackList =async (req,res)=>{
             ReasonForAdmin,
             Admin : req.user.user,
             Requested_Status : 'Accept',
-            dateOfBlackListed : moment()
+            dateOfBlackListed : moment(),
+            image :req.file.filename
         })
         
         await vendor.save((err,vendor)=>{
@@ -94,23 +100,60 @@ exports.AddToBlackList =async (req,res)=>{
 
 }
 exports.BlackListVendorUpdate =async (req,res)=>{
-    const {vendorName,Address,ReasonForAdmin,image} = req.body
-    const id = req.params.id
-    console.log(vendorName,Address,ReasonForAdmin,id);
-    try{
-       const updatedVendor = await Vendor.findByIdAndUpdate(id,{
-        vendorName,
-        Address,
-        ReasonForAdmin
-       }, { new: true })
-       if(updatedVendor){
-        return res.status(200).json({
-            message: "updated",
-            vendor: updatedVendor,
-        });
-       }
-    }catch(err){
-        return res.status(400).json(err)
+    const {vendorName,Address,ReasonForAdmin} = req.body
+    const vendorValues = {
+        vendorName,Address,ReasonForAdmin
     }
+    console.log(vendorName,req.file.filename);
+    if(req.file.filename){
+        vendorValues.image = req.file.filename
+    }
+    const id = req.params.id
+    try{
+
+       const vendor = await Vendor.findById(id)
+      
+       const updatedVendor =  await Vendor.updateOne({_id:vendor._id},vendorValues,{new:true})
+       
+             if(updatedVendor){
+                deletePicFromFolder(vendor.image)
+                return res.status(200).json({
+                    message : 'Vendor Updated',
+                    vendor : updatedVendor
+                })
+             }
+        
+     }catch(err){
+         return res.status(400).json(err)
+     }
+    // try{
+    //    const updatedVendor = await Vendor.findByIdAndUpdate(id,{
+    //     vendorName,
+    //     Address,
+    //     ReasonForAdmin
+    //    }, { new: true })
+    //    if(updatedVendor){
+    //     return res.status(200).json({
+    //         message: "updated",
+    //         vendor: updatedVendor,
+    //     });
+    //    }
+    // }catch(err){
+    //     return res.status(400).json(err)
+    // }
+
+}
+
+function deletePicFromFolder(imgPath){
+    fs.unlink(
+        `${Path.dirname(__dirname) + "/images/"}${imgPath}`,
+        (err) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("deleted");
+          }
+        }
+      );
 
 }
