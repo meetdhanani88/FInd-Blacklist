@@ -1,7 +1,8 @@
 const Vendor = require('../models/Vender.model')
 const moment = require('moment');
 const fs = require('fs')
-const Path = require('path')
+const Path = require('path');
+
 exports.VendorPendingReq = async (req, res) => {
     const { vendorName, Address, ReasonForUser } = req.body
 
@@ -83,7 +84,7 @@ exports.AddToBlackList = async (req, res) => {
     if (req.file) {
         venderValues.image = req.file.filename
     }
-
+    console.log(venderValues);
     try {
 
         const vendor = await Vendor(venderValues)

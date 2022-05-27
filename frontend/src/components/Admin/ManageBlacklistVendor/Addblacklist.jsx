@@ -27,7 +27,11 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
     async function Addblacklist(data) {
 
 
-        const res = await axiosInstance.post('/vendor/AddToBlackList', data)
+        const res = await axiosInstance.post('/vendor/AddToBlackList', data, {
+            headers: {
+                'Content-Type': "multipart/form-data"
+            }
+        })
 
         return res;
 
@@ -36,17 +40,19 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
     const addblacklist = useMutation((data) => Addblacklist(data), {
         onSuccess: data => {
             console.log(data);
+            Toast({ message: data.data.message });
             // Listofuser.refetch();
             // setplan(0);
-            // handleReset();
-            // handleClosepop();
+            handleReset();
+            handleClosepop();
 
-            Toast({ message: "User Created & Password sent on Email" });
 
         },
         onError: (data) => {
             console.log(data);
-
+            Toast({ message: data?.response?.data?.message || "Something Wrong", type: "error" });
+            handleReset();
+            handleClosepop();
             // seterrmsg(data.response.data.message);
 
         },
@@ -64,9 +70,9 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
         // mutation.mutate();
         const finalData = {
             vendorName: values.vendorname,
-            Address: values.reason,
+            Address: values.address,
             ReasonForAdmin: values.reason,
-            image: imageFile.name
+            image: imageFile
         }
         console.log(finalData);
         addblacklist.mutate(finalData);
@@ -112,7 +118,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }} >
                     <DialogTitle id="scroll-dialog-title">Add New BlackList</DialogTitle>
 
                     <DialogContent dividers >
