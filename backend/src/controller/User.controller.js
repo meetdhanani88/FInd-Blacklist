@@ -240,7 +240,7 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-exports.inActivePlane = async (req, res) => {
+exports.inActivePlan = async (req, res) => {
     const id = req.params.id;
     try {
         const { Role } = req.user.user;
@@ -268,7 +268,7 @@ exports.inActivePlane = async (req, res) => {
         return res.status(400).json(err);
     }
 };
-exports.ActivePlane = async (req, res) => {
+exports.ActivePlan = async (req, res) => {
     const id = req.params.id;
     const { Subscription_Plan, Expire } = req.body
     try {
