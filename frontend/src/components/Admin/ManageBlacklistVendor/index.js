@@ -8,6 +8,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
+import { Link } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
@@ -35,6 +36,7 @@ import { useDispatch } from 'react-redux';
 import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
 import { useEffect } from 'react';
 import Toast from '../../../Helper/Toast';
+import Addblacklist from './Addblacklist';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -111,10 +113,10 @@ function TablePaginationActions(props) {
     );
 }
 const rows = [
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
 ]
 function ManageBlacklistVendor() {
 
@@ -222,7 +224,7 @@ function ManageBlacklistVendor() {
 
     return (
         <>
-
+            <Addblacklist openpop={openpop} handleClosepop={handleClosepop} Listofuser={{}}></Addblacklist>
             <Grid container justifyContent={"center"} alignItems="center">
 
                 <Grid container item xs={11} sx={{ mt: 1 }} justifyContent="space-between">
@@ -254,6 +256,7 @@ function ManageBlacklistVendor() {
                                     <StyledTableCell>REQUEST SENT BY</StyledTableCell>
                                     <StyledTableCell>Blacklisted Date</StyledTableCell>
                                     <StyledTableCell>BLACKLISTED BY ADMIN</StyledTableCell>
+                                    <StyledTableCell>Photo</StyledTableCell>
                                     <StyledTableCell>Action</StyledTableCell>
                                 </TableRow>
                             </TableHead>
@@ -288,6 +291,11 @@ function ManageBlacklistVendor() {
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
                                                 {row.adminname}
+                                            </TableCell>
+                                            <TableCell style={{ width: 70 }} >
+                                                <Link href={row.photourl} underline="hover" target="_blank" rel="noreferrer" >
+                                                    Photo Proof
+                                                </Link>
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
 
@@ -350,6 +358,7 @@ function ManageBlacklistVendor() {
                                         <TableCell colSpan={6} />
                                     </TableRow>
                                 )}
+
                             </TableBody>}
 
                             <TableFooter>

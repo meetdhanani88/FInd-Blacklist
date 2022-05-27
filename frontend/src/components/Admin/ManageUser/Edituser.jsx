@@ -15,7 +15,7 @@ import Toast from '../../../Helper/Toast';
 import { useSelector } from 'react-redux';
 import { useLayoutEffect } from 'react';
 
-const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
+const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
 
     const [Edituserdata, setEdituserdata] = React.useState({});
     const [errmsg, seterrmsg] = React.useState(false);
@@ -46,6 +46,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop }) => {
     const mutation = useMutation(EditCreateduser, {
         onSuccess: data => {
             console.log(data)
+            listofuser.refetch()
             handleReset();
             handleCloseEdituserpop();
             Toast({ message: "User Edited" });

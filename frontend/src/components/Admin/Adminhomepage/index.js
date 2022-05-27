@@ -19,7 +19,7 @@ const pages = ['Users', 'Blacklisted Vendor', 'Blacklist Request'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const active = {
-    my: 2, color: 'white', display: 'block', backgroundColor: "white",
+    my: 2, color: 'white', display: 'block', backgroundColor: "white", mx: 2,
     borderRadius: "20px",
     color: "#1976d2",
     '&:hover': {
@@ -184,7 +184,7 @@ const AdminHomepage = () => {
                             {pages.map((page, i) => (
                                 <Button
                                     key={i}
-                                    sx={activeclass.id === i ? active : { my: 2, color: 'white', display: 'block' }}
+                                    sx={activeclass.id === i ? active : { my: 2, mx: 2, color: 'white', display: 'block' }}
                                     onClick={() => adminselectedoption(i)}
                                 >
                                     {page}

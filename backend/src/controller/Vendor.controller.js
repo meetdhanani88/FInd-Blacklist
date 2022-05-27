@@ -2,158 +2,144 @@ const Vendor = require('../models/Vender.model')
 const moment = require('moment');
 const fs = require('fs')
 const Path = require('path')
-exports.VendorPendingReq =async (req,res)=>{
-    const {vendorName,Address,ReasonForUser} = req.body
-    
-   
-    try{
+exports.VendorPendingReq = async (req, res) => {
+    const { vendorName, Address, ReasonForUser } = req.body
+
+
+    try {
         const vendor = await Vendor({
             vendorName,
             Address,
             ReasonForUser,
-            Requested_User : req.user.user,
-            Requested_Status : 'Pending',
-            image : req.file.filename
+            Requested_User: req.user.user,
+            Requested_Status: 'Pending',
+            image: req.file.filename
         })
-        
-        await vendor.save((err,vendor)=>{
-            if(err) return res.status(400).json(err)
-            if(vendor){
+
+        await vendor.save((err, vendor) => {
+            if (err) return res.status(400).json(err)
+            if (vendor) {
                 return res.status(200).json({
-                    message : 'Successfully sent Request to Admin',
-                    vendor : vendor
+                    message: 'Successfully sent Request to Admin',
+                    vendor: vendor
                 })
             }
         })
-    }catch(err){
+    } catch (err) {
         return res.status(400).json(err)
     }
 
 }
-exports.BlackListStatusUpdate =async (req,res)=>{
-    const {Requested_Status,ReasonForAdmin} = req.body
+exports.BlackListStatusUpdate = async (req, res) => {
+    const { Requested_Status, ReasonForAdmin } = req.body
     const updateValue = {
-        Requested_Status,ReasonForAdmin
+        Requested_Status, ReasonForAdmin
     }
-    if(Requested_Status === 'Accept'){
+    if (Requested_Status === 'Accept') {
         updateValue.dateOfBlackListed = moment().format('YYYY-MM-DD');
     }
     const id = req.params.id
     updateValue.Admin = req.user.user._id
-   
-    try{
-       const updatedStatus = await Vendor.findByIdAndUpdate(id,
-        updateValue
-       , { new: true })
-       
-       if(updatedStatus){
-        return res.status(200).json({
-            message: "updated",
-            vendor: updatedStatus,
-        });
-       }
-    }catch(err){
+
+    try {
+        const updatedStatus = await Vendor.findByIdAndUpdate(id,
+            updateValue
+            , { new: true })
+
+        if (updatedStatus) {
+            return res.status(200).json({
+                message: "updated",
+                vendor: updatedStatus,
+            });
+        }
+    } catch (err) {
         return res.status(400).json(err)
     }
 
 }
-exports.ListOfBlackListReq = (req,res)=>{
+exports.ListOfBlackListReq = (req, res) => {
     let Requested_Status = req.params.Requested_Status
-    try{
-        Vendor.find({Requested_Status:Requested_Status}).populate('').exec((err,vendor)=>{
-            if(err) return res.status(400).json(err)
-            if(vendor){
+    try {
+        Vendor.find({ Requested_Status: Requested_Status }).populate('').exec((err, vendor) => {
+            if (err) return res.status(400).json(err)
+            if (vendor) {
                 return res.status(200).json({
-                    vendor : vendor
+                    vendor: vendor
                 })
             }
         })
-    }catch(err){
+    } catch (err) {
         return res.status(400).json(err)
     }
 }
-exports.AddToBlackList =async (req,res)=>{
-    const {vendorName,Address,ReasonForAdmin} = req.body
-    try{
+exports.AddToBlackList = async (req, res) => {
+    const { vendorName, Address, ReasonForAdmin } = req.body
+    try {
         const vendor = await Vendor({
             vendorName,
             Address,
             ReasonForAdmin,
-            Admin : req.user.user,
-            Requested_Status : 'Accept',
-            dateOfBlackListed : moment(),
-            image :req.file.filename
+            Admin: req.user.user,
+            Requested_Status: 'Accept',
+            dateOfBlackListed: moment(),
+            image: req.file.filename
         })
-        
-        await vendor.save((err,vendor)=>{
-            if(err) return res.status(400).json(err)
-            if(vendor){
+
+        await vendor.save((err, vendor) => {
+            if (err) return res.status(400).json(err)
+            if (vendor) {
                 return res.status(200).json({
-                    message : 'Successfully sent Request to Admin',
-                    vendor : vendor
+                    message: 'Successfully sent Request to Admin',
+                    vendor: vendor
                 })
             }
         })
-    }catch(err){
+    } catch (err) {
         return res.status(400).json(err)
     }
 
 }
-exports.BlackListVendorUpdate =async (req,res)=>{
-    const {vendorName,Address,ReasonForAdmin} = req.body
+exports.BlackListVendorUpdate = async (req, res) => {
+    const { vendorName, Address, ReasonForAdmin } = req.body
     const vendorValues = {
-        vendorName,Address,ReasonForAdmin
+        vendorName, Address, ReasonForAdmin
     }
-    console.log(vendorName,req.file.filename);
-    if(req.file.filename){
+    console.log(vendorName, req.file.filename);
+    if (req.file.filename) {
         vendorValues.image = req.file.filename
     }
     const id = req.params.id
-    try{
+    try {
 
-       const vendor = await Vendor.findById(id)
-      
-       const updatedVendor =  await Vendor.updateOne({_id:vendor._id},vendorValues,{new:true})
-       
-             if(updatedVendor){
-                deletePicFromFolder(vendor.image)
-                return res.status(200).json({
-                    message : 'Vendor Updated',
-                    vendor : updatedVendor
-                })
-             }
-        
-     }catch(err){
-         return res.status(400).json(err)
-     }
-    // try{
-    //    const updatedVendor = await Vendor.findByIdAndUpdate(id,{
-    //     vendorName,
-    //     Address,
-    //     ReasonForAdmin
-    //    }, { new: true })
-    //    if(updatedVendor){
-    //     return res.status(200).json({
-    //         message: "updated",
-    //         vendor: updatedVendor,
-    //     });
-    //    }
-    // }catch(err){
-    //     return res.status(400).json(err)
-    // }
+        const vendor = await Vendor.findById(id)
+
+        const updatedVendor = await Vendor.updateOne({ _id: vendor._id }, vendorValues, { new: true })
+
+        if (updatedVendor) {
+            deletePicFromFolder(vendor.image)
+            return res.status(200).json({
+                message: 'Vendor Updated',
+                vendor: updatedVendor
+            })
+        }
+
+    } catch (err) {
+        return res.status(400).json(err)
+    }
+
 
 }
 
-function deletePicFromFolder(imgPath){
+function deletePicFromFolder(imgPath) {
     fs.unlink(
         `${Path.dirname(__dirname) + "/images/"}${imgPath}`,
         (err) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log("deleted");
-          }
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("deleted");
+            }
         }
-      );
+    );
 
 }

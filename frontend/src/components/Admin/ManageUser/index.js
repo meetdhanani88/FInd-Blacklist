@@ -237,9 +237,9 @@ function CustomPaginationActionsTable() {
     return (
         <>
             <Adduser openpop={openpop} handleClosepop={handleClosepop} Listofuser={query}></Adduser>
-            {openEdituserpop && <Edituser openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop}></Edituser>}
+            {openEdituserpop && <Edituser openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop} listofuser={query}></Edituser>}
 
-            {openEditsubuserpop && <EditSubscription openEdituserpop={openEditsubuserpop} handleCloseEdituserpop={() => setopenEditsubuserpop(false)}></EditSubscription>}
+            {openEditsubuserpop && <EditSubscription openEdituserpop={openEditsubuserpop} handleCloseEdituserpop={() => setopenEditsubuserpop(false)} listofuser={query}></EditSubscription>}
 
             <Grid container justifyContent={"center"} alignItems="center">
 

@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik'
-import { Box, Alert } from '@mui/material';
+import { Box } from '@mui/material';
 import axiosInstance from '../../../config';
 import { useMutation, useQueryClient } from 'react-query';
 import Toast from '../../../Helper/Toast';
@@ -18,16 +18,16 @@ import Checkbox from '@mui/material/Checkbox';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
+const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
     const [Edituserdata, setEdituserdata] = React.useState({});
-    const [errmsg, seterrmsg] = React.useState(false);
+
     const queryClient = useQueryClient()
     const userlist = useSelector(state => state.Login.userlist)
     const userEditId = useSelector(state => state.Login.userEditId)
     const [plan, setplan] = React.useState(0);
 
     async function Inactiveplan() {
-        const res = await axiosInstance.post(`/user/inActivePlane/${userEditId}`)
+        const res = await axiosInstance.post(`/user/inActivePlan/${userEditId}`)
         console.log(res);
         return res
     }
@@ -43,6 +43,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
     const inactivesubmutation = useMutation(Inactiveplan, {
 
         onSuccess: async (data) => {
+            listofuser.refetch();
             console.log(data);
             Toast({ message: data.data.message });
             handleReset();
@@ -52,7 +53,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
         },
         onError: (data) => {
             console.log(data);
-            Toast({ message: data?.response?.data?.message || "something Worng", type: "error" });
+            Toast({ message: data?.response?.data?.message || "something Wrong", type: "error" });
             handleReset();
             handleCloseEdituserpop();
 
@@ -91,7 +92,12 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
 
     const Addsubmutation = useMutation(Addsub, {
         onSuccess: data => {
+            listofuser.refetch()
             console.log(data)
+            Toast({ message: data.data.message });
+            handleReset();
+            handleCloseEdituserpop();
+
             // handleReset();
             // handleCloseEdituserpop();
             // Toast({ message: "User Edited" });
@@ -101,8 +107,9 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
         onError: (data) => {
 
             console.log(data);
-            // seterrmsg(data.response.data.message);
-
+            Toast({ message: data?.response?.data?.message || "Something Wrong", type: "error" });
+            handleReset();
+            handleCloseEdituserpop()
         },
         onSettled: () => {
             queryClient.invalidateQueries('added sub');
@@ -117,7 +124,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
             inactivesubmutation.mutate();
 
         }
-        else if (values.Subscription_Plan?.length === 0) {
+        else {
             console.log("hi");
             Addsubmutation.mutate();
         }
@@ -128,6 +135,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
 
 
     const { errors, values, handleBlur, handleSubmit, handleChange, touched, isValid, handleReset } = useFormik({
+
         initialValues: {
 
             firstname: Edituserdata.firstName,
@@ -150,10 +158,10 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
                 aria-describedby="scroll-dialog-description"
             >
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                    <DialogTitle id="scroll-dialog-title">Edit Existing User Data </DialogTitle>
+                    <DialogTitle id="scroll-dialog-title">Edit Subscription </DialogTitle>
 
                     <DialogContent dividers >
-                        {errmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
+                        {/* {errmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>} */}
 
                         <DialogContentText  >
                             Edit User
@@ -174,9 +182,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             onBlur={handleBlur}
                             disabled
                         />
-                        {errors.firstname && touched.firstname ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.firstname}</Alert>
-                        ) : null}
+
                         <TextField
                             required
                             error={(errors.lastname && touched.lastname) ? true : false}
@@ -192,9 +198,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {errors.lastname && touched.lastname ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.lastname}</Alert>
-                        ) : null}
+
                         <TextField
                             error={(errors.email && touched.email) ? true : false}
                             required
@@ -210,9 +214,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {errors.email && touched.email ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.email}</Alert>
-                        ) : null}
+
 
                         <TextField
                             error={(errors.mobileno && touched.mobileno) ? true : false}
@@ -229,9 +231,6 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {errors.mobileno && touched.mobileno ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.mobileno}</Alert>
-                        ) : null}
 
 
 
@@ -268,7 +267,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop }) => {
                         <Button onClick={handleCloseEdituserpop} >Cancel</Button>
                         {values.Subscription_Plan?.length > 0 ?
                             <LoadingButton onClick={handelEdiuser} loading={inactivesubmutation.isLoading} disabled={!isValid || values.firstname === ''}>Inactive Plan</LoadingButton> :
-                            <LoadingButton onClick={handelEdiuser} loading={false} disabled={!isValid || values.firstname === ''}>Add Subscription</LoadingButton>
+                            <LoadingButton onClick={handelEdiuser} loading={Addsubmutation.isLoading} disabled={!isValid || values.firstname === ''}>Add Subscription</LoadingButton>
                         }
 
                     </DialogActions>
