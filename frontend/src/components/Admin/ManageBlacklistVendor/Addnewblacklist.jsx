@@ -14,8 +14,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import Toast from '../../../Helper/Toast';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-
-const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
+const Addnewblacklist = ({ openpop, handleClosepop, Listofuser }) => {
 
     const [plan, setplan] = React.useState(0);
     const [errmsg, seterrmsg] = React.useState(false);
@@ -72,8 +71,6 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
 
     function handelAdduser() {
         mutation.mutate();
-
-
     }
 
     const validationSchema = Yup.object({
@@ -218,4 +215,4 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
     )
 }
 
-export default Adduser;
+export default Addnewblacklist;

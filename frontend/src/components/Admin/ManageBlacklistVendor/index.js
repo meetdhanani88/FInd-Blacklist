@@ -57,8 +57,6 @@ const userlistcss = {
     ml: "35px"
 }
 
-
-
 function TablePaginationActions(props) {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
@@ -112,8 +110,12 @@ function TablePaginationActions(props) {
         </Box>
     );
 }
-
-const rows = [{}]
+const rows = [
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
+    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani" },
+]
 function ManageBlacklistVendor() {
 
     const [page, setPage] = React.useState(0);
@@ -236,7 +238,7 @@ function ManageBlacklistVendor() {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Button variant='outlined' startIcon={<AddIcon></AddIcon>} color="primary" onClick={handleClickOpenpop}>Add User</Button>
+                        <Button variant='outlined' startIcon={<AddIcon></AddIcon>} color="primary" onClick={handleClickOpenpop}>Add New Blacklist</Button>
                     </Grid>
 
                 </Grid>
@@ -272,20 +274,17 @@ function ManageBlacklistVendor() {
                                             <TableCell style={{ width: 50 }} >
                                                 {row.Vendorname}
                                             </TableCell>
-                                            <TableCell style={{ width: 50 }} >
+                                            <TableCell style={{ width: 100 }} >
                                                 {row.Reason}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
                                                 {row.Addrress}
-
                                             </TableCell>
-                                            <TableCell style={{ width: 100 }} >
+                                            <TableCell style={{ width: 50 }} >
                                                 {row.Sentby}
-
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}
-
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
                                                 {row.adminname}
@@ -327,7 +326,7 @@ function ManageBlacklistVendor() {
                                                             <ModeEdit fontSize="small" color="info" />
                                                         </ListItemIcon>
 
-                                                        <ListItemText>Edit User</ListItemText>
+                                                        <ListItemText>Edit Blacklisted Vendor</ListItemText>
                                                     </MenuItem>
                                                     <MenuItem
                                                     // onClick={() => Deleteuserfun(anchorEl)}
@@ -335,14 +334,9 @@ function ManageBlacklistVendor() {
                                                         <ListItemIcon>
                                                             <DeleteIcon fontSize="small" color="error" />
                                                         </ListItemIcon>
-                                                        <ListItemText>Delete User</ListItemText>
+                                                        <ListItemText>Remove From BlackList</ListItemText>
                                                     </MenuItem>
-                                                    <MenuItem onClick={handleClose}>
-                                                        <ListItemIcon>
-                                                            <SubscriptionsIcon fontSize="small" color='success' />
-                                                        </ListItemIcon>
-                                                        <ListItemText>Edit Subscription</ListItemText>
-                                                    </MenuItem>
+
 
                                                 </Menu>
                                             </TableCell>

@@ -18,7 +18,11 @@ const vendorSchema = new mongoose.Schema({
         type : String,
         trim : true
     },
-    
+    BlackList_Status : {
+        type : String,
+        trim : true,
+        enum:[true,false]
+    },
     image : {
         type : String,
         trim : true
@@ -38,13 +42,12 @@ const vendorSchema = new mongoose.Schema({
         trim : true,
         enum :['Accept','Reject','Pending']
     },
-    dateOfBlackListed :{
-        type : Date,
-        trim : true
-    }
 
    
-},{})
+},{timestamps:true})
+
+
+
 module.exports = mongoose.model('Vendors',vendorSchema)
 
 
