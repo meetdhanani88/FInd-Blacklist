@@ -322,15 +322,9 @@ function genPassword() {
 function ExpireDatePlane(Expiry, type) {
 
     let E_Date;
-<<<<<<< HEAD
-
-    if (type === 'Create') {
-        if (Expiry === 3) {
-=======
 
 
         if (Expiry === 3) {
->>>>>>> 9df595185ce55980eb163643cddd97e2b3cd2c2c
             E_Date = moment().add(3, 'M').format('YYYY-MM-DD');
         } else if (Expiry === 6) {
             E_Date = moment().add(6, 'M').format('YYYY-MM-DD');
