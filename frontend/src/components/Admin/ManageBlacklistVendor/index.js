@@ -112,12 +112,19 @@ function TablePaginationActions(props) {
         </Box>
     );
 }
-const rows = [
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-    { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-]
+// const rows = [
+//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
+//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
+//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
+//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
+// ]
+
+
+const getblacklistedVendor = async () => {
+    const res = await axiosInstance.get('/vendor/ListOfBlackListReq/Accept');
+    return res
+
+}
 function ManageBlacklistVendor() {
 
     const [page, setPage] = React.useState(0);
@@ -126,7 +133,7 @@ function ManageBlacklistVendor() {
     const open = Boolean(anchorEl);
     const [openpop, setOpenpop] = React.useState(false);
     const [openEdituserpop, setopenEdituserpop] = React.useState(false);
-    // const query = useQuery('getuserlist', getusertList);
+    const getblacklistedVendorquery = useQuery('getuserlist', getblacklistedVendor);
     const dispatch = useDispatch();
     const queryClient = useQueryClient()
 
@@ -154,15 +161,15 @@ function ManageBlacklistVendor() {
 
 
 
-    // const rows = query?.data?.data
+    const rows = getblacklistedVendorquery?.data?.data?.vendor
+    console.log(rows);
 
-    // console.log(rows);
 
 
     useEffect(() => {
 
 
-        dispatch(LoginAction.userList(rows))
+        dispatch(LoginAction.setblacklistedvendorlist(rows))
 
 
 
@@ -253,7 +260,7 @@ function ManageBlacklistVendor() {
                                     <StyledTableCell>Name of Vendor</StyledTableCell>
                                     <StyledTableCell>Reason for Black-list</StyledTableCell>
                                     <StyledTableCell>Vendor Address</StyledTableCell>
-                                    <StyledTableCell>REQUEST SENT BY</StyledTableCell>
+
                                     <StyledTableCell>Blacklisted Date</StyledTableCell>
                                     <StyledTableCell>BLACKLISTED BY ADMIN</StyledTableCell>
                                     <StyledTableCell>Photo</StyledTableCell>
@@ -268,32 +275,30 @@ function ManageBlacklistVendor() {
                                 )?.map((row, i) => {
 
 
-                                    let date = row?.Expiry_Date ? new Date(row.Expiry_Date) : null;
+                                    let date = row?.dateOfBlackListed ? new Date(row.dateOfBlackListed) : null;
 
 
                                     return (
 
                                         <TableRow key={i}>
                                             <TableCell style={{ width: 50 }} >
-                                                {row.Vendorname}
+                                                {row.vendorName}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.Reason}
+                                                {row.ReasonForAdmin}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.Addrress}
+                                                {row.Address}
                                             </TableCell>
-                                            <TableCell style={{ width: 50 }} >
-                                                {row.Sentby}
-                                            </TableCell>
+
                                             <TableCell style={{ width: 70 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
-                                                {row.adminname}
+                                                {row.date}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
-                                                <Link href={row.photourl} underline="hover" target="_blank" rel="noreferrer" >
+                                                <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
                                                 </Link>
                                             </TableCell>

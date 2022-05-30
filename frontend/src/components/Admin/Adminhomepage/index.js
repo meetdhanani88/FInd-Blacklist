@@ -22,6 +22,10 @@ const active = {
     my: 2, color: 'white', display: 'block', backgroundColor: "white", mx: 2,
     borderRadius: "20px",
     color: "#1976d2",
+    // paddingLeft: "50px",
+    // paddingRight: "50px",
+    // paddingTop: "20px",
+    // paddingBottom: "50px",
     '&:hover': {
         backgroundColor: "white",
         color: "#1976d2"
@@ -184,7 +188,7 @@ const AdminHomepage = () => {
                             {pages.map((page, i) => (
                                 <Button
                                     key={i}
-                                    sx={activeclass.id === i ? active : { my: 2, mx: 2, color: 'white', display: 'block' }}
+                                    sx={activeclass.id === i ? active : { my: 2, mx: 2, color: 'white', display: 'block', padding: "3px" }}
                                     onClick={() => adminselectedoption(i)}
                                 >
                                     {page}
