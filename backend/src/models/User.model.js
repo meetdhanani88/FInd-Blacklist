@@ -3,12 +3,10 @@ const bcrypt = require('bcrypt')
 const userSchema = new mongoose.Schema({
     firstName : {
         type : String,
-        required : true,
         trim : true
     },
     lastName : {
         type : String,
-        required : true,
         trim : true
     },
     email : {
@@ -16,42 +14,27 @@ const userSchema = new mongoose.Schema({
         required : true,
         trim : true
     },
-    MobileNo : {
+    mobileNo : {
         type : Number,
         trim : true
     },
-    Role : {
+    roleId : {
+        type : Number,
+        ref : 'Role',
+        required : true
+    },
+    password  : {
         type : String,
         trim : true
     },
-    Subscription_Plan  : {
-        type : String,
-        trim : true
-    },
-    Expiry_Date : { 
-        type : Date,
-        trim : true
-    },
-    Password  : {
-        type : String,
-        trim : true
-    },
-},{timestamps:true})
+},{timestamps:true,toObject:{virtuals:true}})
 
-// userSchema.methods = {
-//     passwordBcrypt : async function(password){
-//         return await bcrypt.hash(this.Password,10)
-//     },
-//     authenticate : async function(pass){
-//         return  await bcrypt.compare(pass,this.Password)
-        
-//     },
-//     comOldPassword : async function(pass){
-//         return await bcrypt.compare(pass,this.Password)
-//     }
-// }
-
-
+// userSchema.virtual("Role", {
+//     type : mongoose.Schema.Types.ObjectId,
+//     ref: "Role",
+//     foreignField: "id",
+//     localField: "roleId",
+//   });
 module.exports = mongoose.model('User',userSchema)
 
 

@@ -1,4 +1,4 @@
-const { SignUp, SignIn, ResetPassword, forGotPassword, createUser, getAllUsers, deleteUser, updateUser, inActivePlan, ActivePlan } = require('../controller/User.controller')
+const { SignUp, SignIn, ResetPassword, forGotPassword, createUser, getAllUsers, deleteUser, updateUser, inActivePlan, ActivePlan, createRole } = require('../controller/User.controller')
 const { requireSignIn } = require('../middleware')
 
 const router = require('express').Router()

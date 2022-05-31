@@ -1,54 +1,39 @@
 const mongoose = require('mongoose')
-const vendorSchema = new mongoose.Schema({
+const BlacklistedVendorsSchema = new mongoose.Schema({
     vendorName : {
         type : String,
         required : true,
         trim : true
     },
-    Address : {
+    address : {
         type : String,
         required : true,
         trim : true
     },
-    ReasonForUser : {
+    reason : {
         type : String,
+        required : true,
         trim : true
-    },
-    ReasonForAdmin : {
-        type : String,
-        trim : true
-    },
-    BlackList_Status : {
-        type : String,
-        trim : true,
-        enum:[true,false]
     },
     image : {
         type : String,
         trim : true
     },
-    Requested_User : {
+    userId : {
         type : mongoose.Schema.Types.ObjectId,
         trim : true,
         ref : 'User'
-    },
-    Admin : {
+    }, 
+    adminId : {
         type : mongoose.Schema.Types.ObjectId,
         trim : true,
         ref : 'User'
-    },
-    Requested_Status: { 
-        type : String,
-        trim : true,
-        enum :['Accept','Reject','Pending']
-    },
-
-   
+    }, 
 },{timestamps:true})
 
 
 
-module.exports = mongoose.model('Vendors',vendorSchema)
+module.exports = mongoose.model('BlacklistedVendors',BlacklistedVendorsSchema)
 
 
 

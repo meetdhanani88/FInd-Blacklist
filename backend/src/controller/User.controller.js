@@ -1,32 +1,26 @@
 const main = require("../middleware/mailer");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const SubscriptionPlan = require('../models/SubscriptionPlan.model')
 const moment = require('moment');
+const Role = require('../models/Role.model')
 
-exports.SignUp = (req, res) => {
-    const { email } = req.body;
+exports.SignUp = async (req, res) => {
+    const { email,password } = req.body;
+    const { name,_id } = req.body;
     try {
-        User.findOne({ email: email, Role: "Admin" }).exec(async (err, user) => {
-            if (err) return res.status(400).json(err);
-            if (user) {
-                const pass = "PlayBoy";
-
-                await User.findOneAndUpdate(
-                    { email: user.email },
-                    {
-                        Password: pass,
-                    }
-                );
-                return res.status(200).json({
-                    message: "Successfully send Password To Admin Email",
-                });
-            } else {
-                return res.status(404).json({
-                    message: "You are not Allow for Admin Access",
-                });
-            }
-        });
+        // const user = await User({email,password,roleId:1})
+        // user.save((err,user)=>{
+        //     if(err) return res.status(400).json(err)
+        //     return res.status(201).json(user)
+        // })
+        // const _role = await Role({name,_id})
+        // _role.save((err,role)=>{
+        //     if(err) return res.status(400).json(role)
+        //     return res.status(201).json(role)
+        // })
+        const data = await User.find().populate('roleId')
+        return res.status(201).json(data)
     } catch (err) {
         return res.status(400).json(err);
     }
@@ -35,10 +29,11 @@ exports.SignUp = (req, res) => {
 exports.SignIn = (req, res) => {
     const { email, password } = req.body;
     try {
-        User.findOne({ email: email }).exec(async (err, user) => {
+        User.findOne({ email: email }).populate('role').exec(async (err, user) => {
+            console.log(user);
             if (err) return res.status(400).json(err);
             if (user) {
-                if (user.Password === password) {
+                if (user.password === password) {
                     const token = await jwt.sign({ user: user }, process.env.JWT_KEY, {
                         expiresIn: "1d",
                     });
@@ -69,11 +64,11 @@ exports.ResetPassword = (req, res) => {
         User.findOne({ email: email }).exec(async (err, user) => {
             if (err) return res.status(400).json(err);
             if (user) {
-                if (user.Password === password) {
+                if (user.password === password) {
                     await User.updateOne(
                         { _id: user._id },
                         {
-                            Password: newPassword,
+                            password: newPassword,
                         },
                         { new: true }
                     );
@@ -103,7 +98,7 @@ exports.forGotPassword = (req, res) => {
         User.findOne({ email: email }).exec(async (err, user) => {
             if (err) return res.status(400).json(err);
             if (user) {
-                await main(user.email, user.Password);
+                await main(user.email, user.password);
                 return res.status(200).json({
                     message: "Password Sent on Email",
                 });
@@ -119,34 +114,42 @@ exports.forGotPassword = (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-    const { firstName, lastName, email, MobileNo, Subscription_Plan, Expiry } =
+    const { firstName, lastName, email, mobileNo, expiryDate } =
         req.body;
 
-    const E_Date = await ExpireDatePlane(Expiry)
-
-
-
+    const E_Date = await ExpireDatePlane(expiryDate)
     try {
 
         const user = await User({
             firstName,
             lastName,
             email,
-            MobileNo,
-            Subscription_Plan,
-            Expiry_Date: E_Date ? E_Date : undefined,
-            Role: "User",
+            mobileNo,
+            role: 1,
         });
         const pass = await genPassword();
         user.Password = pass
         const { Role } = req.user.user;
+        console.log(req.user.user);
+        const planValues = {
+            expiryDate : E_Date
+        }
+        if(expiryDate === 3){
+            planValues.plan = "Silver"
+        }else if(expiryDate === 6){
+            planValues.plan = "Gold"
+        }else if(expiryDate === 12 || expiryDate === 1){
+            planValues.plan = "Premium"
+        }
+        
 
         if (Role === "Admin") {
             user.save(async (err, user) => {
-                if (err) return res.status(400).json(err);
-
+                if (err) return res.status(400).json(err); 
                 if (user) {
                     await main(user.email, pass);
+                    planValues.userId = user._id
+                    const subscriptionPlan = await SubscriptionPlan(planValues)
                     return res.status(201).json({
                         message: "User Created Successfully",
                         user: user,
