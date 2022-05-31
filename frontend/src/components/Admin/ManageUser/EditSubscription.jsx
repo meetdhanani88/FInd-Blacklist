@@ -15,15 +15,27 @@ import { useSelector } from 'react-redux';
 import { useLayoutEffect } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { FormControl } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Grid } from '@mui/material';
+
+
 
 const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
     const [Edituserdata, setEdituserdata] = React.useState({});
     const queryClient = useQueryClient()
     const userlist = useSelector(state => state.Login.userlist)
     const userEditId = useSelector(state => state.Login.userEditId)
-    const [plan, setplan] = React.useState(0);
+
+
+    const [radioval, setradioval] = React.useState('extendExpiry');
+    const [date, setdate] = React.useState(null);
+
 
     async function Inactiveplan() {
         const res = await axiosInstance.post(`/user/inActivePlan/${userEditId}`)
@@ -65,23 +77,12 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
 
 
-    const handleplanChange = (event) => {
-        setplan(event.target.value);
-    };
 
     const Addsub = async () => {
-        let sp;
-        if (plan === 3) {
-            sp = "Silver"
-        } else if (plan === 6) {
-            sp = "Gold"
-        } else if (plan === 12 || plan === 1) {
-            sp = "Premium"
-        }
+
 
         const res = await axiosInstance.post(`/user/ActivePlan/${Edituserdata._id}`, {
-            Subscription_Plan: sp,
-            Expire: plan
+
         })
 
 
@@ -131,9 +132,24 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
     }
 
+    function Radiochange(event) {
 
 
-    const { errors, values, handleBlur, handleSubmit, handleChange, touched, isValid, handleReset } = useFormik({
+        setradioval(event.target.value);
+    }
+    function expSubmit() {
+        console.log(date);
+    }
+
+    function inactiveSubmit() {
+
+        console.log("Disable Plan");
+
+    }
+
+
+    console.log(date);
+    const { values, handleSubmit, touched, isValid, handleReset } = useFormik({
 
         initialValues: {
 
@@ -152,7 +168,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
     return (
         <div>
             <Dialog open={openEdituserpop} onClose={handleCloseEdituserpop} maxWidth="sm" scroll='paper'
-
+                fullWidth
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
@@ -163,110 +179,78 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
                         {/* {errmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>} */}
 
                         <DialogContentText  >
-                            Edit User
+                            Update User Subscription
                         </DialogContentText>
 
-                        <TextField
-                            error={(errors.firstname && touched.firstname) ? true : false}
-                            required
-                            margin="dense"
-                            id="firstname"
-                            label="First Name"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            sx={{ maxWidth: 700 }}
-                            value={values.firstname || ''}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            disabled
-                        />
+                        <Grid container direction={'column'}  >
+                            <Grid item >
+                                <FormControl>
 
-                        <TextField
-                            required
-                            error={(errors.lastname && touched.lastname) ? true : false}
-                            disabled
-                            margin="dense"
-                            id="lastname"
-                            label="Last Name"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            sx={{ maxWidth: 700 }}
-                            value={values.lastname || ''}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-
-                        <TextField
-                            error={(errors.email && touched.email) ? true : false}
-                            required
-                            margin="dense"
-                            id="email"
-                            label="Email Address"
-                            type="email"
-                            disabled
-                            fullWidth
-                            variant="standard"
-                            sx={{ maxWidth: 700 }}
-                            value={values.email || ''}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-
-
-                        <TextField
-                            error={(errors.mobileno && touched.mobileno) ? true : false}
-                            required
-                            disabled
-                            margin="dense"
-                            id="mobileno"
-                            label="Mobile No"
-                            type="number"
-                            fullWidth
-                            variant="standard"
-                            sx={{ maxWidth: 700 }}
-                            value={values.mobileno || ''}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                        />
-
-
-
-                        {
-
-                            values.Subscription_Plan?.length > 0 ?
-
-                                <FormControlLabel disabled checked control={<Checkbox />} label="Inactive Subscription" /> :
-
-                                <FormControl size='medium' sx={{ mt: 2, minWidth: 200 }} >
-
-                                    <InputLabel id="demo-simple-select-label">Subscription Plan</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="subplan"
-                                        label="Subscription Plan"
-                                        value={plan}
-                                        onChange={handleplanChange}
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                        value={radioval}
+                                        onChange={Radiochange}
                                     >
-                                        <MenuItem value={0}>None</MenuItem>
-                                        <MenuItem value={12}>Premium Plan (1 Year)</MenuItem>
-                                        <MenuItem value={6}>Gold Plan (6 Months)</MenuItem>
-                                        <MenuItem value={3}>Silver Plan (3 Months)</MenuItem>
-                                    </Select>
+                                        <FormControlLabel value="extendExpiry" control={<Radio />} label="Extend Expiry" />
+                                        <FormControlLabel value="disablePlan" control={<Radio />} label="Disable Plan " />
 
+                                    </RadioGroup>
                                 </FormControl>
+                            </Grid>
+                            <Grid item>
+
+                                {radioval === "extendExpiry" ?
+                                    <>
+
+                                        <p>User current plan expiry will be extended based on selected
+                                            date</p>
+
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DatePicker
+
+                                                minDate={new Date()}
+                                                disablePast
+
+                                                label="Expiry Date"
+                                                value={date}
+                                                onChange={(newValue) => {
+                                                    setdate(newValue);
+                                                }}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </LocalizationProvider>
 
 
-                        }
+                                    </>
+
+                                    :
+                                    <>
+                                        <p>Plan will be disabled & User won't be able Login</p>
+                                        <FormControlLabel disabled checked control={<Checkbox />} label="Disabled Plan" />
+                                    </>
+
+
+                                }
+
+                            </Grid>
+                        </Grid>
+
+
+
+
+
+
+
 
                     </DialogContent>
 
                     <DialogActions>
                         <Button onClick={handleCloseEdituserpop} >Cancel</Button>
-                        {values.Subscription_Plan?.length > 0 ?
-                            <LoadingButton onClick={handelEdiuser} loading={inactivesubmutation.isLoading} disabled={!isValid || values.firstname === ''}>Inactive Plan</LoadingButton> :
-                            <LoadingButton onClick={handelEdiuser} loading={Addsubmutation.isLoading} disabled={!isValid || values.firstname === ''}>Add Subscription</LoadingButton>
+                        {radioval === "extendExpiry" ?
+                            <LoadingButton disabled={date === null} onClick={expSubmit} >Extend Expiry</LoadingButton> :
+                            <LoadingButton onClick={inactiveSubmit} >Inactive Plan</LoadingButton>
                         }
 
                     </DialogActions>
@@ -279,3 +263,34 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 }
 
 export default EditSubscription
+
+
+
+
+
+// {
+
+//     values.Subscription_Plan?.length > 0 ?
+
+//         <FormControlLabel disabled checked control={<Checkbox />} label="Inactive Subscription" /> :
+
+//         <FormControl size='medium' sx={{ mt: 2, minWidth: 200 }} >
+
+//             <InputLabel id="demo-simple-select-label">Subscription Plan</InputLabel>
+//             <Select
+//                 labelId="demo-simple-select-label"
+//                 id="subplan"
+//                 label="Subscription Plan"
+//                 value={plan}
+//                 onChange={handleplanChange}
+//             >
+//                 <MenuItem value={0}>None</MenuItem>
+//                 <MenuItem value={12}>Premium Plan (1 Year)</MenuItem>
+//                 <MenuItem value={6}>Gold Plan (6 Months)</MenuItem>
+//                 <MenuItem value={3}>Silver Plan (3 Months)</MenuItem>
+//             </Select>
+
+//         </FormControl>
+
+
+// }

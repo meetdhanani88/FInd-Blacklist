@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { QueryClient, QueryClientProvider, } from 'react-query'
 import LogIn from './components/LogIn';
@@ -31,7 +31,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(decodedToken);
+    // console.log(decodedToken);
     setrole(decodedToken?.user?.roleId)
   }, [decodedToken])
 

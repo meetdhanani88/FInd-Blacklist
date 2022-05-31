@@ -37,7 +37,6 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
             lastName: values.lastname,
             email: values.email,
             mobileNo: values.mobileNo,
-
         })
 
         return res;

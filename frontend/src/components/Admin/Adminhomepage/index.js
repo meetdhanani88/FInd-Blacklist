@@ -105,8 +105,8 @@ const AdminHomepage = () => {
                         <Typography
                             variant="h6"
                             noWrap
-                            component="a"
-                            href="/"
+                            component="div"
+
                             sx={{
                                 mr: 3,
                                 display: { xs: 'none', md: 'flex' },
@@ -162,8 +162,8 @@ const AdminHomepage = () => {
                         <Typography
                             variant="h5"
                             noWrap
-                            component="a"
-                            href=""
+                            component="div"
+
                             sx={{
                                 mr: 2,
                                 display: { xs: 'flex', md: 'none' },

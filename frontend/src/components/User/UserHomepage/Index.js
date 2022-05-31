@@ -37,6 +37,7 @@ const UserHomepage = () => {
                     <div style={{ marginTop: "20px" }}>
 
                         <Blacklistedlist />
+
                     </div>
                 </Container>
             </Paper>

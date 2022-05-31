@@ -29,7 +29,7 @@ function LogIn({ setrole, role, location }) {
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
     const Loginuser = useSelector((state) => state.Login.Loginuser);
-    console.log(Loginuser);
+    // console.log(Loginuser);
 
     // const [loading, setloading] = useState(false)
     const [suceessmsg, setsuceessmsg] = useState(false)
