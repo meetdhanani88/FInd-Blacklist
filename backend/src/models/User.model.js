@@ -32,7 +32,12 @@ const userSchema = new mongoose.Schema({
         required : true,
         default : true,
     }
-},{timestamps:true,toObject:{virtuals:true}})
+},{timestamps:true,toJSON:{virtuals:true}})
+userSchema.virtual("SubscriptionPlan",{
+    ref : 'SubscriptionPlan',
+    foreignField : 'userId',
+    localField : "_id"
+})
 
 module.exports = mongoose.model('User',userSchema)
 

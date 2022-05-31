@@ -3,7 +3,6 @@ const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
 const SubscriptionPlan = require('../models/SubscriptionPlan.model')
 const moment = require('moment');
-const Role = require('../models/Role.model')
 
 exports.SignUp = async (req, res) => {
     const { email,password } = req.body;
@@ -130,7 +129,7 @@ exports.createUser = async (req, res) => {
             roleId: 2,
         });
         const pass = await genPassword();
-        user.Password = pass
+        user.password = pass
         const { roleId:{_id} } = req.user.user;
        
         const planValues = {
@@ -172,7 +171,7 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({ roleId: 2 });
+        const users = await User.find({ roleId: 2 }).populate({path :'SubscriptionPlan'});
         if (users) {
             return res.status(200).json(users);
         } else {
@@ -281,6 +280,39 @@ exports.userActiveOrInActive = async (req, res) => {
         return res.status(400).json(err);
     }
 };
+
+exports.extendExpiryDate = (req,res) =>{
+    const id = req.params.id;
+    const {expiryDate} = req.body
+    try {
+        const { roleId:{_id} } = req.user.user;
+        if (_id === 1) {
+            SubscriptionPlan.findOne({userId:id}).exec( async(err,plan)=>{
+                if(err) return res.status(400).json(err)
+                if(plan){
+                    await  SubscriptionPlan.updateOne({_id:plan._id},{
+                        expiryDate
+                        },{new:true})
+                        return res.status(200).json({
+                            message: "Expiry Date Is Extended",
+                        }); 
+                }else{
+                    return res.status(404).json({
+                        message: "Plan not found",
+                    });
+                }
+                   
+            }) 
+            
+        } else {
+            return res.status(400).json({
+                message: "Required Authorization",
+            });
+        }
+    } catch (err) {
+        return res.status(400).json(err);
+    }
+}
 
 function genPassword() {
     var chars =
