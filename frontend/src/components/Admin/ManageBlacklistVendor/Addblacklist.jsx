@@ -113,12 +113,12 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
 
     return (
         <div>
-            <Dialog open={openpop} onClose={handleClosepop} maxWidth="sm" scroll='paper'
+            <Dialog open={openpop} onClose={() => handleClosepop(handleReset)} maxWidth="sm" scroll='paper'
 
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }} >
+                <Box component="form" noValidate onSubmit={handleSubmit} sx={{}} >
                     <DialogTitle id="scroll-dialog-title">Add New BlackList</DialogTitle>
 
                     <DialogContent dividers >
@@ -210,7 +210,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
                     </DialogContent>
 
                     <DialogActions>
-                        <Button onClick={() => { handleClosepop() }} >Cancel</Button>
+                        <Button onClick={() => { handleClosepop(handleReset) }} >Cancel</Button>
 
                         <LoadingButton loading={Addblacklist.isLoading} onClick={handelAddBlacklist} disabled={!isValid || values.vendorname === ''}>Add to Blacklist</LoadingButton>
                     </DialogActions>

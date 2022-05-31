@@ -162,7 +162,14 @@ function ManageBlacklistVendor() {
 
 
 
-    const rows = getblacklistedVendorquery?.data?.data?.vendor
+    // const rows = getblacklistedVendorquery?.data?.data?.vendor
+    const rows = [{
+
+        vendorName: "Gopal Locha",
+        ReasonForAdmin: "Very oily Locha",
+        Address: "B-788 Satadhar",
+        date: "Ketan"
+    }]
     console.log(rows);
 
 
@@ -198,14 +205,16 @@ function ManageBlacklistVendor() {
         setopenEdituserpop(true)
     };
 
-    const handleClosepop = () => {
-        setOpenpop(false);
+    const handleClosepop = (fn) => {
 
+        if (typeof fn === 'function') {
+            fn()
+        }
+        setOpenpop(false);
     };
     const handleCloseEdituserpop = () => {
         setopenEdituserpop(false)
     };
-
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -261,7 +270,6 @@ function ManageBlacklistVendor() {
                                     <StyledTableCell>Name of Vendor</StyledTableCell>
                                     <StyledTableCell>Reason for Black-list</StyledTableCell>
                                     <StyledTableCell>Vendor Address</StyledTableCell>
-
                                     <StyledTableCell>Blacklisted Date</StyledTableCell>
                                     <StyledTableCell>BLACKLISTED BY ADMIN</StyledTableCell>
                                     <StyledTableCell>Photo</StyledTableCell>
