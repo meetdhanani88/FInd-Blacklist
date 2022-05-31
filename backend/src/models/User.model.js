@@ -27,14 +27,13 @@ const userSchema = new mongoose.Schema({
         type : String,
         trim : true
     },
+    status : {
+        type : Boolean,
+        required : true,
+        default : true,
+    }
 },{timestamps:true,toObject:{virtuals:true}})
 
-// userSchema.virtual("Role", {
-//     type : mongoose.Schema.Types.ObjectId,
-//     ref: "Role",
-//     foreignField: "id",
-//     localField: "roleId",
-//   });
 module.exports = mongoose.model('User',userSchema)
 
 

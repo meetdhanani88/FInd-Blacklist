@@ -14,5 +14,5 @@ const subscriptionPlanSchema = new mongoose.Schema({
         ref : 'User',
         required : true
     }
-},{_id : false})
+})
 module.exports = mongoose.model('SubscriptionPlan',subscriptionPlanSchema)

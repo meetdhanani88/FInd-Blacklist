@@ -15,12 +15,14 @@ exports.SignUp = async (req, res) => {
         //     return res.status(201).json(user)
         // })
         // const _role = await Role({name,_id})
+     
         // _role.save((err,role)=>{
-        //     if(err) return res.status(400).json(role)
+        //     console.log(err);
+        //     if(err) return res.status(400).json(err)
         //     return res.status(201).json(role)
         // })
-        const data = await User.find().populate('roleId')
-        return res.status(201).json(data)
+        // const data = await User.find().populate('roleId')
+        // return res.status(201).json(data)
     } catch (err) {
         return res.status(400).json(err);
     }
@@ -29,8 +31,7 @@ exports.SignUp = async (req, res) => {
 exports.SignIn = (req, res) => {
     const { email, password } = req.body;
     try {
-        User.findOne({ email: email }).populate('role').exec(async (err, user) => {
-            console.log(user);
+        User.findOne({ email: email }).populate('roleId').exec(async (err, user) => {
             if (err) return res.status(400).json(err);
             if (user) {
                 if (user.password === password) {
@@ -118,6 +119,7 @@ exports.createUser = async (req, res) => {
         req.body;
 
     const E_Date = await ExpireDatePlane(expiryDate)
+  
     try {
 
         const user = await User({
@@ -125,12 +127,12 @@ exports.createUser = async (req, res) => {
             lastName,
             email,
             mobileNo,
-            role: 1,
+            roleId: 2,
         });
         const pass = await genPassword();
         user.Password = pass
-        const { Role } = req.user.user;
-        console.log(req.user.user);
+        const { roleId:{_id} } = req.user.user;
+       
         const planValues = {
             expiryDate : E_Date
         }
@@ -143,13 +145,15 @@ exports.createUser = async (req, res) => {
         }
         
 
-        if (Role === "Admin") {
+        if (_id === 1) {
             user.save(async (err, user) => {
                 if (err) return res.status(400).json(err); 
                 if (user) {
-                    await main(user.email, pass);
-                    planValues.userId = user._id
+                    const {_id} = user
+                    planValues.userId = _id
                     const subscriptionPlan = await SubscriptionPlan(planValues)
+                    subscriptionPlan.save()
+                    await main(user.email, pass);
                     return res.status(201).json({
                         message: "User Created Successfully",
                         user: user,
@@ -168,7 +172,7 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({ Role: "User" });
+        const users = await User.find({ roleId: 2 });
         if (users) {
             return res.status(200).json(users);
         } else {
@@ -183,8 +187,8 @@ exports.getAllUsers = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     const id = req.params.id;
     try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
+        const { roleId:{_id} } = req.user.user;
+        if (_id === 1) {
             const deletedUser = await User.findByIdAndDelete(id);
             if (deletedUser) {
                 return res.status(200).json({
@@ -209,13 +213,13 @@ exports.updateUser = async (req, res) => {
         firstName,
         lastName,
         email,
-        MobileNo,
+        mobileNo,
     } = req.body;
     const id = req.params.id;
 
     try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
+        const { roleId:{_id} } = req.user.user;
+        if (_id === 1) {
 
             const updatedUser = await User.findByIdAndUpdate(
                 id,
@@ -223,7 +227,7 @@ exports.updateUser = async (req, res) => {
                     firstName,
                     lastName,
                     email,
-                    MobileNo
+                    mobileNo
                 },
                 { new: true }
             );
@@ -243,63 +247,31 @@ exports.updateUser = async (req, res) => {
     }
 };
 
-exports.inActivePlan = async (req, res) => {
+exports.userActiveOrInActive = async (req, res) => {
     const id = req.params.id;
     try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
-            const updatedUser = await User.findByIdAndUpdate(
-                id,
-                {
-                    Subscription_Plan: "",
-                    Expiry_Date: "",
-                },
-                { new: true }
-            );
-            if (updatedUser) {
-                return res.status(200).json({
-                    message: "Plan InActive",
-                    user: updatedUser,
-                });
-            }
-        } else {
-            return res.status(400).json({
-                message: "Required Authorization",
-            });
-        }
-    } catch (err) {
-        return res.status(400).json(err);
-    }
-};
-exports.ActivePlan = async (req, res) => {
-    const id = req.params.id;
-    const { Subscription_Plan, Expire } = req.body
-    try {
-        const { Role } = req.user.user;
-        if (Role === "Admin") {
-            User.findById(id, async (err, user) => {
-                if (err) return res.status(400).json(err);
-                if (user) {
-                    const E_Date = await ExpireDatePlane(Expire)
-                    console.log(E_Date);
-                    const updatedUser = await User.updateOne(
-                        { email: user.email },
-                        {
-                            Subscription_Plan,
-                            Expiry_Date: E_Date,
-                        },
-                        { new: true }
-                    );
-                    if (updatedUser) {
-                        return res.status(200).json({
-                            message: "Plan Active",
-                            user: updatedUser,
-                        });
-                    }
-
+        const { roleId:{_id} } = req.user.user;
+        if (_id === 1) {
+            User.findOne({_id:id}).exec( async(err,user)=>{
+                if(err) return res.status(400).json(err)
+                if(user.status === true){
+                   await  User.updateOne({_id:user._id},{
+                        status : false
+                    },{new:true})
+                    return res.status(200).json({
+                        message: "User is Now InActive",
+                    });
+                }else{
+                    await User.updateOne({_id:user._id},{
+                        status : true
+                    },{new:true})
+                    return res.status(200).json({
+                        message: "User is Now Active",
+                    });
                 }
             })
-
+            
+            
         } else {
             return res.status(400).json({
                 message: "Required Authorization",
@@ -309,6 +281,7 @@ exports.ActivePlan = async (req, res) => {
         return res.status(400).json(err);
     }
 };
+
 function genPassword() {
     var chars =
         "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -322,8 +295,8 @@ function genPassword() {
 }
 
 
-function ExpireDatePlane(Expiry, type) {
-
+function ExpireDatePlane(Expiry) {
+    
     let E_Date;
 
     if (Expiry === 3) {
