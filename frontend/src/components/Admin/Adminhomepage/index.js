@@ -19,13 +19,9 @@ const pages = ['Users', 'Blacklisted Vendor', 'Blacklist Request'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const active = {
-    my: 2, color: 'white', display: 'block', backgroundColor: "white", mx: 2,
+    my: 2, display: 'block', backgroundColor: "white", mx: 2,
     borderRadius: "20px",
     color: "#1976d2",
-    // paddingLeft: "50px",
-    // paddingRight: "50px",
-    // paddingTop: "20px",
-    // paddingBottom: "50px",
     '&:hover': {
         backgroundColor: "white",
         color: "#1976d2"
@@ -52,13 +48,13 @@ const AdminHomepage = () => {
     const [activeclass, setactiveclass] = useState("");
 
     useLayoutEffect(() => {
-        if (location.pathname === '/adminhomepage') {
+        if (location.pathname === '/admin') {
             setactiveclass({ id: 0 })
         }
-        if (location.pathname === '/adminhomepage/manageblacklistvendor') {
+        if (location.pathname === '/admin/blacklistvendor') {
             setactiveclass({ id: 1 })
         }
-        if (location.pathname === '/adminhomepage/manageblacklistreq') {
+        if (location.pathname === '/admin/blacklistreq') {
             setactiveclass({ id: 2 })
         }
 
@@ -85,15 +81,14 @@ const AdminHomepage = () => {
         handleCloseNavMenu();
 
         if (option === 0) {
-            navigate("/adminhomepage");
-
+            navigate("/admin");
         }
         if (option === 1) {
-            navigate("/adminhomepage/manageblacklistvendor")
+            navigate("/admin/blacklistvendor")
 
         }
         if (option === 2) {
-            navigate("/adminhomepage/manageblacklistreq")
+            navigate("/admin/blacklistreq")
         }
     }
 
