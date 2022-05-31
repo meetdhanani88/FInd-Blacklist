@@ -337,3 +337,6 @@ function ExpireDatePlane(Expiry, type) {
     return E_Date
 
 }
+exports.auth = (req, res) => {
+    return res.status(200).json(req.user.user.Role)
+}

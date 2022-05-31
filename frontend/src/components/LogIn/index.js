@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -22,12 +22,9 @@ import { LoginAction } from '../../redux/reducersSlice/Loginslice';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../../Helper/Toast';
 
-
-
-
 const theme = createTheme();
-
-function LogIn() {
+const token = localStorage.getItem("token");
+function LogIn({ setrole, role, location }) {
     const nav = useNavigate();
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
@@ -39,11 +36,23 @@ function LogIn() {
     const [errmsg, seterrmsg] = useState(false)
 
 
+
     //password validation
     const lowercaseRegEx = /(?=.*[a-z])/;
     const uppercaseRegEx = /(?=.*[A-Z])/;
     const numericRegEx = /(?=.*[0-9])/;
     const lengthRegEx = /(?=.{6,})/;
+
+    useEffect(() => {
+        if (role === "Admin" && token) {
+            console.log(location.pathname.includes("admin"));
+
+            nav("/admin")
+        }
+        if (role === "User" && token) {
+            nav("/user")
+        }
+    }, [nav, role])
 
     const validationSchema = Yup.object({
 
@@ -78,7 +87,19 @@ function LogIn() {
             Toast({ message: `${data.message}` })
             setsuceessmsg(data.message)
             seterrmsg("");
-            nav("/adminhomepage")
+
+            if (data.user.Role === "Admin") {
+
+                setrole("Admin")
+                nav("/admin")
+
+            }
+
+            if (data.user.Role === "User") {
+
+                setrole("User")
+                nav("/user")
+            }
 
         },
         onError: (data) => {

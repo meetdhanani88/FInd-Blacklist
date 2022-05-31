@@ -112,6 +112,7 @@ function TablePaginationActions(props) {
         </Box>
     );
 }
+
 // const rows = [
 //     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
 //     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
@@ -298,9 +299,9 @@ function ManageBlacklistVendor() {
                                                 {row.date}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
-                                                <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
+                                                {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
-                                                </Link>
+                                                </Link> : <p>No Photo Proof</p>}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
 

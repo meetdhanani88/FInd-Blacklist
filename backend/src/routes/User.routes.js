@@ -1,4 +1,4 @@
-const { SignUp, SignIn, ResetPassword, forGotPassword, createUser, getAllUsers, deleteUser, updateUser, inActivePlan, ActivePlan } = require('../controller/User.controller')
+const { SignUp, SignIn, ResetPassword, forGotPassword, createUser, getAllUsers, deleteUser, updateUser, inActivePlan, ActivePlan, auth } = require('../controller/User.controller')
 const { requireSignIn } = require('../middleware')
 
 const router = require('express').Router()
@@ -13,5 +13,6 @@ router.post('/user/deleteUser/:id', requireSignIn, deleteUser)
 router.post('/user/updateUser/:id', requireSignIn, updateUser)
 router.post('/user/inActivePlan/:id', requireSignIn, inActivePlan)
 router.post('/user/ActivePlan/:id', requireSignIn, ActivePlan)
+router.get('/user/auth', requireSignIn, auth)
 
 module.exports = router
