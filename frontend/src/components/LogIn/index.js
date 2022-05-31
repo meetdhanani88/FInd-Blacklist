@@ -45,8 +45,6 @@ function LogIn({ setrole, role, location }) {
 
     useEffect(() => {
         if (role === "Admin" && token) {
-            console.log(location.pathname.includes("admin"));
-
             nav("/admin")
         }
         if (role === "User" && token) {
