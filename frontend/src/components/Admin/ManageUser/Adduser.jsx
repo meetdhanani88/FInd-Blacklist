@@ -36,9 +36,9 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
             firstName: values.firstname,
             lastName: values.lastname,
             email: values.email,
-            MobileNo: values.mobileno,
-            Expiry: plan,
-            Subscription_Plan: sp
+            mobileNo: values.mobileno,
+            expiryDate: plan
+
 
         })
 

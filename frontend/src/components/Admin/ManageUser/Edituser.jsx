@@ -36,7 +36,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
             firstName: values.firstname,
             lastName: values.lastname,
             email: values.email,
-            MobileNo: values.mobileno,
+            mobileNo: values.mobileNo,
 
         })
 
@@ -83,7 +83,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
         firstname: Yup.string().required("firstname is required"),
         lastname: Yup.string().required("lastname is required"),
         email: Yup.string().email('Invalid Email').required('email is required'),
-        mobileno: Yup.string().min(10, "Minimum Length 10").required("mobile no is require"),
+        mobileNo: Yup.string().min(10, "Minimum Length 10").required("mobile no is require"),
     })
 
     const { errors, values, handleBlur, handleSubmit, handleChange, touched, isValid, handleReset } = useFormik({
@@ -92,7 +92,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
             firstname: Edituserdata.firstName,
             lastname: Edituserdata.lastName,
             email: Edituserdata.email,
-            mobileno: Edituserdata.MobileNo,
+            mobileNo: Edituserdata.mobileNo,
         },
         validationSchema,
         onSubmit: handelEdiuser,
@@ -171,21 +171,21 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
                         ) : null}
 
                         <TextField
-                            error={(errors.mobileno && touched.mobileno) ? true : false}
+                            error={(errors.mobileNo && touched.mobileNo) ? true : false}
                             required
                             margin="dense"
-                            id="mobileno"
+                            id="mobileNo"
                             label="Mobile No"
                             type="number"
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.mobileno || ''}
+                            value={values.mobileNo || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {errors.mobileno && touched.mobileno ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.mobileno}</Alert>
+                        {errors.mobileNo && touched.mobileNo ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.mobileNo}</Alert>
                         ) : null}
 
                     </DialogContent>

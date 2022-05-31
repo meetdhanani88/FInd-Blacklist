@@ -5,8 +5,8 @@ const SubscriptionPlan = require('../models/SubscriptionPlan.model')
 const moment = require('moment');
 
 exports.SignUp = async (req, res) => {
-    const { email,password } = req.body;
-    const { name,_id } = req.body;
+    const { email, password } = req.body;
+    const { name, _id } = req.body;
     try {
         // const user = await User({email,password,roleId:1})
         // user.save((err,user)=>{
@@ -14,7 +14,7 @@ exports.SignUp = async (req, res) => {
         //     return res.status(201).json(user)
         // })
         // const _role = await Role({name,_id})
-     
+
         // _role.save((err,role)=>{
         //     console.log(err);
         //     if(err) return res.status(400).json(err)
@@ -29,10 +29,12 @@ exports.SignUp = async (req, res) => {
 
 exports.SignIn = (req, res) => {
     const { email, password } = req.body;
+    console.log("email, password", email, password);
     try {
-        User.findOne({ email: email }).populate('roleId').exec(async (err, user) => {
+        User.findOne({ email: email }).exec(async (err, user) => {
             if (err) return res.status(400).json(err);
             if (user) {
+                console.log(user);
                 if (user.password === password) {
                     const token = await jwt.sign({ user: user }, process.env.JWT_KEY, {
                         expiresIn: "1d",
@@ -118,7 +120,7 @@ exports.createUser = async (req, res) => {
         req.body;
 
     const E_Date = await ExpireDatePlane(expiryDate)
-  
+
     try {
 
         const user = await User({
@@ -130,25 +132,25 @@ exports.createUser = async (req, res) => {
         });
         const pass = await genPassword();
         user.password = pass
-        const { roleId:{_id} } = req.user.user;
-       
+        const { roleId: { _id } } = req.user.user;
+
         const planValues = {
-            expiryDate : E_Date
+            expiryDate: E_Date
         }
-        if(expiryDate === 3){
+        if (expiryDate === 3) {
             planValues.plan = "Silver"
-        }else if(expiryDate === 6){
+        } else if (expiryDate === 6) {
             planValues.plan = "Gold"
-        }else if(expiryDate === 12 || expiryDate === 1){
+        } else if (expiryDate === 12 || expiryDate === 1) {
             planValues.plan = "Premium"
         }
-        
+
 
         if (_id === 1) {
             user.save(async (err, user) => {
-                if (err) return res.status(400).json(err); 
+                if (err) return res.status(400).json(err);
                 if (user) {
-                    const {_id} = user
+                    const { _id } = user
                     planValues.userId = _id
                     const subscriptionPlan = await SubscriptionPlan(planValues)
                     subscriptionPlan.save()
@@ -171,7 +173,7 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({ roleId: 2 }).populate({path :'SubscriptionPlan'});
+        const users = await User.find({ roleId: 2 }).populate({ path: 'SubscriptionPlan' });
         if (users) {
             return res.status(200).json(users);
         } else {
@@ -186,7 +188,7 @@ exports.getAllUsers = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     const id = req.params.id;
     try {
-        const { roleId:{_id} } = req.user.user;
+        const { roleId: { _id } } = req.user.user;
         if (_id === 1) {
             const deletedUser = await User.findByIdAndDelete(id);
             if (deletedUser) {
@@ -217,7 +219,7 @@ exports.updateUser = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const { roleId:{_id} } = req.user.user;
+        const { roleId: { _id } } = req.user.user;
         if (_id === 1) {
 
             const updatedUser = await User.findByIdAndUpdate(
@@ -249,28 +251,28 @@ exports.updateUser = async (req, res) => {
 exports.userActiveOrInActive = async (req, res) => {
     const id = req.params.id;
     try {
-        const { roleId:{_id} } = req.user.user;
+        const { roleId: { _id } } = req.user.user;
         if (_id === 1) {
-            User.findOne({_id:id}).exec( async(err,user)=>{
-                if(err) return res.status(400).json(err)
-                if(user.status === true){
-                   await  User.updateOne({_id:user._id},{
-                        status : false
-                    },{new:true})
+            User.findOne({ _id: id }).exec(async (err, user) => {
+                if (err) return res.status(400).json(err)
+                if (user.status === true) {
+                    await User.updateOne({ _id: user._id }, {
+                        status: false
+                    }, { new: true })
                     return res.status(200).json({
                         message: "User is Now InActive",
                     });
-                }else{
-                    await User.updateOne({_id:user._id},{
-                        status : true
-                    },{new:true})
+                } else {
+                    await User.updateOne({ _id: user._id }, {
+                        status: true
+                    }, { new: true })
                     return res.status(200).json({
                         message: "User is Now Active",
                     });
                 }
             })
-            
-            
+
+
         } else {
             return res.status(400).json({
                 message: "Required Authorization",
@@ -281,29 +283,29 @@ exports.userActiveOrInActive = async (req, res) => {
     }
 };
 
-exports.extendExpiryDate = (req,res) =>{
+exports.extendExpiryDate = (req, res) => {
     const id = req.params.id;
-    const {expiryDate} = req.body
+    const { expiryDate } = req.body
     try {
-        const { roleId:{_id} } = req.user.user;
+        const { roleId: { _id } } = req.user.user;
         if (_id === 1) {
-            SubscriptionPlan.findOne({userId:id}).exec( async(err,plan)=>{
-                if(err) return res.status(400).json(err)
-                if(plan){
-                    await  SubscriptionPlan.updateOne({_id:plan._id},{
+            SubscriptionPlan.findOne({ userId: id }).exec(async (err, plan) => {
+                if (err) return res.status(400).json(err)
+                if (plan) {
+                    await SubscriptionPlan.updateOne({ _id: plan._id }, {
                         expiryDate
-                        },{new:true})
-                        return res.status(200).json({
-                            message: "Expiry Date Is Extended",
-                        }); 
-                }else{
+                    }, { new: true })
+                    return res.status(200).json({
+                        message: "Expiry Date Is Extended",
+                    });
+                } else {
                     return res.status(404).json({
                         message: "Plan not found",
                     });
                 }
-                   
-            }) 
-            
+
+            })
+
         } else {
             return res.status(400).json({
                 message: "Required Authorization",
@@ -328,7 +330,7 @@ function genPassword() {
 
 
 function ExpireDatePlane(Expiry) {
-    
+
     let E_Date;
 
     if (Expiry === 3) {

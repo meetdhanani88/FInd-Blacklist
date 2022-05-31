@@ -20,7 +20,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
     const [Edituserdata, setEdituserdata] = React.useState({});
-
     const queryClient = useQueryClient()
     const userlist = useSelector(state => state.Login.userlist)
     const userEditId = useSelector(state => state.Login.userEditId)
