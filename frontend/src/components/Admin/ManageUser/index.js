@@ -285,7 +285,7 @@ function CustomPaginationActionsTable() {
 
 
                                     {/* let date = row?.SubscriptionPlan[0]?.expiryDate ? new Date(row.SubscriptionPlan[0].expiryDate) : null; */ }
-                                    let date = null
+                                    let date = null;
 
                                     return (
 
