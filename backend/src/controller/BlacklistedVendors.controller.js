@@ -3,13 +3,16 @@ const BlacklistedVendors = require('../models/BlacklistedVendors.model')
 exports.addToBlacklist =  async(req,res)=>{
     const {vendorName, address, reason} = req.body
     const venderValues = {
-        vendorName, address, reason,adminId:req.user.user
+        vendorName, address, reason,adminId:req.user.userId
     }
-    if(req.file){
-        venderValues.image = req.file.filename
-    }
+    
     try{
-        const vendor = await BlacklistedVendors(venderValues)
+        const { _id } = req.user.role;
+        if(_id === 1){
+            if(req.file){
+                venderValues.image = req.file.filename
+            }
+            const vendor = await BlacklistedVendors(venderValues)
         vendor.save((err,vendor)=>{
             if(err) return res.status(400).json(err)
             if(vendor){
@@ -19,6 +22,12 @@ exports.addToBlacklist =  async(req,res)=>{
                 })
             } 
         })
+        }else{
+            return res.status(400).json({
+                message: "Required Authorization",
+              });
+        }
+        
     }catch(err){
         return res.status(400).json(err)
     }
@@ -44,7 +53,7 @@ exports.updateVendor = async (req,res)=>{
     const id = req.params.id;
 
     try {
-        const { roleId:{_id} } = req.user.user;
+        const { _id } = req.user.role;
         if (_id === 1) {
 
             const updatedBlacklistedVendors = await BlacklistedVendors.findByIdAndUpdate(
@@ -69,27 +78,39 @@ exports.updateVendor = async (req,res)=>{
         return res.status(400).json(err);
     }
 }
-exports.removeToBlacklist = async (req,res)=>{
+exports.removeToBlacklist =  (req,res)=>{
    
     const id = req.params.id;
 
     try {
-        const { roleId:{_id} } = req.user.user;
+        const { _id } = req.user.role;
         if (_id === 1) {
-
-            const updatedBlacklistedVendors = await BlacklistedVendors.findByIdAndUpdate(
-                id,
-                {
-                    vendorName, address, reason
-                },
-                { new: true }
-            );
-            if (updatedBlacklistedVendors) {
-                return res.status(200).json({
-                    message: "Vendor Updated",
-                    user: updatedBlacklistedVendors,
-                });
-            }
+            BlacklistedVendors.findOne({ _id: id }).exec(async (err, vendor) => {
+                if (err) return res.status(400).json(err);
+                if (vendor.status === true) {
+                  await BlacklistedVendors.updateOne(
+                    { _id: vendor._id },
+                    {
+                      status: false,
+                    },
+                    { new: true }
+                  );
+                  return res.status(200).json({
+                    message: "Vendor is Remove to Blacklist",
+                  });
+                } else {
+                  await BlacklistedVendors.updateOne(
+                    { _id: vendor._id },
+                    {
+                      status: true,
+                    },
+                    { new: true }
+                  );
+                  return res.status(200).json({
+                    message: "Vendor is Add to Blacklist",
+                  });
+                }
+              });
         } else {
             return res.status(400).json({
                 message: "Required Authorization",
