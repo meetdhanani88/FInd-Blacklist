@@ -164,7 +164,7 @@ function CustomPaginationActionsTable() {
 
 
     const rows = query?.data?.data
-    // console.log(rows);
+    console.log(rows);
 
 
     useEffect(() => {
@@ -284,7 +284,7 @@ function CustomPaginationActionsTable() {
                                 )?.map((row, i) => {
 
 
-                                    let date = row?.Expiry_Date ? new Date(row.Expiry_Date) : null;
+                                    let date = row?.SubscriptionPlan[0]?.expiryDate ? new Date(row.SubscriptionPlan[0].expiryDate) : null;
 
 
                                     return (
@@ -300,17 +300,15 @@ function CustomPaginationActionsTable() {
                                                 {row.email}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.MobileNo}
+                                                {row.mobileNo}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
-                                                {row.Subscription_Plan}
+                                                {row?.SubscriptionPlan[0]?.plan}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
-
-
                                                 <IconButton
                                                     aria-label="edit"
                                                     id={row._id}

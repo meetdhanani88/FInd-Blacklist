@@ -71,12 +71,6 @@ function Forgotpass() {
 
     })
 
-
-
-    const postlogin = async () => {
-        let res = await axiosInstance.post("/user/SignIn", values)
-        return res.data;
-    }
     const postEmail = async () => {
         let res = await axiosInstance.post("/user/forGotPassword", {
             email: values.email
@@ -86,25 +80,6 @@ function Forgotpass() {
     }
 
 
-    const { mutate, isLoading } = useMutation(postlogin, {
-        onSuccess: data => {
-            console.log(data);
-            dispatch(LoginAction.Login(data.user));
-            localStorage.setItem('token', data.token)
-            Toast({ message: `${data.message}` })
-            setsuceessmsg(data.message)
-            seterrmsg("");
-            nav("/adminhomepage")
-        },
-        onError: (data) => {
-            seterrmsg(data.response.data.message);
-            setsuceessmsg("");
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries('user Signup');
-        }
-    });
-
     const mutation = useMutation(postEmail, {
         onSuccess: data => {
             console.log(data);
@@ -112,8 +87,10 @@ function Forgotpass() {
 
             // dispatch(LoginAction.Login(data.user));
             // localStorage.setItem('token', data.token)
+            Toast({ message: `${data.message}` })
             setsuceessmsg(data.message)
             seterrmsg("");
+            nav("/login");
         },
         onError: (data) => {
             seterrmsg(data.response.data.message);
@@ -124,11 +101,7 @@ function Forgotpass() {
         }
     });
 
-    const handelLogin = () => {
-        console.log(values);
-        mutate();
 
-    }
 
     const sentEmail = () => {
         console.log(values);
@@ -139,26 +112,16 @@ function Forgotpass() {
 
     const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid } = useFormik(
 
-        EmailSent ?
-            {
-                initialValues: {
+        {
+            initialValues: {
 
-                    email: '',
-                    password: ''
-                },
-                validationSchema,
-                onSubmit: handelLogin
-            } :
-            {
-                initialValues: {
+                email: '',
+                password: ''
 
-                    email: '',
-                    password: ''
-
-                },
-                validationSchema2,
-                onSubmit: sentEmail
-            }
+            },
+            validationSchema2,
+            onSubmit: sentEmail
+        }
 
     )
 
@@ -218,33 +181,15 @@ function Forgotpass() {
                                 <div>{errors.email}</div>
                             ) : null}
 
-                            {EmailSent && <Grid item xs={12}>
-                                <TextField
-                                    type='password'
-                                    error={(errors.password && touched.password) ? true : false}
-                                    required
-                                    fullWidth
-                                    id="password"
-                                    label="Password"
-                                    name="password"
-                                    autoComplete="password"
-                                    value={values.password}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
 
-                                />
-                            </Grid>
-                            }
-                            {errors.password && touched.password ? (
-                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.password}</Alert>
-                            ) : null}
+
 
                         </Grid>
 
                         {!EmailSent ? <LoadingButton
                             sx={{ mt: 3, mb: 2 }}
                             disabled={(!dirty || !isValid)}
-                            onClick={EmailSent ? handelLogin : sentEmail}
+                            onClick={sentEmail}
                             fullWidth
                             loading={mutation.isLoading}
                             variant="contained"
@@ -254,9 +199,9 @@ function Forgotpass() {
                             <LoadingButton
                                 sx={{ mt: 3, mb: 2 }}
                                 disabled={(!isValid || values.password === '')}
-                                onClick={EmailSent ? handelLogin : sentEmail}
+                                onClick={sentEmail}
                                 fullWidth
-                                loading={isLoading}
+                                loading={mutation.isLoading}
                                 variant="contained"
                             >
                                 Log In

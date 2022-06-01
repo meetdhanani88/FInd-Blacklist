@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { QueryClient, QueryClientProvider, } from 'react-query'
 import LogIn from './components/LogIn';
@@ -27,16 +27,12 @@ const queryClient = new QueryClient()
 function App() {
 
   const [Role, setrole] = useState("");
-  const { decodedToken, isExpired } = useJwt(localStorage.getItem("token"));
+  const { decodedToken } = useJwt(localStorage.getItem("token"));
   const location = useLocation();
-
-
-
-
 
   useEffect(() => {
     // console.log(decodedToken);
-    setrole(decodedToken?.user?.Role)
+    setrole(decodedToken?.user?.roleId)
   }, [decodedToken])
 
   return (
@@ -57,25 +53,39 @@ function App() {
             <Route path="/resetpass" element={<ResetPass></ResetPass>}></Route>
 
 
-            {Role === "Admin" && <Route Route path="/admin" element={<AdminHomepage ></AdminHomepage>}>
+            {
+              Role === 1 &&
+              <Route path="/admin" element={<AdminHomepage ></AdminHomepage>}>
 
-              <Route index element={<ManageUser />} />
-              <Route path="blacklistvendor" element={<ManageBlacklistVendor />} />
-              <Route path="blacklistreq" element={<ManageBlacklistReq />} />
+                <Route index element={<ManageUser />} />
+                <Route path="blacklistvendor" element={<ManageBlacklistVendor />} />
+                <Route path="blacklistreq" element={<ManageBlacklistReq />} />
 
-            </Route>}
+              </Route>
+            }
 
-            {Role === "User" && <Route path="/user" element={<UserHomepage ></UserHomepage>}>
+            {Role === 2 && <Route path="/user" element={<UserHomepage ></UserHomepage>}>
             </Route>}
 
             <Route path='/country/:code' element={<BlacklistedDetails />} />
             <Route path='*' element={<Navigate to={"/login"} />} />
 
+
+
+            {/* <Route path="/admin" element={<AdminHomepage ></AdminHomepage>}>
+
+              <Route index element={<ManageUser />} />
+              <Route path="blacklistvendor" element={<ManageBlacklistVendor />} />
+              <Route path="blacklistreq" element={<ManageBlacklistReq />} />
+
+            </Route> */}
+
+
           </Routes>
         </QueryClientProvider>
         <ToastContainer />
       </StyledEngineProvider>
-    </div>
+    </div >
 
 
   );

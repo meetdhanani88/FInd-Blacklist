@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -29,7 +29,7 @@ function LogIn({ setrole, role, location }) {
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
     const Loginuser = useSelector((state) => state.Login.Loginuser);
-    console.log(Loginuser);
+    // console.log(Loginuser);
 
     // const [loading, setloading] = useState(false)
     const [suceessmsg, setsuceessmsg] = useState(false)
@@ -43,11 +43,11 @@ function LogIn({ setrole, role, location }) {
     const numericRegEx = /(?=.*[0-9])/;
     const lengthRegEx = /(?=.{6,})/;
 
-    useEffect(() => {
-        if (role === "Admin" && token) {
+    useLayoutEffect(() => {
+        if (role === 1 && token) {
             nav("/admin")
         }
-        if (role === "User" && token) {
+        if (role === 2 && token) {
             nav("/user")
         }
     }, [nav, role])
@@ -86,22 +86,22 @@ function LogIn({ setrole, role, location }) {
             setsuceessmsg(data.message)
             seterrmsg("");
 
-            if (data.user.Role === "Admin") {
+            if (data.user.roleId === 1) {
 
-                setrole("Admin")
+                setrole(1)
                 nav("/admin")
 
             }
 
-            if (data.user.Role === "User") {
+            if (data.user.roleId === 2) {
 
-                setrole("User")
+                setrole(2)
                 nav("/user")
             }
 
         },
         onError: (data) => {
-            seterrmsg(data.response.data.message);
+            seterrmsg(data.response.data.message || "Something Wrong");
             setsuceessmsg("");
         },
         onSettled: () => {
