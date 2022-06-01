@@ -13,7 +13,7 @@ import { useFormik } from 'formik'
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import * as Yup from 'yup'
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { useQueryClient, useMutation } from 'react-query'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -29,7 +29,7 @@ function LogIn({ setrole, role, location }) {
     const nav = useNavigate();
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
-    const Loginuser = useSelector((state) => state.Login.Loginuser);
+    // const Loginuser = useSelector((state) => state.Login.Loginuser);
     // console.log(Loginuser);
 
     // const [loading, setloading] = useState(false)
@@ -80,7 +80,7 @@ function LogIn({ setrole, role, location }) {
 
     const { mutate, isLoading } = useMutation(postlogin, {
         onSuccess: data => {
-            console.log(data);
+            //  console.log(data);
             dispatch(LoginAction.Login(data.user));
             localStorage.setItem('token', data.token)
             Toast({ message: `${data.message}` })
@@ -160,7 +160,7 @@ function LogIn({ setrole, role, location }) {
                     {errmsg && !suceessmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
                     {suceessmsg && !errmsg && <Alert severity="success" variant='filled' sx={{ mt: 2, mb: 2 }}>{suceessmsg}</Alert>}
 
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }} >
                         <Grid container spacing={2}>
 
                             <Grid item xs={12}>

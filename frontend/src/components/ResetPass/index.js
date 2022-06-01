@@ -13,7 +13,7 @@ import { useFormik } from 'formik'
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import * as Yup from 'yup'
-import { /*useDispatch*/ useSelector } from "react-redux"
+//import { useDispatch useSelector } from "react-redux"
 import { useQueryClient, useMutation } from 'react-query'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -31,10 +31,10 @@ function ResetPass() {
 
     const queryClient = useQueryClient()
     //    const dispatch = useDispatch();
-    const Loginuser = useSelector((state) => state.Login.Loginuser);
+    //const Loginuser = useSelector((state) => state.Login.Loginuser);
     const navigate = useNavigate()
 
-    console.log(Loginuser);
+    // console.log(Loginuser);
 
     // const [loading, setloading] = useState(false)
     const [suceessmsg, setsuceessmsg] = useState(false)
@@ -118,7 +118,7 @@ function ResetPass() {
         },
 
         onError: (data) => {
-            console.log(data.response.data.message);
+            // console.log(data.response.data.message);
             seterrmsg(data.response.data.message);
             setsuceessmsg("");
         },

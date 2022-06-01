@@ -15,28 +15,32 @@ import Toast from '../../../Helper/Toast';
 import { useSelector } from 'react-redux';
 import { useLayoutEffect } from 'react';
 
-const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
+const EditBlacklistedVendor = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
 
     const [Edituserdata, setEdituserdata] = React.useState({});
     const [errmsg, seterrmsg] = React.useState(false);
-    const queryClient = useQueryClient()
-    const userlist = useSelector(state => state.Login.userlist)
-    const userEditId = useSelector(state => state.Login.userEditId)
+    const queryClient = useQueryClient();
+    const userlist = useSelector(state => state.Login.blacklistedvendorlist)
+    const userEditId = useSelector(state => state.Login.blacklistedvendorlistId)
 
     useLayoutEffect(() => {
 
         const editdata = userlist.filter(item => item._id === userEditId);
-
         setEdituserdata(editdata[0])
+
     }, [userlist, userEditId])
+
+    // console.log(Edituserdata);
+
+
 
     async function EditCreateduser() {
 
-        const res = await axiosInstance.post(`/user/updateUser/${Edituserdata._id}`, {
-            firstName: values.firstname,
-            lastName: values.lastname,
-            email: values.email,
-            mobileNo: values.mobileNo,
+        const res = await axiosInstance.post(`/vendor/updateVendor/${Edituserdata._id}`, {
+            vendorName: values.vendorName,
+            reason: values.reason,
+            address: values.address,
+
         })
 
         return res;
@@ -44,21 +48,20 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
     }
     const mutation = useMutation(EditCreateduser, {
         onSuccess: data => {
-            console.log(data)
+            // console.log(data)
             listofuser.refetch()
             handleReset();
             handleCloseEdituserpop();
-            Toast({ message: "User Edited" });
+            Toast({ message: "Details Edited Successfully" });
 
 
         },
         onError: (data) => {
-
-            seterrmsg(data.response.data.message);
+            seterrmsg(data.response.data.message || "Something Went Wrong");
 
         },
         onSettled: () => {
-            queryClient.invalidateQueries('userEdited');
+            queryClient.invalidateQueries('Blacklisted Vendor Edited');
         }
     })
 
@@ -66,11 +69,8 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
     function handelEdiuser() {
 
 
-        // const finaldata = {
-        //     ...values,
 
-        // }
-        // console.log("finaldata", finaldata);
+
 
         mutation.mutate();
 
@@ -79,19 +79,18 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
 
     const validationSchema = Yup.object({
 
-        firstname: Yup.string().required("firstname is required"),
-        lastname: Yup.string().required("lastname is required"),
-        email: Yup.string().email('Invalid Email').required('email is required'),
-        mobileNo: Yup.string().min(10, "Minimum Length 10").required("mobile no is require"),
+        vendorName: Yup.string().required("vendorName is required"),
+        address: Yup.string().required("address is required"),
+        reason: Yup.string().min(10, "Minimum Length 10").required("reason is require"),
     })
 
     const { errors, values, handleBlur, handleSubmit, handleChange, touched, isValid, handleReset } = useFormik({
         initialValues: {
 
-            firstname: Edituserdata.firstName,
-            lastname: Edituserdata.lastName,
-            email: Edituserdata.email,
-            mobileNo: Edituserdata.mobileNo,
+            vendorName: Edituserdata?.vendorName,
+            reason: Edituserdata?.reason,
+            address: Edituserdata?.address,
+
         },
         validationSchema,
         onSubmit: handelEdiuser,
@@ -106,93 +105,76 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
                 aria-describedby="scroll-dialog-description"
             >
                 <Box component="form" noValidate onSubmit={handleSubmit} >
-                    <DialogTitle id="scroll-dialog-title">Edit Existing User Data </DialogTitle>
+                    <DialogTitle id="scroll-dialog-title">Edit Blacklisted-Vendor </DialogTitle>
 
                     <DialogContent dividers >
                         {errmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
                         <DialogContentText  >
-                            Edit User
+                            Edit Blacklisted-Vendor Details
                         </DialogContentText>
 
 
 
                         <TextField
-                            error={(errors.firstname && touched.firstname) ? true : false}
+                            error={(errors.vendorName && touched.vendorName) ? true : false}
                             required
 
                             margin="dense"
-                            id="firstname"
-                            label="First Name"
+                            id="vendorName"
+                            label="Vendor Name"
                             type="text"
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.firstname || ''}
+                            value={values.vendorName || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {errors.firstname && touched.firstname ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.firstname}</Alert>
+                        {errors.vendorName && touched.vendorName ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.vendorName}</Alert>
                         ) : null}
                         <TextField
                             required
-                            error={(errors.lastname && touched.lastname) ? true : false}
+                            error={(errors.reason && touched.reason) ? true : false}
                             margin="dense"
-                            id="lastname"
-                            label="Last Name"
+                            id="reason"
+                            label="Reason of Blacklist"
                             type="text"
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.lastname || ''}
+                            value={values.reason || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {errors.lastname && touched.lastname ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.lastname}</Alert>
-                        ) : null}
-                        <TextField
-                            error={(errors.email && touched.email) ? true : false}
-                            required
-                            margin="dense"
-                            id="email"
-                            label="Email Address"
-                            type="email"
-                            fullWidth
-                            variant="standard"
-                            sx={{ maxWidth: 700 }}
-                            value={values.email || ''}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            disabled
-                        />
-                        {errors.email && touched.email ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.email}</Alert>
+                        {errors.reason && touched.reason ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.reason}</Alert>
                         ) : null}
 
+
                         <TextField
-                            error={(errors.mobileNo && touched.mobileNo) ? true : false}
+                            error={(errors.address && touched.address) ? true : false}
                             required
                             margin="dense"
-                            id="mobileNo"
-                            label="Mobile No"
-                            type="number"
+                            id="address"
+                            label="Address Of Vendor "
+                            type="text"
                             fullWidth
                             variant="standard"
                             sx={{ maxWidth: 700 }}
-                            value={values.mobileNo || ''}
+                            value={values.address || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
                         />
-                        {errors.mobileNo && touched.mobileNo ? (
-                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.mobileNo}</Alert>
+                        {errors.address && touched.address ? (
+                            <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.address}</Alert>
                         ) : null}
 
                     </DialogContent>
 
                     <DialogActions>
                         <Button onClick={handleCloseEdituserpop} >Cancel</Button>
-                        <Button onClick={handelEdiuser} disabled={!isValid || values.firstname === ''}>Edit User</Button>
+                        <Button onClick={handelEdiuser} disabled={!isValid || values.vendorName === ''}>Edit Details</Button>
                     </DialogActions>
                 </Box>
 
@@ -203,4 +185,4 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
 }
 
 
-export default Edituser; 
+export default EditBlacklistedVendor; 

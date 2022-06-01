@@ -141,14 +141,14 @@ function CustomPaginationActionsTable() {
 
     const deletemutation = useMutation((id) => deleteUser(id), {
         onSuccess: data => {
-            console.log(data);
+            //  console.log(data);
             Toast({ message: "Deleted User Successfully" })
             query.refetch();
             setAnchorEl(null);
         },
         onError: (data) => {
 
-            console.log(data);
+            // console.log(data);
             Toast({ message: "Something wrong", type: "error" })
 
         },
@@ -164,7 +164,7 @@ function CustomPaginationActionsTable() {
 
 
     const rows = query?.data?.data
-    console.log(rows);
+    //  console.log(rows);
 
 
     useEffect(() => {
@@ -303,7 +303,7 @@ function CustomPaginationActionsTable() {
                                                 {row.mobileNo}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
-                                                {row.plan.title}
+                                                {row?.plan?.title}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}

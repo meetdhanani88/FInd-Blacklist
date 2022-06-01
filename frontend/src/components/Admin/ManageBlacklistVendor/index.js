@@ -29,7 +29,6 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ModeEdit from '@mui/icons-material/ModeEdit';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import axiosInstance from '../../../config';
 import { useDispatch } from 'react-redux';
@@ -37,6 +36,7 @@ import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
 import { useEffect } from 'react';
 import Toast from '../../../Helper/Toast';
 import Addblacklist from './Addblacklist';
+import EditBlacklistedVendor from './EditBlacklistedVendor';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -122,9 +122,16 @@ function TablePaginationActions(props) {
 
 
 const getblacklistedVendor = async () => {
-    const res = await axiosInstance.get('/vendor/ListOfBlackListReq/Accept');
+    const res = await axiosInstance.get('/vendor/listOfBlackListVendor');
     return res
 
+}
+
+async function deleteUser(id) {
+    const res = await axiosInstance.post(`/vendor/removeToBlacklist/${id}`
+
+    )
+    return res
 }
 function ManageBlacklistVendor() {
 
@@ -138,51 +145,53 @@ function ManageBlacklistVendor() {
     const dispatch = useDispatch();
     const queryClient = useQueryClient()
 
-    // const deletemutation = useMutation((id) => deleteUser(id), {
-    //     onSuccess: data => {
-    //         console.log(data);
-    //         Toast({ message: "Deleted User Successfully" })
-    //         query.refetch();
-    //         setAnchorEl(null);
-    //     },
-    //     onError: (data) => {
+    const deletemutation = useMutation((id) => deleteUser(id), {
+        onSuccess: data => {
+            console.log(data);
+            Toast({ message: "Deleted User Successfully" })
+            getblacklistedVendorquery.refetch();
+            setAnchorEl(null);
+        },
+        onError: (data) => {
 
-    //         console.log(data);
-    //         Toast({ message: "Something wrong", type: "error" })
+            console.log(data);
+            Toast({ message: "Something wrong", type: "error" })
 
-    //     },
-    //     onSettled: () => {
-    //         queryClient.invalidateQueries("userdeleted")
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries("BlacklistedVendordeleted")
 
-    //     }
-    // }
+        }
+    }
 
-    // )
-
-
+    )
 
 
-    // const rows = getblacklistedVendorquery?.data?.data?.vendor
-    const rows = [{
 
-        vendorName: "Gopal Locha",
-        ReasonForAdmin: "Very oily Locha",
-        Address: "B-788 Satadhar",
-        date: "Ketan"
-    }, {
 
-        vendorName: "Gopal Locha",
-        ReasonForAdmin: "Very oily Locha",
-        Address: "B-788 Satadhar",
-        date: "Ketan"
-    }, {
+    const rows = getblacklistedVendorquery?.data?.data;
 
-        vendorName: "Gopal Locha",
-        ReasonForAdmin: "Very oily Locha",
-        Address: "B-788 Satadhar",
-        date: "Ketan"
-    }]
-    console.log(rows);
+    // console.log(getblacklistedVendorquery.data);
+    // const rows = [{
+
+    //     vendorName: "Gopal Locha",
+    //     ReasonForAdmin: "Very oily Locha",
+    //     Address: "B-788 Satadhar",
+    //     date: "Ketan"
+    // }, {
+
+    //     vendorName: "Gopal Locha",
+    //     ReasonForAdmin: "Very oily Locha",
+    //     Address: "B-788 Satadhar",
+    //     date: "Ketan"
+    // }, {
+
+    //     vendorName: "Gopal Locha",
+    //     ReasonForAdmin: "Very oily Locha",
+    //     Address: "B-788 Satadhar",
+    //     date: "Ketan"
+    // }]
+    // console.log(rows);
 
 
 
@@ -198,15 +207,15 @@ function ManageBlacklistVendor() {
 
     const Edituserfun = (btnid) => {
 
-        dispatch(LoginAction.GetuserEditId(btnid.id))
+        dispatch(LoginAction.setblacklistedvendorEditId(btnid.id))
         handleClose();
         handleClickOpenEdituserpop()
 
     }
-    // const Deleteuserfun = (btnid) => {
-    //     deletemutation.mutate(btnid.id)
+    const Deleteuserfun = (btnid) => {
+        deletemutation.mutate(btnid.id)
 
-    // }
+    }
 
     const handleClickOpenpop = (scrollType) => {
         setOpenpop(true);
@@ -251,7 +260,9 @@ function ManageBlacklistVendor() {
 
     return (
         <>
-            <Addblacklist openpop={openpop} handleClosepop={handleClosepop} Listofuser={{}}></Addblacklist>
+            <EditBlacklistedVendor openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop} listofuser={getblacklistedVendorquery} ></EditBlacklistedVendor>
+
+            <Addblacklist openpop={openpop} handleClosepop={handleClosepop} Listofuser={getblacklistedVendorquery}></Addblacklist>
             <Grid container justifyContent={"center"} alignItems="center">
 
                 <Grid container item xs={11} sx={{ mt: 1 }} justifyContent="space-between">
@@ -281,7 +292,7 @@ function ManageBlacklistVendor() {
                                     <StyledTableCell>Reason for Black-list</StyledTableCell>
                                     <StyledTableCell>Vendor Address</StyledTableCell>
                                     <StyledTableCell>Blacklisted Date</StyledTableCell>
-                                    <StyledTableCell>BLACKLISTED BY ADMIN</StyledTableCell>
+                                    {/* <StyledTableCell>BLACKLISTED BY ADMIN</StyledTableCell> */}
                                     <StyledTableCell>Photo</StyledTableCell>
                                     <StyledTableCell>Action</StyledTableCell>
                                 </TableRow>
@@ -294,7 +305,7 @@ function ManageBlacklistVendor() {
                                 )?.map((row, i) => {
 
 
-                                    let date = row?.dateOfBlackListed ? new Date(row.dateOfBlackListed) : null;
+                                    let date = row?.createdAt ? new Date(row.createdAt) : null;
 
 
                                     return (
@@ -304,18 +315,18 @@ function ManageBlacklistVendor() {
                                                 {row.vendorName}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.ReasonForAdmin}
+                                                {row.reason}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.Address}
+                                                {row.address}
                                             </TableCell>
 
                                             <TableCell style={{ width: 70 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
-                                            <TableCell style={{ width: 70 }} >
+                                            {/* <TableCell style={{ width: 70 }} >
                                                 {row.date}
-                                            </TableCell>
+                                            </TableCell> */}
                                             <TableCell style={{ width: 70 }} >
                                                 {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
@@ -361,7 +372,7 @@ function ManageBlacklistVendor() {
                                                         <ListItemText>Edit Blacklisted Vendor</ListItemText>
                                                     </MenuItem>
                                                     <MenuItem
-                                                    // onClick={() => Deleteuserfun(anchorEl)}
+                                                        onClick={() => Deleteuserfun(anchorEl)}
                                                     >
                                                         <ListItemIcon>
                                                             <DeleteIcon fontSize="small" color="error" />
@@ -389,7 +400,7 @@ function ManageBlacklistVendor() {
                                 <TableRow >
                                     <TablePagination
                                         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-                                        colSpan={7}
+                                        colSpan={6}
                                         count={rows ? rows?.length : 0}
                                         rowsPerPage={rowsPerPage}
                                         page={page}

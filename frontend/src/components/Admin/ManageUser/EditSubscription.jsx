@@ -39,7 +39,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
     async function Inactiveplan() {
         const res = await axiosInstance.post(`/user/userActiveOrInActive/${userEditId}`)
-        console.log(res);
+        // console.log(res);
         return res
     }
 
@@ -55,7 +55,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
         onSuccess: async (data) => {
             listofuser.refetch();
-            console.log(data);
+            // console.log(data);
             Toast({ message: data.data.message });
             handleReset();
             handleCloseEdituserpop();
@@ -63,7 +63,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
         },
         onError: (data) => {
-            console.log(data);
+            // console.log(data);
             Toast({ message: data?.response?.data?.message || "something Wrong", type: "error" });
             handleReset();
             handleCloseEdituserpop();
@@ -94,7 +94,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
     const Addsubmutation = useMutation(Addsub, {
         onSuccess: data => {
             listofuser.refetch()
-            console.log(data)
+            // console.log(data)
             Toast({ message: data.data.message });
             handleReset();
             handleCloseEdituserpop();
@@ -107,7 +107,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
         },
         onError: (data) => {
 
-            console.log(data);
+            // console.log(data);
             Toast({ message: data?.response?.data?.message || "Something Wrong", type: "error" });
             handleReset();
             handleCloseEdituserpop()
@@ -126,7 +126,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
         }
         else {
-            console.log("hi");
+            // console.log("hi");
             Addsubmutation.mutate();
         }
 
@@ -140,18 +140,18 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
     }
     function expSubmit() {
         Addsubmutation.mutate()
-        console.log(date);
+        // console.log(date);
     }
 
     function inactiveSubmit() {
         inactivesubmutation.mutate()
-        console.log("Disable Plan");
+        // console.log("Disable Plan");
 
     }
 
 
     console.log(date);
-    const { values, handleSubmit, touched, isValid, handleReset } = useFormik({
+    const { values, handleSubmit, handleReset } = useFormik({
 
         initialValues: {
 
@@ -174,7 +174,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Box component="form" noValidate onSubmit={handleSubmit} >
                     <DialogTitle id="scroll-dialog-title">Edit Subscription </DialogTitle>
 
                     <DialogContent dividers >

@@ -13,12 +13,12 @@ import { useFormik } from 'formik'
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import * as Yup from 'yup'
-import { useDispatch, useSelector } from "react-redux"
+//import { useDispatch, useSelector } from "react-redux"
 import { useQueryClient, useMutation } from 'react-query'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import axiosInstance from '../../config';
-import { LoginAction } from '../../redux/reducersSlice/Loginslice';
+//import { LoginAction } from '../../redux/reducersSlice/Loginslice';
 //import useMediaQuery from '@mui/material/useMediaQuery';
 import ForwardToInboxOutlinedIcon from '@mui/icons-material/ForwardToInboxOutlined';
 import Toast from '../../Helper/Toast';
@@ -31,9 +31,9 @@ function Forgotpass() {
     const nav = useNavigate();
 
     const queryClient = useQueryClient()
-    const dispatch = useDispatch();
-    const Loginuser = useSelector((state) => state.Login.Loginuser);
-    console.log(Loginuser);
+    // const dispatch = useDispatch();
+    //  const Loginuser = useSelector((state) => state.Login.Loginuser);
+    // console.log(Loginuser);
 
     // const [loading, setloading] = useState(false)
     const [suceessmsg, setsuceessmsg] = useState(false)
@@ -43,28 +43,8 @@ function Forgotpass() {
     //const matches = useMediaQuery('(min-width:600px)')
 
 
-    //password validation
-    const lowercaseRegEx = /(?=.*[a-z])/;
-    const uppercaseRegEx = /(?=.*[A-Z])/;
-    const numericRegEx = /(?=.*[0-9])/;
-    const lengthRegEx = /(?=.{6,})/;
 
-    const validationSchema = Yup.object({
 
-        email: Yup.string().email('Invalid Email').required('email is required'),
-        password: Yup.string()
-            .matches(
-                lowercaseRegEx,
-                "Must contain one lowercase alphabetical character!"
-            )
-            .matches(
-                uppercaseRegEx,
-                "Must contain one uppercase alphabetical character!"
-            )
-            .matches(numericRegEx, "Must contain one numeric character!")
-            .matches(lengthRegEx, "Must contain 6 characters!")
-            .required("Required!")
-    })
     const validationSchema2 = Yup.object({
 
         email: Yup.string().email('Invalid Email').required('email is required'),
@@ -82,7 +62,7 @@ function Forgotpass() {
 
     const mutation = useMutation(postEmail, {
         onSuccess: data => {
-            console.log(data);
+            //    console.log(data);
             setEmailSent(true);
 
             // dispatch(LoginAction.Login(data.user));
@@ -104,7 +84,7 @@ function Forgotpass() {
 
 
     const sentEmail = () => {
-        console.log(values);
+        //  console.log(values);
         mutation.mutate();
     }
 

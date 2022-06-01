@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
 const Toast = ({ message, delay, type }) => {
-    console.log("message", message);
+    // console.log("message", message);
     return (
 
         type === "error" ?

@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Box, InputLabel, MenuItem, Select, FormControl, Alert } from '@mui/material';
+import { Box, Alert } from '@mui/material';
 import axiosInstance from '../../../config';
 import { useMutation, useQueryClient } from 'react-query';
 import Toast from '../../../Helper/Toast';
@@ -17,8 +17,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
 
-    const [plan, setplan] = React.useState(0);
-    const [errmsg, seterrmsg] = React.useState(false);
+
+
     const queryClient = useQueryClient()
     const [imageFile, setImageFile] = React.useState("");
     // const [Postdata, setPostdata] = React.useState({});
@@ -27,7 +27,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
     async function Addblacklist(data) {
 
 
-        const res = await axiosInstance.post('/vendor/AddToBlackList', data, {
+        const res = await axiosInstance.post('/vendor/addToBlacklist', data, {
             headers: {
                 'Content-Type': "multipart/form-data"
             }
@@ -41,8 +41,8 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
         onSuccess: data => {
             console.log(data);
             Toast({ message: data.data.message });
-            // Listofuser.refetch();
-            // setplan(0);
+            Listofuser.refetch();
+
             handleReset();
             handleClosepop();
 
@@ -61,17 +61,15 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
         }
     })
 
-    const handleplanChange = (event) => {
-        setplan(event.target.value);
-    };
+
 
     function handelAddBlacklist() {
         // console.log(values);
         // mutation.mutate();
         const finalData = {
             vendorName: values.vendorname,
-            Address: values.address,
-            ReasonForAdmin: values.reason,
+            address: values.address,
+            reason: values.reason,
             image: imageFile
         }
         console.log(finalData);
@@ -122,7 +120,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
                     <DialogTitle id="scroll-dialog-title">Add New BlackList</DialogTitle>
 
                     <DialogContent dividers >
-                        {errmsg && <Alert severity="error" variant='filled' sx={{ mt: 2, mb: 2 }}>{errmsg}</Alert>}
+
                         <DialogContentText  >
                             Add New Vendor to Blacklist.
                         </DialogContentText>
@@ -200,7 +198,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
 
                             {imageFile && <img src={URL.createObjectURL(imageFile)} alt="" style={{ width: "100%" }} />}
 
-                            {console.log(imageFile)}
+
 
 
                         </div>

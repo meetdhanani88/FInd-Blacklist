@@ -104,7 +104,7 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Box component="form" noValidate onSubmit={handleSubmit} >
                     <DialogTitle id="scroll-dialog-title">Add New User</DialogTitle>
 
                     <DialogContent dividers >

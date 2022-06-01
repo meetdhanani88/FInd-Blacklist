@@ -135,7 +135,7 @@ function ManageBlacklistVendor() {
     const open = Boolean(anchorEl);
     const [openpop, setOpenpop] = React.useState(false);
     const [openEdituserpop, setopenEdituserpop] = React.useState(false);
-    const getblacklistedVendorquery = useQuery('getuserlist', getblacklistedVendor);
+    // const getblacklistedVendorquery = useQuery('getuserlist', getblacklistedVendor);
     const dispatch = useDispatch();
     const queryClient = useQueryClient()
 
@@ -171,7 +171,7 @@ function ManageBlacklistVendor() {
         Address: "B-788 Satadhar",
         date: "Ketan"
     }]
-    console.log(rows);
+    // console.log(rows);
 
 
 

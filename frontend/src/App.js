@@ -31,7 +31,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(decodedToken);
+    // console.log(decodedToken);
     setrole(decodedToken?.role?._id)
   }, [decodedToken])
 
@@ -72,20 +72,14 @@ function App() {
 
 
 
-            {/* <Route path="/admin" element={<AdminHomepage ></AdminHomepage>}>
 
-              <Route index element={<ManageUser />} />
-              <Route path="blacklistvendor" element={<ManageBlacklistVendor />} />
-              <Route path="blacklistreq" element={<ManageBlacklistReq />} />
-
-            </Route> */}
 
 
           </Routes>
         </QueryClientProvider>
         <ToastContainer />
       </StyledEngineProvider>
-    </div >
+    </div>
 
 
   );

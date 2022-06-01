@@ -7,7 +7,6 @@ const Applayout = ({ children }) => {
             <div className='app'>
                 {children}
             </div>
-
         </Paper>
     )
 }
