@@ -87,14 +87,14 @@ function LogIn({ setrole, role, location }) {
             setsuceessmsg(data.message)
             seterrmsg("");
 
-            if (data.user.roleId === 1) {
+            if (data.user._id === 1) {
 
                 setrole(1)
                 nav("/admin")
 
             }
 
-            if (data.user.roleId === 2) {
+            if (data.user._id === 2) {
 
                 setrole(2)
                 nav("/user")

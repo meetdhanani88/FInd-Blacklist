@@ -312,14 +312,14 @@ function ManageBlacklistVendor() {
                                             </TableCell>
 
                                             <TableCell style={{ width: 10 }} >
-                                                <Button variant="outlined" startIcon={<CheckIcon />} color="success" fullWidth>
+                                                <Button variant="outlined" startIcon={<CheckIcon />} color="success" size='small' fullWidth>
                                                     Accept
                                                 </Button>
 
                                             </TableCell>
                                             <TableCell style={{ width: 10 }} >
 
-                                                <Button variant="outlined" startIcon={<CloseIcon />} color="error" fullWidth >
+                                                <Button variant="outlined" startIcon={<CloseIcon />} color="error" size='small' fullWidth >
                                                     Reject
                                                 </Button>
 

@@ -169,6 +169,18 @@ function ManageBlacklistVendor() {
         ReasonForAdmin: "Very oily Locha",
         Address: "B-788 Satadhar",
         date: "Ketan"
+    }, {
+
+        vendorName: "Gopal Locha",
+        ReasonForAdmin: "Very oily Locha",
+        Address: "B-788 Satadhar",
+        date: "Ketan"
+    }, {
+
+        vendorName: "Gopal Locha",
+        ReasonForAdmin: "Very oily Locha",
+        Address: "B-788 Satadhar",
+        date: "Ketan"
     }]
     console.log(rows);
 
@@ -176,9 +188,7 @@ function ManageBlacklistVendor() {
 
     useEffect(() => {
 
-
         dispatch(LoginAction.setblacklistedvendorlist(rows))
-
 
 
     }, [rows, dispatch])

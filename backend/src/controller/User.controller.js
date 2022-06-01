@@ -33,9 +33,9 @@ exports.signIn = (req, res) => {
     User.findOne({ email: email })
       .populate("roleId")
       .exec(async (err, user) => {
-        if(user.status === false){
+        if (user.status === false) {
           return res.status(400).json({
-            message : "Inactive User, Can't logIn"
+            message: "Inactive User, Can't logIn"
           })
         }
         if (err) return res.status(400).json(err);
@@ -51,7 +51,7 @@ exports.signIn = (req, res) => {
             );
             return res.status(200).json({
               message: "Login Successfully",
-              user: user,
+              user: user.roleId,
               token: token,
             });
           } else {
@@ -148,10 +148,10 @@ exports.createUser = async (req, res) => {
     const { _id } = req.user.role;
 
     if (_id === 1) {
-      User.findOne({email:email}).exec((err,_user)=>{
-        if(_user){
+      User.findOne({ email: email }).exec((err, _user) => {
+        if (_user) {
           return res.status(400).json({
-            message : 'User Already Existed'
+            message: 'User Already Existed'
           })
         }
         user.save(async (err, user) => {
@@ -165,7 +165,7 @@ exports.createUser = async (req, res) => {
           }
         });
       })
-      
+
     } else {
       return res.status(400).json({
         message: "Required Authorization",
@@ -178,7 +178,7 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ roleId: 2 ,status : true })
+    const users = await User.find({ roleId: 2, status: true })
       .populate("roleId plan")
       .select("-password");
     if (users) {

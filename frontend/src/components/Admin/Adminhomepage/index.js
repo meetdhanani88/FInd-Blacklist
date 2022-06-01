@@ -72,7 +72,11 @@ const AdminHomepage = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = (setting) => {
+        if (setting === "Logout") {
+            localStorage.removeItem("token");
+            navigate("/login");
+        }
         setAnchorElUser(null);
     };
 
@@ -215,7 +219,7 @@ const AdminHomepage = () => {
                             >
 
                                 {settings.map((setting, i) => (
-                                    <MenuItem key={i} onClick={handleCloseUserMenu} >
+                                    <MenuItem key={i} onClick={() => handleCloseUserMenu(setting)} >
                                         <Typography textAlign="center">{setting}</Typography>
                                     </MenuItem>
                                 ))}

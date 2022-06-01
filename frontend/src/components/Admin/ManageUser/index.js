@@ -53,11 +53,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const userlistcss = {
-    //background: "#fff",
-    //color: "#fff",
+    background: "#fff",
+    color: "#fff",
     fontFamily: "Ubuntu,sans-serif",
-    //textShadow:
-    // "2px 2px 0 #86a8e7, 2px -2px 0 #86a8e7, -2px 2px 0 #86a8e7, -2px -2px 0 #86a8e7, 2px 0 0 #86a8e7, 0 2px 0 #86a8e7, -2px 0 0 #86a8e7, 0 -2px 0 #86a8e7",
+    textShadow:
+        "2px 2px 0 #1976d2, 2px -2px 0 #1976d2, -2px 2px 0 #1976d2, -2px -2px 0 #1976d2, 2px 0 0 #1976d2, 0 2px 0 #1976d2, -2px 0 0 #1976d2, 0 -2px 0 #1976d2",
     letterSpacing: "8px",
     ml: "35px"
 }
@@ -285,7 +285,7 @@ function CustomPaginationActionsTable() {
 
 
                                     let date = row?.expiryDate ? new Date(row.expiryDate) : null;
-                                    
+
 
                                     return (
 
