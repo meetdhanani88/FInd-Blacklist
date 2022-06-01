@@ -81,6 +81,7 @@ exports.updateVendor = async (req,res)=>{
 exports.removeToBlacklist =  (req,res)=>{
    
     const id = req.params.id;
+    const {reason} = req.body
 
     try {
         const { _id } = req.user.role;
@@ -92,6 +93,7 @@ exports.removeToBlacklist =  (req,res)=>{
                     { _id: vendor._id },
                     {
                       status: false,
+                      reason
                     },
                     { new: true }
                   );
