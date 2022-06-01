@@ -31,6 +31,15 @@ const userSchema = new mongoose.Schema({
         type : Boolean,
         required : true,
         default : true,
+    },
+    plan : {
+        type :Number,
+        ref :'SubscriptionPlan',
+        required : true
+    },
+    expiryDate : {
+        type : Date,
+        required : true
     }
 },{timestamps:true,toObject:{virtuals:true}})
 // userSchema.virtual("SubscriptionPlan",{

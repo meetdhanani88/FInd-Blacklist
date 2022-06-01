@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const SubscriptionPlan = require("../models/SubscriptionPlan.model");
 const moment = require("moment");
 const Role = require("../models/Role.model");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 exports.signUp = async (req, res) => {
   const { email, password } = req.body;
   const { name, _id } = req.body;
@@ -71,9 +71,9 @@ exports.resetPassword = (req, res) => {
     User.findOne({ email: email }).exec(async (err, user) => {
       if (err) return res.status(400).json(err);
       if (user) {
-        const isMatch = await user.authenticated(password)
+        const isMatch = await user.authenticated(password);
         if (isMatch) {
-            const hashPass = await bcrypt.hash(newPassword,10)
+          const hashPass = await bcrypt.hash(newPassword, 10);
           await User.updateOne(
             { _id: user._id },
             {
@@ -123,7 +123,7 @@ exports.forgotPassword = (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-  const { firstName, lastName, email, mobileNo, expiryDate } = req.body;
+  const { firstName, lastName, email, mobileNo, expiryDate, plan } = req.body;
 
   const E_Date = await expireDatePlan(expiryDate);
 
@@ -133,32 +133,19 @@ exports.createUser = async (req, res) => {
       lastName,
       email,
       mobileNo,
+      plan,
       roleId: 2,
     });
     const pass = await genPassword();
     user.password = pass;
+    user.expiryDate = E_Date;
 
     const { _id } = req.user.role;
-
-    const planValues = {
-      expiryDate: E_Date,
-    };
-    if (expiryDate === 3) {
-      planValues.plan = "Silver";
-    } else if (expiryDate === 6) {
-      planValues.plan = "Gold";
-    } else if (expiryDate === 12 || expiryDate === 1) {
-      planValues.plan = "Premium";
-    }
 
     if (_id === 1) {
       user.save(async (err, user) => {
         if (err) return res.status(400).json(err);
         if (user) {
-          const { _id } = user;
-          planValues.userId = _id;
-          const subscriptionPlan = await SubscriptionPlan(planValues);
-          subscriptionPlan.save();
           await main(user.email, pass);
           return res.status(201).json({
             message: "User Created Successfully",
@@ -178,7 +165,9 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ roleId: 2 });
+    const users = await User.find({ roleId: 2 })
+      .populate("roleId plan")
+      .select("-password");
     if (users) {
       return res.status(200).json(users);
     } else {
@@ -193,9 +182,7 @@ exports.getAllUsers = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   const id = req.params.id;
   try {
-    const {
-      roleId: { _id },
-    } = req.user.user;
+    const { _id } = req.user.role;
     if (_id === 1) {
       const deletedUser = await User.findByIdAndDelete(id);
       if (deletedUser) {
@@ -221,9 +208,7 @@ exports.updateUser = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const {
-      roleId: { _id },
-    } = req.user.user;
+    const { _id } = req.user.role;
     if (_id === 1) {
       const updatedUser = await User.findByIdAndUpdate(
         id,
@@ -254,9 +239,7 @@ exports.updateUser = async (req, res) => {
 exports.userActiveOrInActive = async (req, res) => {
   const id = req.params.id;
   try {
-    const {
-      roleId: { _id },
-    } = req.user.user;
+    const { _id } = req.user.role;
     if (_id === 1) {
       User.findOne({ _id: id }).exec(async (err, user) => {
         if (err) return res.status(400).json(err);
@@ -298,15 +281,13 @@ exports.extendExpiryDate = (req, res) => {
   const id = req.params.id;
   const { expiryDate } = req.body;
   try {
-    const {
-      roleId: { _id },
-    } = req.user.user;
+    const { _id } = req.user.role;
     if (_id === 1) {
-      SubscriptionPlan.findOne({ userId: id }).exec(async (err, plan) => {
+      User.findOne({ _id: id }).exec(async (err, user) => {
         if (err) return res.status(400).json(err);
-        if (plan) {
-          await SubscriptionPlan.updateOne(
-            { _id: plan._id },
+        if (user) {
+          await User.updateOne(
+            { _id: user._id },
             {
               expiryDate,
             },
