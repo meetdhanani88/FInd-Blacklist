@@ -1,17 +1,16 @@
 const mongoose  = require('mongoose')
 
 const subscriptionPlanSchema = new mongoose.Schema({
-    plan: {
+    _id : {
+        type : Number,
+        required : true
+    },
+    title: {
         type: String,
         required : true
     },
-    expiryDate : {
-        type : Date,
-        required : true
-    },
-    userId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'User',
+    validity : {
+        type : Number,
         required : true
     }
 })

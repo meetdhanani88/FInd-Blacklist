@@ -1,6 +1,6 @@
 const BlacklistedVendors = require('../models/BlacklistedVendors.model')
 
-exports.AddToBlacklist =  async(req,res)=>{
+exports.addToBlacklist =  async(req,res)=>{
     const {vendorName, address, reason} = req.body
     const venderValues = {
         vendorName, address, reason,adminId:req.user.user
@@ -24,7 +24,7 @@ exports.AddToBlacklist =  async(req,res)=>{
     }
 }
 
-exports.ListOfBlackListVendor = async(req,res)=>{
+exports.listOfBlackListVendor = async(req,res)=>{
     try{
         const blacklistedVendors = await BlacklistedVendors.find()
         if(blacklistedVendors){
@@ -70,5 +70,32 @@ exports.updateVendor = async (req,res)=>{
     }
 }
 exports.removeToBlacklist = async (req,res)=>{
-    
+   
+    const id = req.params.id;
+
+    try {
+        const { roleId:{_id} } = req.user.user;
+        if (_id === 1) {
+
+            const updatedBlacklistedVendors = await BlacklistedVendors.findByIdAndUpdate(
+                id,
+                {
+                    vendorName, address, reason
+                },
+                { new: true }
+            );
+            if (updatedBlacklistedVendors) {
+                return res.status(200).json({
+                    message: "Vendor Updated",
+                    user: updatedBlacklistedVendors,
+                });
+            }
+        } else {
+            return res.status(400).json({
+                message: "Required Authorization",
+            });
+        }
+    } catch (err) {
+        return res.status(400).json(err);
+    }
 }

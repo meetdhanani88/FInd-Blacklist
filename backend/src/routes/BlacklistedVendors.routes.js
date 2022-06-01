@@ -1,4 +1,4 @@
-const {AddToBlacklist, ListOfBlackListVendor, updateVendor } = require('../controller/BlacklistedVendors.controller')
+const {addToBlacklist, listOfBlackListVendor, updateVendor } = require('../controller/BlacklistedVendors.controller')
 const { requireSignIn } = require('../middleware')
 
 const router = require('express').Router()
@@ -18,8 +18,8 @@ const storage = multer.diskStorage({
   
   const upload = multer({ storage: storage })
 
-router.post('/vendor/AddToBlacklist',requireSignIn,upload.single('image'),AddToBlacklist)
-router.get('/vendor/ListOfBlackListVendor',requireSignIn,ListOfBlackListVendor)
+router.post('/vendor/addToBlacklist',requireSignIn,upload.single('image'),addToBlacklist)
+router.get('/vendor/listOfBlackListVendor',requireSignIn,listOfBlackListVendor)
 router.post('/vendor/updateVendor/:id',requireSignIn,updateVendor)
 
 // router.post('/vendor/VendorPendingReq', requireSignIn,upload.single('image'),VendorPendingReq)

@@ -32,12 +32,26 @@ const userSchema = new mongoose.Schema({
         required : true,
         default : true,
     }
-},{timestamps:true,toJSON:{virtuals:true}})
-userSchema.virtual("SubscriptionPlan",{
-    ref : 'SubscriptionPlan',
-    foreignField : 'userId',
-    localField : "_id"
+},{timestamps:true,toObject:{virtuals:true}})
+// userSchema.virtual("SubscriptionPlan",{
+//     ref : 'SubscriptionPlan',
+//     foreignField : 'userId',
+//     localField : "_id"
+// })
+// userSchema.virtual("Roles",{
+//     ref : 'Role',
+//     foreignField : '_id',
+//     localField : "roleId"
+// })
+userSchema.pre('save', async function(){
+    this.password = await bcrypt.hash(this.password,10)
 })
+
+userSchema.methods = {
+    authenticated : async function(pass){
+        return await bcrypt.compare(pass,this.password)
+    }
+}
 
 module.exports = mongoose.model('User',userSchema)
 
