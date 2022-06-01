@@ -196,7 +196,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
                                         onChange={Radiochange}
                                     >
                                         <FormControlLabel value="extendExpiry" control={<Radio />} label="Extend Expiry" />
-                                        <FormControlLabel value="disablePlan" control={<Radio />} label="Disable Plan " />
+                                        <FormControlLabel value="disablePlan" control={<Radio />} label="In-Active User " />
 
                                     </RadioGroup>
                                 </FormControl>
@@ -229,8 +229,8 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
                                     :
                                     <>
-                                        <p>Plan will be disabled & User won't be able Login</p>
-                                        <FormControlLabel disabled checked control={<Checkbox />} label="Disabled Plan" />
+                                        <p>User will be Inactivated & User won't be able Login</p>
+                                        <FormControlLabel disabled checked control={<Checkbox />} label="Inactive User" />
                                     </>
 
 
@@ -252,7 +252,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
                         <Button onClick={handleCloseEdituserpop} >Cancel</Button>
                         {radioval === "extendExpiry" ?
                             <LoadingButton disabled={date === null} onClick={expSubmit} >Extend Expiry</LoadingButton> :
-                            <LoadingButton onClick={inactiveSubmit} loading={inactivesubmutation.isLoading}>Inactive Plan</LoadingButton>
+                            <LoadingButton onClick={inactiveSubmit} loading={inactivesubmutation.isLoading}>Inactive User</LoadingButton>
                         }
 
                     </DialogActions>
