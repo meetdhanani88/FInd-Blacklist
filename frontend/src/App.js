@@ -70,11 +70,6 @@ function App() {
             <Route path='/country/:code' element={<BlacklistedDetails />} />
             <Route path='*' element={<Navigate to={"/login"} />} />
 
-
-
-
-
-
           </Routes>
         </QueryClientProvider>
         <ToastContainer />

@@ -160,6 +160,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
                             type="email"
                             fullWidth
                             variant="standard"
+                            style={{ display: "none" }}
                             sx={{ maxWidth: 700 }}
                             value={values.email || ''}
                             onChange={handleChange}
