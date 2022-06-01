@@ -30,7 +30,7 @@ exports.signUp = async (req, res) => {
 exports.signIn = (req, res) => {
   const { email, password } = req.body;
   try {
-    User.findOne({ email: email })
+    User.findOne({ email: email }).select()
       .populate("roleId")
       .exec(async (err, user) => {
         if (user.status === false) {

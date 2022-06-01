@@ -23,7 +23,11 @@ const BlacklistVendersReqSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         trim : true,
         ref : 'User'
-    }, 
+    },
+    requestStatus:{
+        type : Boolean,
+        default : true
+    } 
 },{timestamps:true})
 
 

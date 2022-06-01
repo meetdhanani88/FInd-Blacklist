@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 
 exports.requireSignIn = (req,res,next)=>{
     const jwtToken = req.headers.authorization
-    
     if(jwtToken){
         const token = jwtToken.split(' ')[1]
     jwt.verify(token,process.env.JWT_KEY,(err,user)=>{
