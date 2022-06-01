@@ -24,6 +24,7 @@ import Toast from '../../Helper/Toast';
 
 const theme = createTheme();
 const token = localStorage.getItem("token");
+
 function LogIn({ setrole, role, location }) {
     const nav = useNavigate();
     const queryClient = useQueryClient()

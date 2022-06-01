@@ -17,18 +17,18 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
 
-    const [plan, setplan] = React.useState(0);
+    const [plan, setplan] = React.useState(1);
     const [errmsg, seterrmsg] = React.useState(false);
     const queryClient = useQueryClient()
 
     async function Createuser() {
         let sp;
-        if (plan === 3) {
-            sp = "Silver"
-        } else if (plan === 6) {
-            sp = "Gold"
-        } else if (plan === 12 || plan === 1) {
-            sp = "Premium"
+        if (plan === 1) {
+            sp = 12
+        } else if (plan === 2) {
+            sp = 6
+        } else if (plan === 3) {
+            sp = 3
         }
 
 
@@ -37,8 +37,8 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
             lastName: values.lastname,
             email: values.email,
             mobileNo: values.mobileno,
-            expiryDate: plan
-
+            plan: plan,
+            expiryDate: sp
 
         })
 
@@ -49,6 +49,7 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
     const mutation = useMutation(Createuser, {
         onSuccess: data => {
             Listofuser.refetch();
+            console.log(data);
             setplan(0);
             handleReset();
             handleClosepop();
@@ -196,9 +197,9 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
                                 value={plan}
                                 onChange={handleplanChange}
                             >
-                                <MenuItem value={0}>None</MenuItem>
-                                <MenuItem value={12}>Premium Plan (1 Year)</MenuItem>
-                                <MenuItem value={6}>Gold Plan (6 Months)</MenuItem>
+
+                                <MenuItem value={1}>Premium Plan (1 Year)</MenuItem>
+                                <MenuItem value={2}>Gold Plan (6 Months)</MenuItem>
                                 <MenuItem value={3}>Silver Plan (3 Months)</MenuItem>
                             </Select>
 
