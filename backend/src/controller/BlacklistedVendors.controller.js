@@ -37,7 +37,7 @@ exports.listOfBlackListVendor = async(req,res)=>{
     try{
         const blacklistedVendors = await BlacklistedVendors.find({status : true})
         if(blacklistedVendors){
-            return res.status(404).json(blacklistedVendors)
+            return res.status(200).json(blacklistedVendors)
         }else{
             return res.status(404).json({
                 message : "Vendor Not Found"
