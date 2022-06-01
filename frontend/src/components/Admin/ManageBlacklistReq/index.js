@@ -36,7 +36,8 @@ import { useDispatch } from 'react-redux';
 import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
 import { useEffect } from 'react';
 import Toast from '../../../Helper/Toast';
-
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -248,7 +249,7 @@ function ManageBlacklistVendor() {
 
 
 
-                    <Grid item >
+                    <Grid item xs={11} >
                         <Typography variant="h4" component="div" sx={userlistcss} >
                             Requests for Black-Listing
                         </Typography>
@@ -266,10 +267,12 @@ function ManageBlacklistVendor() {
                                     <StyledTableCell>Name of Vendor</StyledTableCell>
                                     <StyledTableCell>Reason for Black-list</StyledTableCell>
                                     <StyledTableCell>Vendor Address</StyledTableCell>
-                                    <StyledTableCell>Blacklisted Date</StyledTableCell>
-                                    <StyledTableCell>BLACKLISTED BY ADMIN</StyledTableCell>
+                                    <StyledTableCell>Request Date</StyledTableCell>
+                                    <StyledTableCell>Request Sent By</StyledTableCell>
                                     <StyledTableCell>Photo</StyledTableCell>
-                                    <StyledTableCell>Action</StyledTableCell>
+                                    <StyledTableCell>Accept</StyledTableCell>
+                                    <StyledTableCell>Reject</StyledTableCell>
+
                                 </TableRow>
                             </TableHead>
 
@@ -286,77 +289,40 @@ function ManageBlacklistVendor() {
                                     return (
 
                                         <TableRow key={i}>
-                                            <TableCell style={{ width: 50 }} >
+                                            <TableCell style={{ width: 100 }} >
                                                 {row.vendorName}
                                             </TableCell>
-                                            <TableCell style={{ width: 100 }} >
+                                            <TableCell style={{ width: 150 }} >
                                                 {row.ReasonForAdmin}
                                             </TableCell>
-                                            <TableCell style={{ width: 100 }} >
+                                            <TableCell style={{ width: 150 }} >
                                                 {row.Address}
                                             </TableCell>
 
-                                            <TableCell style={{ width: 70 }} >
+                                            <TableCell style={{ width: 100 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
-                                            <TableCell style={{ width: 70 }} >
+                                            <TableCell style={{ width: 100 }} >
                                                 {row.date}
                                             </TableCell>
-                                            <TableCell style={{ width: 70 }} >
+                                            <TableCell style={{ width: 100 }} >
                                                 {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
                                                 </Link> : <p>No Photo Proof</p>}
                                             </TableCell>
-                                            <TableCell style={{ width: 70 }} >
 
-                                                <IconButton
-                                                    aria-label="edit"
-                                                    id={row._id}
-                                                    aria-controls={open ? 'basic-menu' : undefined}
-                                                    aria-haspopup="true"
-                                                    aria-expanded={open ? 'true' : undefined}
-                                                    onClick={handleClick}
-                                                    style={{ boxShadow: "none" }}
+                                            <TableCell style={{ width: 10 }} >
+                                                <Button variant="outlined" startIcon={<CheckIcon />} color="success" fullWidth>
+                                                    Accept
+                                                </Button>
 
-                                                >
-                                                    <MenuIcon color='error' />
+                                            </TableCell>
+                                            <TableCell style={{ width: 10 }} >
 
-                                                </IconButton>
-                                                {/* <p style={{}} ref={rowid}>{row._id}</p> */}
-                                                <Menu
-                                                    id="basic-menu"
-                                                    anchorEl={anchorEl}
-                                                    open={open}
-                                                    onClose={handleClose}
-                                                    MenuListProps={{
-                                                        'aria-labelledby': 'basic-button',
-                                                    }}
-                                                    sx={{
-                                                        '& .MuiMenu-paper': {
-                                                            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
-                                                        }
-                                                    }}
+                                                <Button variant="outlined" startIcon={<CloseIcon />} color="error" fullWidth >
+                                                    Reject
+                                                </Button>
 
-                                                >
-
-                                                    <MenuItem onClick={() => Edituserfun(anchorEl)}>
-                                                        <ListItemIcon>
-                                                            <ModeEdit fontSize="small" color="info" />
-                                                        </ListItemIcon>
-
-                                                        <ListItemText>Edit Blacklisted Vendor</ListItemText>
-                                                    </MenuItem>
-                                                    <MenuItem
-                                                    // onClick={() => Deleteuserfun(anchorEl)}
-                                                    >
-                                                        <ListItemIcon>
-                                                            <DeleteIcon fontSize="small" color="error" />
-                                                        </ListItemIcon>
-                                                        <ListItemText>Remove From BlackList</ListItemText>
-                                                    </MenuItem>
-
-
-                                                </Menu>
                                             </TableCell>
 
                                         </TableRow>
@@ -403,4 +369,57 @@ function ManageBlacklistVendor() {
     )
 }
 
-export default ManageBlacklistVendor
+export default ManageBlacklistVendor;
+
+
+
+
+
+{/* <IconButton
+                                                    aria-label="edit"
+                                                    id={row._id}
+                                                    aria-controls={open ? 'basic-menu' : undefined}
+                                                    aria-haspopup="true"
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                    onClick={handleClick}
+                                                    style={{ boxShadow: "none" }}
+
+                                                >
+                                                    <MenuIcon color='error' />
+
+                                                </IconButton> */}
+{/* <p style={{}} ref={rowid}>{row._id}</p> */ }
+{/* <Menu
+                                                    id="basic-menu"
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={handleClose}
+                                                    MenuListProps={{
+                                                        'aria-labelledby': 'basic-button',
+                                                    }}
+                                                    sx={{
+                                                        '& .MuiMenu-paper': {
+                                                            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+                                                        }
+                                                    }}
+
+                                                >
+
+                                                    <MenuItem onClick={() => Edituserfun(anchorEl)}>
+                                                        <ListItemIcon>
+                                                            <ModeEdit fontSize="small" color="info" />
+                                                        </ListItemIcon>
+
+                                                        <ListItemText>Edit Blacklisted Vendor</ListItemText>
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                    // onClick={() => Deleteuserfun(anchorEl)}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <DeleteIcon fontSize="small" color="error" />
+                                                        </ListItemIcon>
+                                                        <ListItemText>Remove From BlackList</ListItemText>
+                                                    </MenuItem>
+
+
+                                                </Menu> */}

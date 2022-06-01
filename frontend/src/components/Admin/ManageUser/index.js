@@ -284,8 +284,8 @@ function CustomPaginationActionsTable() {
                                 )?.map((row, i) => {
 
 
-                                    {/* let date = row?.SubscriptionPlan[0]?.expiryDate ? new Date(row.SubscriptionPlan[0].expiryDate) : null; */ }
-                                    let date = null;
+                                    let date = row?.expiryDate ? new Date(row.expiryDate) : null;
+                                    
 
                                     return (
 
@@ -303,7 +303,7 @@ function CustomPaginationActionsTable() {
                                                 {row.mobileNo}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
-                                                {/* {row?.SubscriptionPlan[0]?.plan} */}
+                                                {row.plan.title}
                                             </TableCell>
                                             <TableCell style={{ width: 70 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}

@@ -31,8 +31,8 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    // console.log(decodedToken);
-    setrole(decodedToken?.user?.roleId)
+    console.log(decodedToken);
+    setrole(decodedToken?.role?._id)
   }, [decodedToken])
 
   return (

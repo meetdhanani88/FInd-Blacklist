@@ -38,7 +38,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
 
     async function Inactiveplan() {
-        const res = await axiosInstance.post(`/user/inActivePlan/${userEditId}`)
+        const res = await axiosInstance.post(`/user/userActiveOrInActive/${userEditId}`)
         console.log(res);
         return res
     }
@@ -81,7 +81,8 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
     const Addsub = async () => {
 
 
-        const res = await axiosInstance.post(`/user/ActivePlan/${Edituserdata._id}`, {
+        const res = await axiosInstance.post(`/user/extendExpiryDate/${Edituserdata._id}`, {
+            expiryDate: date
 
         })
 
@@ -138,11 +139,12 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
         setradioval(event.target.value);
     }
     function expSubmit() {
+        Addsubmutation.mutate()
         console.log(date);
     }
 
     function inactiveSubmit() {
-
+        inactivesubmutation.mutate()
         console.log("Disable Plan");
 
     }
@@ -250,7 +252,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
                         <Button onClick={handleCloseEdituserpop} >Cancel</Button>
                         {radioval === "extendExpiry" ?
                             <LoadingButton disabled={date === null} onClick={expSubmit} >Extend Expiry</LoadingButton> :
-                            <LoadingButton onClick={inactiveSubmit} >Inactive Plan</LoadingButton>
+                            <LoadingButton onClick={inactiveSubmit} loading={inactivesubmutation.isLoading}>Inactive Plan</LoadingButton>
                         }
 
                     </DialogActions>

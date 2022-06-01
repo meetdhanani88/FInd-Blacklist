@@ -280,6 +280,7 @@ exports.userActiveOrInActive = async (req, res) => {
 exports.extendExpiryDate = (req, res) => {
   const id = req.params.id;
   const { expiryDate } = req.body;
+  console.log(expiryDate);
   try {
     const { _id } = req.user.role;
     if (_id === 1) {

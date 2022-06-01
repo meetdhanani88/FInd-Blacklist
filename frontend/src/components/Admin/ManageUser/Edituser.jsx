@@ -164,6 +164,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
                             value={values.email || ''}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            disabled
                         />
                         {errors.email && touched.email ? (
                             <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.email}</Alert>
