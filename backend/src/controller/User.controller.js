@@ -33,7 +33,6 @@ exports.signIn = (req, res) => {
     User.findOne({ email: email, })
       .populate("roleId")
       .exec(async (err, user) => {
-        
         if (err) return res.status(400).json(err);
         if (user) {
           const isMatch = await user.authenticated(password);

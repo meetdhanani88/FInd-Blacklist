@@ -1,4 +1,4 @@
-const {addToBlacklist, listOfBlackListVendor, updateVendor, removeToBlacklist } = require('../controller/BlacklistedVendors.controller')
+const {addToBlacklist, listOfBlackListVendor, updateVendor, removeToBlacklist, updateCategory } = require('../controller/BlacklistedVendors.controller')
 const { requireSignIn } = require('../middleware')
 
 const router = require('express').Router()
@@ -22,6 +22,7 @@ router.post('/vendor/addToBlacklist',requireSignIn,upload.single('image'),addToB
 router.get('/vendor/listOfBlackListVendor',requireSignIn,listOfBlackListVendor)
 router.post('/vendor/updateVendor/:id',requireSignIn,updateVendor)
 router.post('/vendor/removeToBlacklist/:id',requireSignIn,removeToBlacklist)
+router.post('/vendor/updateCategory/:id',requireSignIn,updateCategory)
 
 
 

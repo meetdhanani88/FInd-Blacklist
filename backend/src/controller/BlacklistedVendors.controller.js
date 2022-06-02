@@ -122,7 +122,31 @@ exports.removeToBlacklist =  (req,res)=>{
         return res.status(400).json(err);
     }
 }
-exports.updateCategory = (req,res)=>{
-    const {vendorName, address, reason} = req.body
+exports.updateCategory = async (req,res)=>{
+    const {category} = req.body
     const id = req.params.id;
+    try {
+        const { _id } = req.user.role;
+        if (_id === 1) {
+
+            const updatedCategory = await BlacklistedVendors.findByIdAndUpdate(
+                id,
+                {
+                    category
+                },
+                { new: true }
+            );
+            if (updatedCategory) {
+                return res.status(200).json({
+                    message: "Category Updated",
+                });
+            }
+        } else {
+            return res.status(400).json({
+                message: "Required Authorization",
+            });
+        }
+    } catch (err) {
+        return res.status(400).json(err);
+    }
 }
