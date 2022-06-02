@@ -5,7 +5,7 @@ const router = require('express').Router()
 const multer = require('multer')
 const path = require('path')
 const shortId = require('shortid')
-const { blacklistRequest, getAllRequest, rejectRequest, addReqToBlacklist } = require('../controller/BlacklistVendersReq.controller')
+const { blacklistRequest, getAllRequest, rejectRequest, addReqToBlacklist, recentlyBlacklistedVendors } = require('../controller/BlacklistVendersReq.controller')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -23,6 +23,7 @@ router.post('/vendor/blacklistRequest',requireSignIn, upload.single('image'),bla
 router.get('/vendor/getAllRequest',requireSignIn,getAllRequest)
 router.post('/vendor/rejectRequest/:id',requireSignIn,rejectRequest)
 router.post('/vendor/addReqToBlacklist/:id',requireSignIn,addReqToBlacklist)
+router.get('/vendor/recentlyBlacklistedVendors',requireSignIn,recentlyBlacklistedVendors)
 
 
 

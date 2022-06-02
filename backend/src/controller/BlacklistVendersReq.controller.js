@@ -1,6 +1,6 @@
 const BlacklistVendersReq = require('../models/BlacklistVendersReq.model')
 const BlacklistedVendors = require('../models/BlacklistedVendors.model')
-
+const moment = require('moment')
 exports.blacklistRequest = (req,res)=>{
     try{
         
@@ -97,3 +97,12 @@ exports.addReqToBlacklist = (req,res)=>{
         return res.status(400).json(err)
     }
 }
+
+exports.recentlyBlacklistedVendors = async (req,res)=>{
+    const start = moment().startOf('day').subtract(30, 'day').toDate();
+   const vendors = await BlacklistedVendors.find(
+    {  
+        createdAt: { $gte: start}  
+    })
+   return res.status(200).json(vendors)
+} 
