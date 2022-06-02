@@ -35,7 +35,7 @@ exports.addToBlacklist =  async(req,res)=>{
 
 exports.listOfBlackListVendor = async(req,res)=>{
     try{
-        const blacklistedVendors = await BlacklistedVendors.find({status : true})
+        const blacklistedVendors = await BlacklistedVendors.find({isActive : true})
         if(blacklistedVendors){
             return res.status(200).json(blacklistedVendors)
         }else{
