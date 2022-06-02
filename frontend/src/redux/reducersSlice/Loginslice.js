@@ -3,8 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const Loginslice = createSlice({
     name: "Login",
     initialState: {
-        Login: false, token: "", Loginuser: {}, userlist: [],
-        userEditId: "", blacklistedvendorlist: [], role: "", blacklistedvendorlistId: ""
+        Login: false,
+        token: "",
+        Loginuser: {}, userlist: [],
+        userEditId: "",
+        blacklistedvendorlist: [], role: "", blacklistedvendorlistId: ""
     },
 
     reducers: {
@@ -31,9 +34,6 @@ const Loginslice = createSlice({
         // gettoken(state, action) {
         //     state.token = localStorage.getItem("token")
         // },
-
-
-
         // setResetsuccess(state, action) {
         //     state.ResetpassMsg = action.payload
         // }

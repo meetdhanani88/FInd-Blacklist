@@ -33,15 +33,15 @@ exports.signIn = (req, res) => {
     User.findOne({ email: email }).select()
       .populate("roleId")
       .exec(async (err, user) => {
-        if (user.status === false) {
-          return res.status(400).json({
-            message: "Inactive User, Can't logIn"
-          })
-        }
         if (err) return res.status(400).json(err);
         if (user) {
           const isMatch = await user.authenticated(password);
           if (isMatch) {
+            if (user.status === false) {
+              return res.status(400).json({
+                message: "Inactive User, Can't logIn"
+              })
+            }
             const token = await jwt.sign(
               { userId: user._id, role: user.roleId, email: user.email },
               process.env.JWT_KEY,
