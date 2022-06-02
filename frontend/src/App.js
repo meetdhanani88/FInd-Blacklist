@@ -18,6 +18,7 @@ import { useJwt } from "react-jwt";
 // import { LoginAction } from './redux/reducersSlice/Loginslice';
 import UserHomepage from './components/User/UserHomepage/Index';
 import BlacklistedDetails from './components/User/UserHomepage/BlacklistedDetails/BlacklistedDetails';
+import { useSelector } from 'react-redux';
 // import axiosInstance from './config';
 
 const queryClient = new QueryClient()
@@ -29,6 +30,7 @@ function App() {
   const [Role, setrole] = useState("");
   const { decodedToken } = useJwt(localStorage.getItem("token"));
   const location = useLocation();
+  const userlist = useSelector(state => state.Login.blacklistedvendorlist)
 
   useEffect(() => {
     // console.log(decodedToken);
@@ -67,7 +69,7 @@ function App() {
             {Role === 2 && <Route path="/user" element={<UserHomepage ></UserHomepage>}>
             </Route>}
 
-            <Route path='/country/:code' element={<BlacklistedDetails />} />
+            <Route path='/blacklist/:code' element={userlist?.length >= 1 ? <BlacklistedDetails /> : <Navigate to={"/login"}></Navigate>} />
             <Route path='*' element={<Navigate to={"/login"} />} />
 
           </Routes>

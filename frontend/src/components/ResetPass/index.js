@@ -145,11 +145,6 @@ function ResetPass() {
         validationSchema,
         onSubmit: handelReset
     })
-
-
-
-
-
     return (
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">

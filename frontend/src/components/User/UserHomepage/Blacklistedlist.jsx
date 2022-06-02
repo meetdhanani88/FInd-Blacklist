@@ -1,15 +1,18 @@
-import { Grid } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import axios from 'axios';
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import { useQuery } from 'react-query';
 import BlacklistedlistItem from './BlacklistedlistItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import axiosInstance from '../../../config';
+import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
 
 
-const getAllCountriesAPI = async () => {
+const getAllBlacklist = async () => {
 
-    const response = await axios.get('https://restcountries.com/v3.1/all');
+    const response = await axiosInstance.get('vendor/ListOfBlackListVendor');
     const data = response.data;
     return data;
 
@@ -17,30 +20,68 @@ const getAllCountriesAPI = async () => {
 
 const Blacklistedlist = () => {
 
-    const { data, isLoading } = useQuery('getcoutry', getAllCountriesAPI);
-    const countryList = data ? [...data] : [];
-    // console.log(countryList);
 
+
+    const { data, isLoading } = useQuery('getcoutry', getAllBlacklist);
+    const BlacklistedList = data ? [...data] : [];
+    // console.log(countryList);
+    const category = ["Blacklisted", "Highly Cautious", "Cautious"];
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(LoginAction.setblacklistedvendorlist(data))
+    }, [data, dispatch])
+
+
+    const color = (cat) => {
+        if (cat === "Blacklisted") {
+            return { color: "#e55350 ", my: 2 }
+        }
+        else if (cat === "Cautious") { return { color: "#7b1fa2 ", my: 2 } }
+        else if (cat === "Highly Cautious") { return { color: "#1565c0", my: 2 } }
+        else { return { color: "#e55350 ", my: 2 } }
+
+    }
 
     return (
-        <div>
+        <>
             {isLoading && <Box sx={{ display: 'flex', }} justifyContent="center">
                 <CircularProgress />
             </Box>}
 
-            {!isLoading && <Grid container direction='row' spacing={4}>
 
-                {countryList?.map((country, key) =>
-                    <Grid item xs={12} sm={6} md={4} lg={3} key={key} justifyContent='center'>
-                        <BlacklistedlistItem country={country} />
+            {!isLoading &&
+                category.map((cat) =>
+
+
+
+                    <Grid container key={cat}>
+
+
+                        <Typography variant="h4" gutterBottom component="div" color={"InfoText"} align="left" sx={color(cat)}>
+                            {cat}
+
+                        </Typography>
+
+                        <Grid container direction='row' spacing={4}>
+
+                            {BlacklistedList?.filter((item) => item.category === cat).map((listitem, key) =>
+                                <Grid item xs={12} sm={6} md={4} lg={3} key={key} justifyContent='center'>
+                                    <BlacklistedlistItem listitem={listitem} />
+                                </Grid>
+                            )}
+
+                        </Grid>
                     </Grid>
-                )}
+                )
+            }
 
-            </Grid>}
-        </div>
+        </>
     )
 }
 
 export default Blacklistedlist;
+
+
+
 
 

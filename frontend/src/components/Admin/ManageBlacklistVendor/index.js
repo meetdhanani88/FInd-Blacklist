@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -37,6 +38,7 @@ import { useEffect } from 'react';
 import Toast from '../../../Helper/Toast';
 import Addblacklist from './Addblacklist';
 import EditBlacklistedVendor from './EditBlacklistedVendor';
+import EditSubscription from './EditSubscription';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -141,6 +143,7 @@ function ManageBlacklistVendor() {
     const open = Boolean(anchorEl);
     const [openpop, setOpenpop] = React.useState(false);
     const [openEdituserpop, setopenEdituserpop] = React.useState(false);
+    const [openEditsubpop, setopenEditsubpop] = React.useState(false);
     const getblacklistedVendorquery = useQuery('getuserlist', getblacklistedVendor);
     const dispatch = useDispatch();
     const queryClient = useQueryClient()
@@ -212,6 +215,13 @@ function ManageBlacklistVendor() {
         handleClickOpenEdituserpop()
 
     }
+
+    const Editsubrfun = (btn) => {
+        dispatch(LoginAction.setblacklistedvendorEditId(btn.id))
+        handleClose();
+        setopenEditsubpop(true)
+
+    }
     const Deleteuserfun = (btnid) => {
         deletemutation.mutate(btnid.id)
 
@@ -234,6 +244,9 @@ function ManageBlacklistVendor() {
     const handleCloseEdituserpop = () => {
         setopenEdituserpop(false)
     };
+    const handleCloseEditsubpop = () => {
+        setopenEditsubpop(false)
+    };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -255,14 +268,37 @@ function ManageBlacklistVendor() {
         setPage(0);
     };
 
+    function category(cat) {
+        if (cat === "Blacklisted") {
+            return <TableCell style={{ width: 70, color: "#e55350" }} >
+                {cat}
+            </TableCell>
+        }
+        else if (cat === "Highly Cautious") {
+            return <TableCell style={{ width: 70, color: "#ed6c02" }} >
+                {cat}
+            </TableCell>
+        }
+        else if (cat === "Cautious") {
+            return <TableCell style={{ width: 70, color: "#2e7d32" }} >
+                {cat}
+            </TableCell>
+        }
+        else {
+            return <TableCell style={{ width: 70 }} >
+                {cat}
+            </TableCell>
+        }
 
+
+    }
 
 
     return (
         <>
-            <EditBlacklistedVendor openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop} listofuser={getblacklistedVendorquery} ></EditBlacklistedVendor>
-
-            <Addblacklist openpop={openpop} handleClosepop={handleClosepop} Listofuser={getblacklistedVendorquery}></Addblacklist>
+            {openEdituserpop && <EditBlacklistedVendor openEdituserpop={openEdituserpop} handleCloseEdituserpop={handleCloseEdituserpop} listofuser={getblacklistedVendorquery} ></EditBlacklistedVendor>}
+            {openEditsubpop && <EditSubscription openEditsubpop={openEditsubpop} handleCloseEditsubpop={handleCloseEditsubpop} listofuser={getblacklistedVendorquery} ></EditSubscription>}
+            {openpop && <Addblacklist openpop={openpop} handleClosepop={handleClosepop} Listofuser={getblacklistedVendorquery}></Addblacklist>}
             <Grid container justifyContent={"center"} alignItems="center">
 
                 <Grid container item xs={11} sx={{ mt: 1 }} justifyContent="space-between">
@@ -292,7 +328,7 @@ function ManageBlacklistVendor() {
                                     <StyledTableCell>Reason for Black-list</StyledTableCell>
                                     <StyledTableCell>Vendor Address</StyledTableCell>
                                     <StyledTableCell>Blacklisted Date</StyledTableCell>
-                                    {/* <StyledTableCell>BLACKLISTED BY ADMIN</StyledTableCell> */}
+                                    <StyledTableCell>CATEGORY</StyledTableCell>
                                     <StyledTableCell>Photo</StyledTableCell>
                                     <StyledTableCell>Action</StyledTableCell>
                                 </TableRow>
@@ -324,9 +360,9 @@ function ManageBlacklistVendor() {
                                             <TableCell style={{ width: 70 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
-                                            {/* <TableCell style={{ width: 70 }} >
-                                                {row.date}
-                                            </TableCell> */}
+                                            {category(row.category)}
+
+
                                             <TableCell style={{ width: 70 }} >
                                                 {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
@@ -378,6 +414,13 @@ function ManageBlacklistVendor() {
                                                             <DeleteIcon fontSize="small" color="error" />
                                                         </ListItemIcon>
                                                         <ListItemText>Remove From BlackList</ListItemText>
+                                                    </MenuItem>
+                                                    <MenuItem onClick={() => Editsubrfun(anchorEl)}>
+                                                        <ListItemIcon>
+                                                            <SubscriptionsIcon fontSize="small" color="success" />
+                                                        </ListItemIcon>
+
+                                                        <ListItemText>Edit Blacklist Status</ListItemText>
                                                     </MenuItem>
 
 

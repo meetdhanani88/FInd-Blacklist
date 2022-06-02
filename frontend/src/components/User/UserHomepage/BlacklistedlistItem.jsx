@@ -5,6 +5,7 @@ import { CardMedia } from '@mui/material';
 import { Card } from '@mui/material';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import image from '../../Images/undraw_online_stats_0g94.png'
 
 
 const classes = {
@@ -28,34 +29,33 @@ const classes = {
     }
 }
 
-const BlacklistedlistItem = ({ country, isLoading }) => {
+const BlacklistedlistItem = ({ listitem, isLoading }) => {
 
 
     const navigate = useNavigate();
+
+
     return (
 
 
-
-        <Card sx={classes.root} style={{ height: "100%", maxWidth: "100%" }} onClick={() => navigate(`/country/${country.cca2}`)}>
+        <Card sx={classes.root} style={{ height: "100%", maxWidth: "100%" }} onClick={() => navigate(`/blacklist/${listitem._id}`)}>
             <CardActionArea>
                 <CardMedia
-                    style={{ height: "140px" }}
-                    image={`${country.flags.png}`}
+                    style={{ height: "150px" }}
+                    image={image}
                     title="Contemplative Reptile"
                 />
                 <CardContent sx={{ textAlign: "start" }}>
                     <Typography gutterBottom variant="h5" component="h3" sx={classes.cardItemTitle} >
-                        {country.name.common}
+                        {listitem.vendorName}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p" sx={classes.cardItemSubTitle} >
-                        <span style={classes.cardContainTitle}>Population:</span> {country?.population}
+                        <span style={classes.cardContainTitle}>Address:</span> {listitem?.address}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p" sx={classes.cardItemSubTitle} >
-                        <span style={classes.cardContainTitle}>Region:</span> {country?.region}
+                        <span style={classes.cardContainTitle}>Reason:</span> {listitem?.reason}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" sx={classes.cardItemSubTitle}>
-                        <span style={classes.cardContainTitle}>Capital:</span> {country?.capital || ""}
-                    </Typography>
+
                 </CardContent>
             </CardActionArea>
 

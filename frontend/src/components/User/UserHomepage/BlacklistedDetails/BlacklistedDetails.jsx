@@ -1,14 +1,29 @@
 import { ThemeProvider } from '@emotion/react';
-import { Paper, Grid, Container, createTheme, Button } from '@mui/material'
-import React from 'react'
+import { Paper, Grid, Container, createTheme, Button, Link } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useSelector } from "react-redux"
+import img from '../../../Images/undraw_online_stats_0g94.png'
 
 
 
 
 const BlacklistedDetails = () => {
+    const [vendor, setVendor] = useState("")
     const navigate = useNavigate()
+    const { code } = useParams();
+    const userlist = useSelector(state => state.Login.blacklistedvendorlist)
+    console.log(userlist);
+
+
+    useEffect(() => {
+        const data = userlist.filter((item) => item._id === code)
+
+        setVendor(data[0]);
+
+    }, [code, userlist])
+    // console.log(code);
 
     const classes = {
         btnWrapper: {
@@ -38,70 +53,50 @@ const BlacklistedDetails = () => {
                 <Button onClick={() => navigate('/user')} sx={classes.btnBack} startIcon={<ArrowBackIcon></ArrowBackIcon>}>Back</Button>
             </Paper>
 
+            {vendor &&
+                <Grid container spacing={5} style={{ marginTop: "50px" }}>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <img src={img} height="100%" width="100%" alt='Flag' />
+                    </Grid>
 
-            <Grid container spacing={5} style={{ marginTop: "50px" }}>
-                <Grid item xs={12} sm={6} md={6}>
-                    <img src={"https://flagcdn.com/w320/do.png"} height="100%" width="100%" alt='Flag' />
-                </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <div className="info-box">
+                            <div>
+                                <h3>{vendor.vendorName}</h3>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                        <ul className='info-list'>
+                                            <li>
+                                                <span>Vendor Name:</span> {vendor.vendorName}
+                                            </li>
+                                            <li>
+                                                <span>Address:</span> {vendor.address}
+                                            </li>
+                                            <li>
+                                                <span>Reason to Blacklist:</span> {vendor.reason}
+                                            </li>
+                                            <li>
+                                                <span>Date of Blacklist:</span> {new Date(vendor.createdAt).toISOString().substring(0, 10)}
+                                            </li>
+                                            <li>
+                                                {vendor.image ? <Link href={`http://localhost:7600/${vendor.image}`} underline="hover" target="_blank" rel="noreferrer" >
+                                                    Photo Proof
+                                                </Link> : <p>No Photo Proof</p>}
+                                            </li>
 
-                <Grid item xs={12} sm={6} md={6}>
-                    <div className="info-box">
-                        <div>
-                            <h3>{"Dominican Republic"}</h3>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={12} md={6} lg={6}>
-                                    <ul className='info-list'>
-                                        <li>
-                                            <span>Native Name:</span> {"Dominican Republic"}
-                                        </li>
-                                        <li>
-                                            <span>Population:</span> {"10847904"}
-                                        </li>
-                                        <li>
-                                            <span>Region:</span> {"Americas"}
-                                        </li>
-                                        <li>
-                                            <span>Sub Region:</span> {"Caribbean"}
-                                        </li>
-                                        <li>
-                                            <span>Capital:</span> {"Santo Domingo"}
-                                        </li>
 
-                                    </ul>
+                                        </ul>
+                                    </Grid>
+
                                 </Grid>
-                                <Grid item xs={12} sm={12} md={6} lg={6}>
-                                    <ul className='info-list'>
-                                        <li>
-                                            <span>Top Level Domain:</span> {".do"}
-                                        </li>
-                                        <li>
-                                            <span>Currencies:</span> {"Dominican peso"}
-                                        </li>
-                                        <li>
-                                            <span>Languages:</span> {"Spanish"}
-                                        </li>
-                                    </ul>
-                                </Grid>
-                            </Grid>
 
 
-                            <div style={{ display: "flex", flexWrap: "wrap" }}>
-                                <h4>Border Countries:</h4>
-                                <ul className="borderList">
-                                    {["Haiti"].map((item, i) =>
-                                        <li key={i}>
-                                            <Paper sx={classes.borderItem}>
-                                                {item}
-                                            </Paper>
-                                        </li>
-                                    )}
-                                </ul>
+
                             </div>
                         </div>
-                    </div>
 
-                </Grid>
-            </Grid>
+                    </Grid>
+                </Grid>}
         </Container>
 
     )

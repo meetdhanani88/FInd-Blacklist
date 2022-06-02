@@ -17,7 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 //import AccountBoxIcon from '@mui/icons-material/AccountBox';
 // import AdbIcon from '@mui/icons-material/Adb';
-import { useNavigate, } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //import LogoutIcon from '@mui/icons-material/Logout';
 import "./index.css"
 
@@ -159,18 +159,7 @@ const UserHomepage = () => {
             <Paper style={{ height: "100%", minHeight: "100vh", border: 0, boxShadow: "none" }}>
                 <Container style={{ marginTop: "40px" }}>
 
-                    {/* <Grid container direction='row' justifyContent='space-between' alignItems='center'>
 
-
-
-
-                        <Grid item xs={12} lg={5} style={{ marginBottom: "20px" }}>
-                            <div>Search</div>
-                        </Grid>
-                        <Grid item xs={6} sm={4} md={3} lg={2} style={{ marginBottom: "20px" }}>
-                            <div>Filter </div>
-                        </Grid>
-                    </Grid> */}
                     <div style={{ marginTop: "20px" }}>
 
                         <Blacklistedlist />
