@@ -175,14 +175,11 @@ function ManageBlacklistVendor() {
 
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
+    //     dispatch(LoginAction.setblacklistedvendorlist(rows))
 
-        dispatch(LoginAction.setblacklistedvendorlist(rows))
-
-
-
-    }, [rows, dispatch])
+    // }, [rows, dispatch])
 
     // console.log(query?.data?.data);
 
@@ -375,51 +372,3 @@ export default ManageBlacklistVendor;
 
 
 
-{/* <IconButton
-                                                    aria-label="edit"
-                                                    id={row._id}
-                                                    aria-controls={open ? 'basic-menu' : undefined}
-                                                    aria-haspopup="true"
-                                                    aria-expanded={open ? 'true' : undefined}
-                                                    onClick={handleClick}
-                                                    style={{ boxShadow: "none" }}
-
-                                                >
-                                                    <MenuIcon color='error' />
-
-                                                </IconButton> */}
-{/* <p style={{}} ref={rowid}>{row._id}</p> */ }
-{/* <Menu
-                                                    id="basic-menu"
-                                                    anchorEl={anchorEl}
-                                                    open={open}
-                                                    onClose={handleClose}
-                                                    MenuListProps={{
-                                                        'aria-labelledby': 'basic-button',
-                                                    }}
-                                                    sx={{
-                                                        '& .MuiMenu-paper': {
-                                                            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
-                                                        }
-                                                    }}
-
-                                                >
-
-                                                    <MenuItem onClick={() => Edituserfun(anchorEl)}>
-                                                        <ListItemIcon>
-                                                            <ModeEdit fontSize="small" color="info" />
-                                                        </ListItemIcon>
-
-                                                        <ListItemText>Edit Blacklisted Vendor</ListItemText>
-                                                    </MenuItem>
-                                                    <MenuItem
-                                                    // onClick={() => Deleteuserfun(anchorEl)}
-                                                    >
-                                                        <ListItemIcon>
-                                                            <DeleteIcon fontSize="small" color="error" />
-                                                        </ListItemIcon>
-                                                        <ListItemText>Remove From BlackList</ListItemText>
-                                                    </MenuItem>
-
-
-                                                </Menu> */}
