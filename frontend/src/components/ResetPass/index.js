@@ -96,7 +96,7 @@ function ResetPass() {
 
     const postlogin = async () => {
 
-        let res = await axiosInstance.post("/user/ResetPassword", {
+        let res = await axiosInstance.post("/user/resetPassword", {
             email: values.email,
             password: values.oldpassword,
             newPassword: values.newpassword

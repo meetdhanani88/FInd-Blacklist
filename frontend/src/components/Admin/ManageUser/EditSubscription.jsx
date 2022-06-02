@@ -229,7 +229,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
                                     :
                                     <>
-                                        <p>User will be Inactivated & User won't be able Login</p>
+                                        <p>User will be Inactivated & User won't be able to Login</p>
                                         <FormControlLabel disabled checked control={<Checkbox />} label="Inactive User" />
                                     </>
 

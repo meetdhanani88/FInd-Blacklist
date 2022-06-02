@@ -33,12 +33,12 @@ exports.signIn = (req, res) => {
     User.findOne({ email: email, }).select()
       .populate("roleId")
       .exec(async (err, user) => {
-        if (user.isActive === false ) {
+        if (user.isActive === false) {
           return res.status(400).json({
             message: "Inactive User, Can't logIn"
           })
         }
-        if(user.expiryDate <= moment()){
+        if (user.expiryDate <= moment()) {
           return res.status(400).json({
             message: "Your Plan is Expired"
           })
@@ -47,6 +47,11 @@ exports.signIn = (req, res) => {
         if (user) {
           const isMatch = await user.authenticated(password);
           if (isMatch) {
+            if (user.status === false) {
+              return res.status(400).json({
+                message: "Inactive User, Can't logIn"
+              })
+            }
             const token = await jwt.sign(
               { userId: user._id, role: user.roleId, email: user.email },
               process.env.JWT_KEY,
