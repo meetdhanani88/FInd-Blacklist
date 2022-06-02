@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
         type : String,
         trim : true
     },
-    status : {
+    isActive : {
         type : Boolean,
         required : true,
         default : true,

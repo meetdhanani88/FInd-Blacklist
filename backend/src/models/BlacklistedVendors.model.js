@@ -29,7 +29,7 @@ const BlacklistedVendorsSchema = new mongoose.Schema({
         trim : true,
         ref : 'User'
     },
-    status : {
+    isActive : {
         type : Boolean,
         default : true  
     } 

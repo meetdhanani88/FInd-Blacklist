@@ -30,9 +30,19 @@ exports.signUp = async (req, res) => {
 exports.signIn = (req, res) => {
   const { email, password } = req.body;
   try {
-    User.findOne({ email: email }).select()
+    User.findOne({ email: email, }).select()
       .populate("roleId")
       .exec(async (err, user) => {
+        if (user.isActive === false) {
+          return res.status(400).json({
+            message: "Inactive User, Can't logIn"
+          })
+        }
+        if (user.expiryDate <= moment()) {
+          return res.status(400).json({
+            message: "Your Plan is Expired"
+          })
+        }
         if (err) return res.status(400).json(err);
         if (user) {
           const isMatch = await user.authenticated(password);
