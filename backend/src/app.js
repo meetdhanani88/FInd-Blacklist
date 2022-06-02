@@ -5,7 +5,6 @@ require('./db/coon')
 const PORT = process.env.PORT
 const cors = require('cors')
 const userRoutes = require('./routes/User.routes')
-const vendorRoutes = require('./routes/Vendor.routes')
 const blacklistedVendorRoutes = require('./routes/BlacklistedVendors.routes')
 const blacklistedVendorsReqRoutes = require('./routes/BlacklistedVendorsReq.routes')
 
@@ -18,7 +17,6 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static(path.join(__dirname,'images')))
 app.use('/api',userRoutes)
-// app.use('/api',vendorRoutes)
 app.use('/api',blacklistedVendorRoutes)
 app.use('/api',blacklistedVendorsReqRoutes)
 

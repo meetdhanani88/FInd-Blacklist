@@ -88,11 +88,11 @@ exports.removeToBlacklist =  (req,res)=>{
         if (_id === 1) {
             BlacklistedVendors.findOne({ _id: id }).exec(async (err, vendor) => {
                 if (err) return res.status(400).json(err);
-                if (vendor.status === true) {
+                if (vendor.isActive === true) {
                   await BlacklistedVendors.updateOne(
                     { _id: vendor._id },
                     {
-                      status: false,
+                    isActive: false,
                       reason
                     },
                     { new: true }
@@ -104,7 +104,7 @@ exports.removeToBlacklist =  (req,res)=>{
                   await BlacklistedVendors.updateOne(
                     { _id: vendor._id },
                     {
-                      status: true,
+                        isActive: true,
                     },
                     { new: true }
                   );
