@@ -38,7 +38,7 @@ exports.signIn = (req, res) => {
         if (user) {
           const isMatch = await user.authenticated(password);
           if (isMatch) {
-            if (user.status === false) {
+            if (user.isActive === false) {
               return res.status(400).json({
                 message: "Inactive User, Can't logIn"
               })
@@ -184,7 +184,7 @@ exports.createUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({ roleId: 2, status: true })
+    const users = await User.find({ roleId: 2, isActive: true })
       .populate("roleId plan")
       .select("-password");
     if (users) {
@@ -262,11 +262,11 @@ exports.userActiveOrInActive = async (req, res) => {
     if (_id === 1) {
       User.findOne({ _id: id }).exec(async (err, user) => {
         if (err) return res.status(400).json(err);
-        if (user.status === true) {
+        if (user.isActive === true) {
           await User.updateOne(
             { _id: user._id },
             {
-              status: false,
+              isActive: false,
             },
             { new: true }
           );
@@ -277,7 +277,7 @@ exports.userActiveOrInActive = async (req, res) => {
           await User.updateOne(
             { _id: user._id },
             {
-              status: true,
+              isActive: true,
             },
             { new: true }
           );

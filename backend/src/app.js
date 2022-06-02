@@ -20,7 +20,10 @@ app.use('/api',userRoutes)
 app.use('/api',blacklistedVendorRoutes)
 app.use('/api',blacklistedVendorsReqRoutes)
 
-
+process.on('uncaughtException',()=>{
+    console.log('Alert! ERROR : ',  error);
+   process.exit(1);
+})
 
 
 app.listen(PORT,()=>{
