@@ -122,3 +122,7 @@ exports.removeToBlacklist =  (req,res)=>{
         return res.status(400).json(err);
     }
 }
+exports.updateCategory = (req,res)=>{
+    const {vendorName, address, reason} = req.body
+    const id = req.params.id;
+}
