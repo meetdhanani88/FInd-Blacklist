@@ -25,7 +25,7 @@ exports.blacklistRequest = (req,res)=>{
 }
 exports.getAllRequest = async(req,res)=>{
     try{
-       const venderReq = await BlacklistVendersReq.find().populate('userId')
+       const venderReq = await BlacklistVendersReq.find({requestStatus:true}).populate('userId')
        if(venderReq)
        {
         return res.status(200).json(venderReq)
