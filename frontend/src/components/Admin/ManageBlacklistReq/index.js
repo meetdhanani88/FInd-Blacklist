@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MenuIcon from '@mui/icons-material/Menu';
+
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -19,25 +19,15 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import TableHead from '@mui/material/TableHead';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { Grid } from '@mui/material';
 import { Typography } from '@mui/material';
 import { Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ModeEdit from '@mui/icons-material/ModeEdit';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import { useQuery, useMutation, useQueryClient } from "react-query"
 import axiosInstance from '../../../config';
-import { useDispatch } from 'react-redux';
-import { LoginAction } from '../../../redux/reducersSlice/Loginslice';
-import { useEffect } from 'react';
 import Toast from '../../../Helper/Toast';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import Rejectreq from './Rejectreq';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -59,6 +49,7 @@ const userlistcss = {
     letterSpacing: "5px",
     ml: "35px"
 }
+
 
 function TablePaginationActions(props) {
     const theme = useTheme();
@@ -122,8 +113,13 @@ function TablePaginationActions(props) {
 // ]
 
 
-const getblacklistedVendor = async () => {
-    const res = await axiosInstance.get('/vendor/ListOfBlackListReq/Accept');
+const getallReq = async () => {
+    const res = await axiosInstance.get('/vendor/getAllRequest');
+    return res
+
+}
+const Acceptreq = async (id) => {
+    const res = await axiosInstance.post(`/vendor/addReqToBlacklist/${id}`);
     return res
 
 }
@@ -131,77 +127,63 @@ function ManageBlacklistVendor() {
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
     const [openpop, setOpenpop] = React.useState(false);
-    const [openEdituserpop, setopenEdituserpop] = React.useState(false);
-    // const getblacklistedVendorquery = useQuery('getuserlist', getblacklistedVendor);
-    const dispatch = useDispatch();
+    const [rejectVendorId, setrejectVendorId] = React.useState("");
+    const getallReqquery = useQuery('GETREQ', getallReq);
     const queryClient = useQueryClient()
 
-    // const deletemutation = useMutation((id) => deleteUser(id), {
-    //     onSuccess: data => {
-    //         console.log(data);
-    //         Toast({ message: "Deleted User Successfully" })
-    //         query.refetch();
-    //         setAnchorEl(null);
-    //     },
-    //     onError: (data) => {
-
-    //         console.log(data);
-    //         Toast({ message: "Something wrong", type: "error" })
-
-    //     },
-    //     onSettled: () => {
-    //         queryClient.invalidateQueries("userdeleted")
-
-    //     }
-    // }
-
-    // )
+    const AcceptRequest = useMutation((id) => Acceptreq(id), {
+        onSuccess: data => {
+            console.log(data);
+            Toast({ message: "Request Accepted" })
+            getallReqquery.refetch()
 
 
+        },
+        onError: (data) => {
 
+            console.log(data);
+            Toast({ message: data.response.data.message || "Something wrong", type: "error" })
 
-    // const rows = getblacklistedVendorquery?.data?.data?.vendor
-    const rows = [{
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries("userdeleted")
 
-        vendorName: "Gopal Locha",
-        ReasonForAdmin: "Very oily Locha",
-        Address: "B-788 Satadhar",
-        date: "Ketan"
-    }]
-    // console.log(rows);
-
-
-
-    // useEffect(() => {
-
-    //     dispatch(LoginAction.setblacklistedvendorlist(rows))
-
-    // }, [rows, dispatch])
-
-    // console.log(query?.data?.data);
-
-
-    const Edituserfun = (btnid) => {
-
-        dispatch(LoginAction.GetuserEditId(btnid.id))
-        handleClose();
-        handleClickOpenEdituserpop()
-
+        }
     }
-    // const Deleteuserfun = (btnid) => {
-    //     deletemutation.mutate(btnid.id)
 
-    // }
+    )
 
-    const handleClickOpenpop = (scrollType) => {
+
+
+
+    const rows = getallReqquery?.data?.data
+    // const rows = [{
+
+    //     vendorName: "Gopal Locha",
+    //     ReasonForAdmin: "Very oily Locha",
+    //     Address: "B-788 Satadhar",
+    //     date: "Ketan",
+    //     _id: "abcd"
+    // }, {
+
+    //     vendorName: "Gopal Locha",
+    //     ReasonForAdmin: "Very oily Locha",
+    //     Address: "B-788 Satadhar",
+    //     date: "Ketan",
+    //     _id: "abcdeee"
+    // }]
+
+
+
+
+
+    const handleClickOpenpop = (id) => {
+        console.log("id", id);
+        setrejectVendorId(id)
         setOpenpop(true);
     };
-    const handleClickOpenEdituserpop = () => {
-        setopenEdituserpop(true)
-    };
+
 
     const handleClosepop = (fn) => {
 
@@ -210,16 +192,8 @@ function ManageBlacklistVendor() {
         }
         setOpenpop(false);
     };
-    const handleCloseEdituserpop = () => {
-        setopenEdituserpop(false)
-    };
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -234,12 +208,14 @@ function ManageBlacklistVendor() {
         setPage(0);
     };
 
-
+    function acceptpost(id) {
+        AcceptRequest.mutate(id);
+    }
 
 
     return (
         <>
-
+            {openpop && <Rejectreq openpop={openpop} handleClosepop={handleClosepop} rejectVendorId={rejectVendorId} Listofuser={getallReqquery}></Rejectreq>}
             <Grid container justifyContent={"center"} alignItems="center">
 
                 <Grid container item xs={11} sx={{ mt: 1 }} justifyContent="center">
@@ -280,7 +256,7 @@ function ManageBlacklistVendor() {
                                 )?.map((row, i) => {
 
 
-                                    let date = row?.dateOfBlackListed ? new Date(row.dateOfBlackListed) : null;
+                                    let date = row?.createdAt ? new Date(row.createdAt) : null;
 
 
                                     return (
@@ -290,17 +266,17 @@ function ManageBlacklistVendor() {
                                                 {row.vendorName}
                                             </TableCell>
                                             <TableCell style={{ width: 150 }} >
-                                                {row.ReasonForAdmin}
+                                                {row.reason}
                                             </TableCell>
                                             <TableCell style={{ width: 150 }} >
-                                                {row.Address}
+                                                {row.address}
                                             </TableCell>
 
                                             <TableCell style={{ width: 100 }} >
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.date}
+                                                {row.userId.firstName + " " + row.userId.lastName}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
                                                 {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
@@ -308,13 +284,13 @@ function ManageBlacklistVendor() {
                                                 </Link> : <p>No Photo Proof</p>}
                                             </TableCell>
 
-                                            <TableCell style={{ width: 10 }} >
+                                            <TableCell style={{ width: 10 }} onClick={() => acceptpost(row._id)}>
                                                 <Button variant="outlined" startIcon={<CheckIcon />} color="success" size='small' fullWidth>
                                                     Accept
                                                 </Button>
 
                                             </TableCell>
-                                            <TableCell style={{ width: 10 }} >
+                                            <TableCell style={{ width: 10 }} onClick={() => handleClickOpenpop(row._id)} >
 
                                                 <Button variant="outlined" startIcon={<CloseIcon />} color="error" size='small' fullWidth >
                                                     Reject

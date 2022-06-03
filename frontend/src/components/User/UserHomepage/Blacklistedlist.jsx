@@ -1,5 +1,4 @@
 import { Grid, Typography } from '@mui/material'
-import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useQuery } from 'react-query';
@@ -27,6 +26,7 @@ const Blacklistedlist = () => {
     // console.log(countryList);
     const category = ["Blacklisted", "Highly Cautious", "Cautious"];
     const dispatch = useDispatch()
+
     useEffect(() => {
         dispatch(LoginAction.setblacklistedvendorlist(data))
     }, [data, dispatch])
@@ -36,8 +36,8 @@ const Blacklistedlist = () => {
         if (cat === "Blacklisted") {
             return { color: "#e55350 ", my: 2 }
         }
-        else if (cat === "Cautious") { return { color: "#7b1fa2 ", my: 2 } }
-        else if (cat === "Highly Cautious") { return { color: "#1565c0", my: 2 } }
+        else if (cat === "Cautious") { return { color: "#1565c0", my: 2 } }
+        else if (cat === "Highly Cautious") { return { color: "#7b1fa2", my: 2 } }
         else { return { color: "#e55350 ", my: 2 } }
 
     }
@@ -51,9 +51,6 @@ const Blacklistedlist = () => {
 
             {!isLoading &&
                 category.map((cat) =>
-
-
-
                     <Grid container key={cat}>
 
 
