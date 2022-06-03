@@ -42,10 +42,8 @@ const Rejectreq = ({ openpop, handleClosepop, Listofuser, rejectVendorId }) => {
         onSuccess: data => {
             Listofuser.refetch();
             console.log(data);
-
             handleReset();
             handleClosepop();
-
             Toast({ message: "Request Rejected" });
 
         },
