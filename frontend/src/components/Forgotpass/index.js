@@ -21,14 +21,14 @@ import axiosInstance from '../../config';
 //import { LoginAction } from '../../redux/reducersSlice/Loginslice';
 //import useMediaQuery from '@mui/material/useMediaQuery';
 import ForwardToInboxOutlinedIcon from '@mui/icons-material/ForwardToInboxOutlined';
-import Toast from '../../Helper/Toast';
-import { useNavigate } from 'react-router-dom';
+
+
 
 
 const theme = createTheme();
 
 function Forgotpass() {
-    const nav = useNavigate();
+
 
     const queryClient = useQueryClient()
     // const dispatch = useDispatch();

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Link as RouterLink, useNavigate, useLocation, useParams } from "react-router-dom"
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
@@ -33,7 +33,7 @@ function Reset() {
     //    const dispatch = useDispatch();
     //const Loginuser = useSelector((state) => state.Login.Loginuser);
     const navigate = useNavigate()
-    const location = useLocation()
+
     const { code } = useParams()
     // console.log(code);
 
