@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema({
 //     foreignField : '_id',
 //     localField : "roleId"
 // })
-userSchema.pre('save', async function(){
+userSchema.pre('save', async function(req,res,next){
     if (this.isModified('password')) { return next(); }
     this.password = await bcrypt.hash(this.password,10)
 })
