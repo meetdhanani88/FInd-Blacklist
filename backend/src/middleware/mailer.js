@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer")
 
 async function main(email, pass,subject,text,html) {
   try{
-    if (email && pass) {
+    if (email) {
       // let testAccount = await nodemailer.createTestAccount();
   
       let transporter = nodemailer.createTransport({

@@ -110,26 +110,65 @@ exports.resetPassword = (req, res) => {
   }
 };
 
-exports.forgotPassword = (req, res) => {
-  const { email } = req.body;
+exports.forgotPassword = async(req, res) => {
+  const email = req.body.email;   
+    User.findOne({ email: email})
+      .then(async (user) => {
+        const token = await jwt.sign(
+          {  email: email },
+          process.env.JWT_KEY,
+          {
+            expiresIn: "1h",
+          }
+        );
+        if (!user) return res.status(404).json({message : 'User not Found'})
+        const subject = "User Password";
+        const text = "Forgot User Password";
+        const html = `<p>You have request for Forgot Password</p><br>
+            <p>Click This Link <a href=http://localhost:3000/forgotpassword/${token}> link </a> To Set New Password</p>`;
+            await main(email, subject, text, html);
+        return res.status(200).json({message : 'Email send on Your Id'})
+      })
+      .catch(err => {
+        return res.status(400).json(err)
+      });
+      
+  
+};
+exports.updatePassword = async (req, res) => {
+  const newPassword = req.body.password
+  const token = req.body.token 
+    if(token){
+    jwt.verify(token,process.env.JWT_KEY,(err,user)=>{
+        if(err) return res.status(400).json({message : 'Link is Expire'})
+        if(user){
+          User.findOne({
+            email: user.email
+          })
+            .then(user => {
+              if(!user) return res.status(404).json({message : 'User Not Found'})
+              user.password = newPassword;
+              user.save();
+              return res.status(200).json({message : 'Password is Updated'})
+            })
+            .catch(err => {
+              return res.status(400).json(err)
+            });
+          
+        }
+    })
+    }else{
+        return res.status(400).json({
+            message : 'Authorization token Required '
+        })
+    }
 
-  try {
-    User.findOne({ email: email }).exec(async (err, user) => {
-      if (err) return res.status(400).json(err);
-      if (user) {
-        await main(user.email, user.password);
-        return res.status(200).json({
-          message: "Password Sent on Email",
-        });
-      } else {
-        return res.status(404).json({
-          message: "User Not Found",
-        });
-      }
-    });
-  } catch (err) {
-    return res.status(400).json(err);
-  }
+
+
+
+
+ 
+ 
 };
 
 exports.createUser = async (req, res) => {
