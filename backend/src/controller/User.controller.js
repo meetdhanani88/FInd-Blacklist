@@ -162,7 +162,11 @@ exports.createUser = async (req, res) => {
         user.save(async (err, user) => {
           if (err) return res.status(400).json(err);
           if (user) {
-            await main(user.email, pass);
+            const subject = "Your Password for find black-list"
+            const text = "Here is your logInId and Password for Admin Access "
+            const html = `<p>Email : ${user.email}<br>
+            Password : ${pass}</p>`;
+            await main(user.email, pass,subject,text,html);
             return res.status(201).json({
               message: "User Created Successfully",
               user: user,
@@ -334,13 +338,15 @@ exports.extendExpiryDate = (req, res) => {
 function genPassword() {
   var chars =
     "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var passwordLength = 12;
+  var passwordLength = 8;
   var password = "";
   for (var i = 0; i <= passwordLength; i++) {
     var randomNumber = Math.floor(Math.random() * chars.length);
     password += chars.substring(randomNumber, randomNumber + 1);
   }
-  return password;
+  const pass =`A@p#1${password}`
+  return pass;
+
 }
 
 function expireDatePlan(Expiry) {

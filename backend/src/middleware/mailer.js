@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer")
 
 
-async function main(email, pass) {
+async function main(email, pass,subject,text,html) {
   try{
     if (email && pass) {
       // let testAccount = await nodemailer.createTestAccount();
@@ -19,10 +19,9 @@ async function main(email, pass) {
       let info = await transporter.sendMail({
         from: `Find Black-list ${process.env.Email}`, // sender address
         to: email, // list of receivers
-        subject: "Your Password for find black-list", // Subject line
-        text: "Here is your logInId and Password for Admin Access ", // plain text body
-        html: `<p>Email : ${email}<br>
-              Password : ${pass}</p>`, // html body
+        subject: subject, // Subject line
+        text: text, // plain text body
+        html: html // html body
       });
   
       console.log("Message sent: %s", info.messageId);
