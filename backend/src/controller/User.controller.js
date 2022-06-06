@@ -145,10 +145,15 @@ exports.updatePassword = async (req, res) => {
           User.findOne({
             email: user.email
           })
-            .then((user) => {
+            .then(async(user) => {
               if(!user) return res.status(404).json({message : 'User Not Found'})
-              user.password = newPassword;
-              user.save();
+              // const hashPass = await bcrypt.hash(newPassword,10)
+              // console.log(hashPass);
+              // await User.findOne({email:user.email},{
+              //   password :hashPass
+              // })
+               user.password = newPassword
+               await user.save()
               return res.status(200).json({message : 'Password is Updated'})
             })
             .catch(err => {
