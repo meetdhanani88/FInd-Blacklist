@@ -21,7 +21,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser, role }) => {
 
     const queryClient = useQueryClient()
     const [imageFile, setImageFile] = React.useState("");
-    // const [Postdata, setPostdata] = React.useState({});
+
 
 
     async function Addblacklist(data) {
@@ -68,7 +68,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser, role }) => {
             Toast({ message: data?.response?.data?.message || "Something Wrong", type: "error" });
             handleReset();
             handleClosepop();
-            // seterrmsg(data.response.data.message);
+
 
         },
         onSettled: () => {
@@ -92,7 +92,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser, role }) => {
             Toast({ message: data?.response?.data?.message || "Something Wrong", type: "error" });
             handleReset();
             handleClosepop();
-            // seterrmsg(data.response.data.message);
+
 
         },
         onSettled: () => {
@@ -104,7 +104,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser, role }) => {
 
     function handelAddBlacklist(rol) {
         //console.log(rol);
-        // mutation.mutate();
+
         const finalData = {
             vendorName: values.vendorname,
             address: values.address,
@@ -144,7 +144,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser, role }) => {
         onSubmit: handelAddBlacklist
     })
 
-    // console.log(values.photourl);
+
 
     function handleImage(event) {
         let image = event.target.files[0];

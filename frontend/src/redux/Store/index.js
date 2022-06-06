@@ -6,7 +6,7 @@ const store = configureStore({
     reducer: {
         Login: Loginslice.reducer,
 
-        // auth: authslice.reducer
+
     }
 })
 

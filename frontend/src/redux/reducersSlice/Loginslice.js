@@ -31,12 +31,7 @@ const Loginslice = createSlice({
         setblacklistedvendorEditId(state, action) {
             state.blacklistedvendorlistId = action.payload;
         }
-        // gettoken(state, action) {
-        //     state.token = localStorage.getItem("token")
-        // },
-        // setResetsuccess(state, action) {
-        //     state.ResetpassMsg = action.payload
-        // }
+
     }
 })
 /* this function will return object(reducer && actions) */

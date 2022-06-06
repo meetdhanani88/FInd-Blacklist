@@ -13,12 +13,12 @@ import { useFormik } from 'formik'
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import * as Yup from 'yup'
-//import { useDispatch useSelector } from "react-redux"
+
 import { useQueryClient, useMutation } from 'react-query'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import axiosInstance from '../../config';
-//import { LoginAction } from '../../redux/reducersSlice/Loginslice';
+
 import Toast from '../../Helper/Toast';
 
 
@@ -30,17 +30,11 @@ function Reset() {
 
 
     const queryClient = useQueryClient()
-    //    const dispatch = useDispatch();
-    //const Loginuser = useSelector((state) => state.Login.Loginuser);
+
     const navigate = useNavigate()
 
     const { code } = useParams()
-    // console.log(code);
 
-
-    // console.log(Loginuser);
-
-    // const [loading, setloading] = useState(false)
     const [suceessmsg, setsuceessmsg] = useState(false)
     const [errmsg, seterrmsg] = useState(false)
 

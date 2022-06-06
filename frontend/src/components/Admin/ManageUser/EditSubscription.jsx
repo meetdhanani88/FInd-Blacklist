@@ -99,9 +99,6 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
             handleReset();
             handleCloseEdituserpop();
 
-            // handleReset();
-            // handleCloseEdituserpop();
-            // Toast({ message: "User Edited" });
 
 
         },
@@ -120,7 +117,7 @@ const EditSubscription = ({ openEdituserpop, handleCloseEdituserpop, listofuser 
 
     function handelEdiuser() {
 
-        // mutation.mutate();
+
         if (values.Subscription_Plan?.length > 0) {
             inactivesubmutation.mutate();
 
@@ -270,29 +267,3 @@ export default EditSubscription
 
 
 
-// {
-
-//     values.Subscription_Plan?.length > 0 ?
-
-//         <FormControlLabel disabled checked control={<Checkbox />} label="Inactive Subscription" /> :
-
-//         <FormControl size='medium' sx={{ mt: 2, minWidth: 200 }} >
-
-//             <InputLabel id="demo-simple-select-label">Subscription Plan</InputLabel>
-//             <Select
-//                 labelId="demo-simple-select-label"
-//                 id="subplan"
-//                 label="Subscription Plan"
-//                 value={plan}
-//                 onChange={handleplanChange}
-//             >
-//                 <MenuItem value={0}>None</MenuItem>
-//                 <MenuItem value={12}>Premium Plan (1 Year)</MenuItem>
-//                 <MenuItem value={6}>Gold Plan (6 Months)</MenuItem>
-//                 <MenuItem value={3}>Silver Plan (3 Months)</MenuItem>
-//             </Select>
-
-//         </FormControl>
-
-
-// }

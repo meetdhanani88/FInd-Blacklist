@@ -105,12 +105,7 @@ function TablePaginationActions(props) {
     );
 }
 
-// const rows = [
-//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-//     { Vendorname: "Gopal Locha", Reason: "Oily Locha", Addrress: "A.k road surat", Sentby: "ketal Patel", date: "22-10-2020", adminname: "Meet Dhanani", photourl: "http://google.com" },
-// ]
+
 
 
 const getallReq = async () => {

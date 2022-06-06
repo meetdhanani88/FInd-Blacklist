@@ -11,16 +11,12 @@ import ManageUser from './components/Admin/ManageUser';
 import ManageBlacklistVendor from './components/Admin/ManageBlacklistVendor';
 import ManageBlacklistReq from './components/Admin/ManageBlacklistReq';
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
-
 import { useJwt } from "react-jwt";
-
-// import { useDispatch, useSelector } from 'react-redux';
-// import { LoginAction } from './redux/reducersSlice/Loginslice';
 import UserHomepage from './components/User/UserHomepage/Index';
 import BlacklistedDetails from './components/User/UserHomepage/BlacklistedDetails/BlacklistedDetails';
 import { useSelector } from 'react-redux';
 import Reset from './components/Forgotpass/Reset';
-// import axiosInstance from './config';
+
 
 const queryClient = new QueryClient()
 

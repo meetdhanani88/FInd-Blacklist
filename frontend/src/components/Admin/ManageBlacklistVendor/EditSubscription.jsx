@@ -55,9 +55,7 @@ const EditSubscription = ({ openEditsubpop, handleCloseEditsubpop, listofuser })
 
             handleCloseEditsubpop();
 
-            // handleReset();
-            // handleCloseEditsubpop();
-            // Toast({ message: "User Edited" });
+
 
 
         },

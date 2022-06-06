@@ -66,11 +66,6 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
     function handelEdiuser() {
 
 
-        // const finaldata = {
-        //     ...values,
-
-        // }
-        // console.log("finaldata", finaldata);
 
         mutation.mutate();
 

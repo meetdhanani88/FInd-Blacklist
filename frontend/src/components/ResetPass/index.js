@@ -13,12 +13,12 @@ import { useFormik } from 'formik'
 import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
 import * as Yup from 'yup'
-//import { useDispatch useSelector } from "react-redux"
+
 import { useQueryClient, useMutation } from 'react-query'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import axiosInstance from '../../config';
-//import { LoginAction } from '../../redux/reducersSlice/Loginslice';
+
 import Toast from '../../Helper/Toast';
 
 
@@ -30,14 +30,14 @@ function ResetPass() {
 
 
     const queryClient = useQueryClient()
-    //    const dispatch = useDispatch();
-    //const Loginuser = useSelector((state) => state.Login.Loginuser);
+
+
     const navigate = useNavigate()
     const location = useLocation()
 
     // console.log(Loginuser);
 
-    // const [loading, setloading] = useState(false)
+
     const [suceessmsg, setsuceessmsg] = useState(false)
     const [errmsg, seterrmsg] = useState(false)
 
@@ -107,9 +107,7 @@ function ResetPass() {
 
     const { mutate, isLoading } = useMutation(postlogin, {
         onSuccess: data => {
-            // console.log(data.message);
-            // dispatch(LoginAction.Login(data.user));
-            // localStorage.setItem('token', data.token)
+
             setsuceessmsg(data.message)
             Toast({ message: `${data.message}` })
             Toast({ message: "Login With New Password ", delay: 500 })
@@ -119,7 +117,7 @@ function ResetPass() {
         },
 
         onError: (data) => {
-            // console.log(data.response.data.message);
+
             seterrmsg(data.response.data.message || "Something Went Wrong");
             setsuceessmsg("");
         },
