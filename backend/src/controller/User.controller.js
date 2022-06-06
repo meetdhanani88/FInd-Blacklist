@@ -127,7 +127,7 @@ exports.forgotPassword = async(req, res) => {
         const html = `<p>You have request for Forgot Password</p><br>
             <p>Click This Link <a href=http://localhost:3000/forgotpassword/${token}> link </a> To Set New Password</p>`;
             await main(email, subject, text, html);
-        return res.status(200).json({message : 'Email send on Your Id'})
+        return res.status(200).json({message : 'Reset Link has sent on your Email'})
       })
       .catch(err => {
         return res.status(400).json(err)
