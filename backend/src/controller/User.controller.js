@@ -145,10 +145,10 @@ exports.updatePassword = async (req, res) => {
           User.findOne({
             email: user.email
           })
-            .then(async(user) => {
+            .then((user) => {
               if(!user) return res.status(404).json({message : 'User Not Found'})
               user.password = newPassword;
-             await user.save();
+              user.save();
               return res.status(200).json({message : 'Password is Updated'})
             })
             .catch(err => {
