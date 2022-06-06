@@ -51,8 +51,8 @@ const userSchema = new mongoose.Schema({
 //     localField : "roleId"
 // })
 userSchema.pre('save', async function(){
-    const salt = bcrypt.salt(10)
-    this.password = await bcrypt.hash(this.password,salt)
+    if (!user.isModified('password')) { return next(); }
+    this.password = await bcrypt.hash(this.password,10)
 })
 
 userSchema.methods = {
