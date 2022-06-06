@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material'
 import { ThemeProvider } from '@mui/material';
-import { Container, createTheme } from '@mui/material'
+import { Container, createTheme, Grid } from '@mui/material'
 import React, { useState } from 'react'
 import Blacklistedlist from './Blacklistedlist'
 import AppBar from '@mui/material/AppBar';
@@ -9,7 +9,8 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 //import MenuIcon from '@mui/icons-material/Menu';
 import Avatar from '@mui/material/Avatar';
 //import Button from '@mui/material/Button';
@@ -20,6 +21,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
 //import LogoutIcon from '@mui/icons-material/Logout';
 import "./index.css"
+import Addblacklist from '../../Admin/ManageBlacklistVendor/Addblacklist';
+
 
 // const pages = ['Users', 'Blacklisted Vendor', 'Blacklist Request'];
 const settings = ['Profile', 'Logout'];
@@ -44,13 +47,14 @@ const UserHomepage = () => {
 
 
     const [anchorElUser, setAnchorElUser] = useState(null);
-    const navigate = useNavigate()
+    const [openpop, setopenpop] = useState(false);
+    const navigate = useNavigate();
+
 
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-
 
 
     const handleCloseUserMenu = (setting) => {
@@ -61,9 +65,14 @@ const UserHomepage = () => {
         setAnchorElUser(null);
     };
 
+    function handleClosepop() {
+        setopenpop(false);
+    }
+
     return (
 
         <ThemeProvider theme={theme}>
+            {openpop && <Addblacklist openpop={openpop} handleClosepop={handleClosepop} role={"user"}></Addblacklist>}
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
@@ -137,16 +146,9 @@ const UserHomepage = () => {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-
                                 {settings.map((setting, i) => (
-                                    <MenuItem key={i} onClick={() => handleCloseUserMenu(setting)} >
-
-                                        <Button disableElevation={true} disableFocusRipple={true} variant="text" fullWidth
-                                            sx={{ '&:hover': { backgroundColor: "#fff", } }}
-                                        >
-                                            {setting}
-                                        </Button>
-
+                                    <MenuItem key={i} onClick={() => handleCloseUserMenu(setting)} sx={{ color: "#1976d2" }}>
+                                        <Typography textAlign="center" fontSize={18} >{setting}</Typography>
                                     </MenuItem>
                                 ))}
 
@@ -158,6 +160,12 @@ const UserHomepage = () => {
 
             <Paper style={{ height: "100%", minHeight: "100vh", border: 0, boxShadow: "none" }}>
                 <Container style={{ marginTop: "40px" }}>
+                    <Grid container spacing={1} justifyContent="flex-end">
+                        <Fab color="primary" aria-label="add" variant='extended' onClick={() => setopenpop(true)}>
+                            <AddIcon sx={{ mr: 1 }} />
+                            Request For Blacklist
+                        </Fab>
+                    </Grid>
 
 
                     <div style={{ marginTop: "20px" }}>

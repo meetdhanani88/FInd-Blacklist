@@ -276,7 +276,7 @@ function ManageBlacklistVendor() {
                                                 {date ? date?.toISOString().substring(0, 10) : null}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.userId.firstName + " " + row.userId.lastName}
+                                                {row.userId?.firstName + " " + row.userId?.lastName}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
                                                 {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >

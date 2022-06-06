@@ -113,12 +113,9 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
                             Add New user for giving acess to Find-Blacklist.
                         </DialogContentText>
 
-
-
                         <TextField
                             error={(errors.firstname && touched.firstname) ? true : false}
                             required
-
                             margin="dense"
                             id="firstname"
                             label="First Name"

@@ -15,7 +15,7 @@ import Toast from '../../../Helper/Toast';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 
-const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
+const Addblacklist = ({ openpop, handleClosepop, Listofuser, role }) => {
 
 
 
@@ -37,6 +37,21 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
 
 
     }
+
+    async function sentreqapi(data) {
+
+
+        const res = await axiosInstance.post('/vendor/blacklistRequest', data, {
+            headers: {
+                'Content-Type': "multipart/form-data"
+            }
+        })
+
+        return res;
+
+
+    }
+
     const addblacklist = useMutation((data) => Addblacklist(data), {
         onSuccess: data => {
             console.log(data);
@@ -61,10 +76,34 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
         }
     })
 
+    const sentreq = useMutation((data) => sentreqapi(data), {
+        onSuccess: data => {
+            console.log(data);
+            Toast({ message: data.data.message });
 
 
-    function handelAddBlacklist() {
-        // console.log(values);
+            handleReset();
+            handleClosepop();
+
+
+        },
+        onError: (data) => {
+            console.log(data);
+            Toast({ message: data?.response?.data?.message || "Something Wrong", type: "error" });
+            handleReset();
+            handleClosepop();
+            // seterrmsg(data.response.data.message);
+
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries('Sent Req');
+        }
+    })
+
+
+
+    function handelAddBlacklist(rol) {
+        //console.log(rol);
         // mutation.mutate();
         const finalData = {
             vendorName: values.vendorname,
@@ -72,8 +111,17 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
             reason: values.reason,
             image: imageFile
         }
-        console.log(finalData);
-        addblacklist.mutate(finalData);
+        //console.log(finalData);
+
+        if (rol === "admin") {
+
+            addblacklist.mutate(finalData);
+        }
+
+        if (rol === "user") {
+
+            sentreq.mutate(finalData);
+        }
 
 
     }
@@ -109,6 +157,8 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
         setImageFile(image);
     }
 
+
+
     return (
         <div>
             <Dialog open={openpop} onClose={() => handleClosepop(handleReset)} maxWidth="sm" scroll='paper'
@@ -117,12 +167,12 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
                 aria-describedby="scroll-dialog-description"
             >
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{}} >
-                    <DialogTitle id="scroll-dialog-title">Add New BlackList</DialogTitle>
+                    {role === 'user' ? <DialogTitle id="scroll-dialog-title">Sent New BlackList Request</DialogTitle> : <DialogTitle id="scroll-dialog-title">Add New BlackList</DialogTitle>}
 
                     <DialogContent dividers >
 
                         <DialogContentText  >
-                            Add New Vendor to Blacklist.
+                            {role === 'user' ? "Sent New Request for Blacklisting Vendors " : "Add New Vendor to Blacklist."}
                         </DialogContentText>
 
 
@@ -195,12 +245,7 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
 
                         </Button>
                         <div>
-
                             {imageFile && <img src={URL.createObjectURL(imageFile)} alt="" style={{ width: "100%" }} />}
-
-
-
-
                         </div>
 
 
@@ -210,7 +255,12 @@ const Addblacklist = ({ openpop, handleClosepop, Listofuser }) => {
                     <DialogActions>
                         <Button onClick={() => { handleClosepop(handleReset) }} >Cancel</Button>
 
-                        <LoadingButton loading={Addblacklist.isLoading} onClick={handelAddBlacklist} disabled={!isValid || values.vendorname === ''}>Add to Blacklist</LoadingButton>
+                        {role === "user" ?
+
+                            <LoadingButton loading={Addblacklist.isLoading} onClick={() => handelAddBlacklist("user")} disabled={!isValid || values.vendorname === ''}>Sent Request</LoadingButton>
+
+                            :
+                            <LoadingButton loading={Addblacklist.isLoading} onClick={() => handelAddBlacklist("admin")} disabled={!isValid || values.vendorname === ''}>Add to Blacklist</LoadingButton>}
                     </DialogActions>
                 </Box>
 

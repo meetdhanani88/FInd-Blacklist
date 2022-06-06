@@ -1,5 +1,6 @@
 import * as React from 'react';
 import "./index.css"
+import Fab from '@mui/material/Fab';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -22,7 +23,6 @@ import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Grid } from '@mui/material';
 import { Typography } from '@mui/material';
-import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -255,7 +255,11 @@ function CustomPaginationActionsTable() {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Button variant='outlined' startIcon={<AddIcon></AddIcon>} color="primary" onClick={handleClickOpenpop}>Add User</Button>
+                        {/* <Button variant='outlined' startIcon={<AddIcon></AddIcon>} color="primary" onClick={handleClickOpenpop}>Add User</Button> */}
+                        <Fab color="primary" aria-label="add" variant='extended' onClick={handleClickOpenpop}>
+                            <AddIcon sx={{ mr: 1 }} />
+                            Add User
+                        </Fab>
                     </Grid>
 
                 </Grid>

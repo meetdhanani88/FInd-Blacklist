@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom"
+import { Link as RouterLink, useNavigate, useLocation, useParams } from "react-router-dom"
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockResetRoundedIcon from '@mui/icons-material/LockResetRounded';
@@ -26,7 +26,7 @@ import Toast from '../../Helper/Toast';
 
 const theme = createTheme();
 
-function ResetPass() {
+function Reset() {
 
 
     const queryClient = useQueryClient()
@@ -34,6 +34,9 @@ function ResetPass() {
     //const Loginuser = useSelector((state) => state.Login.Loginuser);
     const navigate = useNavigate()
     const location = useLocation()
+    const { code } = useParams()
+    // console.log(code);
+
 
     // console.log(Loginuser);
 
@@ -50,20 +53,7 @@ function ResetPass() {
 
     const validationSchema = Yup.object({
 
-        email: Yup.string().email('Invalid Email').required('email is required'),
 
-        oldpassword: Yup.string()
-            .matches(
-                lowercaseRegEx,
-                "Must contain one lowercase alphabetical character!"
-            )
-            .matches(
-                uppercaseRegEx,
-                "Must contain one uppercase alphabetical character!"
-            )
-            .matches(numericRegEx, "Must contain one numeric character!")
-            .matches(lengthRegEx, "Must contain 6 characters!")
-            .required("Required!"),
 
         newpassword: Yup.string()
             .matches(
@@ -97,10 +87,12 @@ function ResetPass() {
 
     const postlogin = async () => {
 
-        let res = await axiosInstance.post("/user/resetPassword", {
-            email: values.email,
-            password: values.oldpassword,
-            newPassword: values.newpassword
+        let res = await axiosInstance.post("/user/updatePassword", {
+
+
+            newPassword: values.newpassword,
+            token: code
+
         })
         return res.data;
     }
@@ -110,9 +102,9 @@ function ResetPass() {
             // console.log(data.message);
             // dispatch(LoginAction.Login(data.user));
             // localStorage.setItem('token', data.token)
-            setsuceessmsg(data.message)
+            // setsuceessmsg(data.message)
             Toast({ message: `${data.message}` })
-            Toast({ message: "Login With New Password ", delay: 500 })
+            // Toast({ message: "Login With New Password ", delay: 500 })
             seterrmsg("");
             navigate("/login")
 
@@ -124,7 +116,7 @@ function ResetPass() {
             setsuceessmsg("");
         },
         onSettled: () => {
-            queryClient.invalidateQueries('user Signup');
+            queryClient.invalidateQueries('password reseted');
         }
     });
 
@@ -135,11 +127,11 @@ function ResetPass() {
 
     }
 
-    const { errors, values, handleBlur, handleSubmit, handleChange, touched, dirty, isValid } = useFormik({
+    const { errors, values, handleBlur, handleSubmit, handleChange, touched, isValid } = useFormik({
         initialValues: {
 
-            email: location?.state?.email || '',
-            oldpassword: location?.state?.pass || '',
+
+
             newpassword: "",
             confirmnewpassword: ''
         },
@@ -182,43 +174,8 @@ function ResetPass() {
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
 
-                            <Grid item xs={12}>
-                                <TextField
-                                    error={(errors.email && touched.email) ? true : false}
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                    value={values.email}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                />
-                            </Grid>
 
-                            {errors.email && touched.email ? (
-                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.email}</Alert>
-                            ) : null}
 
-                            <Grid item xs={12}>
-                                <TextField
-                                    type='password'
-                                    error={(errors.oldpassword && touched.oldpassword) ? true : false}
-                                    required
-                                    fullWidth
-                                    id="oldpassword"
-                                    label="Enter Your Old Password"
-                                    name="oldpassword"
-                                    autoComplete="oldpassword"
-                                    value={values.oldpassword}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                />
-                            </Grid>
-                            {errors.oldpassword && touched.oldpassword ? (
-                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.oldpassword}</Alert>
-                            ) : null}
 
                             <Grid item xs={12}>
                                 <TextField
@@ -264,7 +221,7 @@ function ResetPass() {
 
                         <LoadingButton
                             sx={{ mt: 3, mb: 2 }}
-                            disabled={!dirty || !isValid}
+                            disabled={!isValid}
                             onClick={handelReset}
                             fullWidth
                             loading={isLoading}
@@ -306,4 +263,4 @@ function ResetPass() {
     );
 }
 
-export default ResetPass;
+export default Reset;

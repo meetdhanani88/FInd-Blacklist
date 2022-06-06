@@ -2,6 +2,7 @@ import * as React from 'react';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme } from '@mui/material/styles';
+import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,7 +24,6 @@ import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Grid } from '@mui/material';
 import { Typography } from '@mui/material';
-import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -314,7 +314,11 @@ function ManageBlacklistVendor() {
                         </Typography>
                     </Grid>
                     <Grid item>
-                        <Button variant='outlined' startIcon={<AddIcon></AddIcon>} color="primary" onClick={handleClickOpenpop}>Add New Blacklist</Button>
+
+                        <Fab color="primary" aria-label="add" variant='extended' onClick={handleClickOpenpop}>
+                            <AddIcon sx={{ mr: 1 }} />
+                            Add New Blacklist
+                        </Fab>
                     </Grid>
 
                 </Grid>

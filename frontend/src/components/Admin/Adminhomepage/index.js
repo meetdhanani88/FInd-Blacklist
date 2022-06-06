@@ -16,7 +16,7 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import "./index.css"
 
 const pages = ['Users', 'Blacklisted Vendor', 'Blacklist Request'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Logout'];
 
 const active = {
     my: 2, display: 'block', backgroundColor: "white", mx: 2,

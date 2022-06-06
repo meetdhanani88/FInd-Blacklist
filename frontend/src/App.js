@@ -19,6 +19,7 @@ import { useJwt } from "react-jwt";
 import UserHomepage from './components/User/UserHomepage/Index';
 import BlacklistedDetails from './components/User/UserHomepage/BlacklistedDetails/BlacklistedDetails';
 import { useSelector } from 'react-redux';
+import Reset from './components/Forgotpass/Reset';
 // import axiosInstance from './config';
 
 const queryClient = new QueryClient()
@@ -52,6 +53,7 @@ function App() {
 
             <Route path="/login" element={<LogIn setrole={setrole} role={Role} location={location} />}></Route>
             <Route path="/forgotpass" element={<Forgotpass></Forgotpass>}></Route>
+            <Route path="/forgotpassword/:code" element={<Reset></Reset>}></Route>
             <Route path="/resetpass" element={<ResetPass></ResetPass>}></Route>
 
 

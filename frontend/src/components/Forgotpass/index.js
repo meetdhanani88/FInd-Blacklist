@@ -38,21 +38,21 @@ function Forgotpass() {
     // const [loading, setloading] = useState(false)
     const [suceessmsg, setsuceessmsg] = useState(false)
     const [errmsg, seterrmsg] = useState(false)
-    const [EmailSent, setEmailSent] = useState(false)
+    //const [EmailSent, setEmailSent] = useState(false)
 
     //const matches = useMediaQuery('(min-width:600px)')
 
 
 
 
-    const validationSchema2 = Yup.object({
+    const validationSchema = Yup.object({
 
         email: Yup.string().email('Invalid Email').required('email is required'),
 
     })
 
     const postEmail = async () => {
-        let res = await axiosInstance.post("/user/forGotPassword", {
+        let res = await axiosInstance.post("/user/forgotPassword", {
             email: values.email
         })
         return res.data;
@@ -62,18 +62,13 @@ function Forgotpass() {
 
     const mutation = useMutation(postEmail, {
         onSuccess: data => {
-            //    console.log(data);
-            setEmailSent(true);
-
-            // dispatch(LoginAction.Login(data.user));
-            // localStorage.setItem('token', data.token)
-            Toast({ message: `${data.message}` })
+            // Toast({ message: `${data.message}` })
             setsuceessmsg(data.message)
             seterrmsg("");
-            nav("/login");
+            // nav("/login");
         },
         onError: (data) => {
-            seterrmsg(data.response.data.message);
+            seterrmsg(data.response.data.message || "Something Wrong");
             setsuceessmsg("");
         },
         onSettled: () => {
@@ -95,11 +90,11 @@ function Forgotpass() {
         {
             initialValues: {
 
-                email: '',
-                password: ''
+                email: ''
+
 
             },
-            validationSchema2,
+            validationSchema,
             onSubmit: sentEmail
         }
 
@@ -152,13 +147,13 @@ function Forgotpass() {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     //sx={matches ? { width: "25rem" } : { width: "26rem" }}
-                                    sx={!EmailSent ? { width: "25rem" } : {}}
+                                    sx={{ width: "25rem" }}
 
                                 />
                             </Grid>
 
                             {errors.email && touched.email ? (
-                                <div>{errors.email}</div>
+                                <Alert variant='string' severity='error' sx={{ color: '#f44336' }}>{errors.email}</Alert>
                             ) : null}
 
 
@@ -166,7 +161,7 @@ function Forgotpass() {
 
                         </Grid>
 
-                        {!EmailSent ? <LoadingButton
+                        <LoadingButton
                             sx={{ mt: 3, mb: 2 }}
                             disabled={(!dirty || !isValid)}
                             onClick={sentEmail}
@@ -174,19 +169,10 @@ function Forgotpass() {
                             loading={mutation.isLoading}
                             variant="contained"
                         >
-                            Sent Password on Email
-                        </LoadingButton> :
-                            <LoadingButton
-                                sx={{ mt: 3, mb: 2 }}
-                                disabled={(!isValid || values.password === '')}
-                                onClick={sentEmail}
-                                fullWidth
-                                loading={mutation.isLoading}
-                                variant="contained"
-                            >
-                                Log In
-                            </LoadingButton>
-                        }
+                            Sent Email
+                        </LoadingButton>
+
+
                         <Grid container justifyContent="space-between">
                             <Grid item>
                                 <RouterLink to={"/Login"} style={{
