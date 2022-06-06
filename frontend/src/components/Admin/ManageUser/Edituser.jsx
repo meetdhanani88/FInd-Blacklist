@@ -54,7 +54,7 @@ const Edituser = ({ openEdituserpop, handleCloseEdituserpop, listofuser }) => {
         },
         onError: (data) => {
 
-            seterrmsg(data.response.data.message);
+            seterrmsg(data.response.data.message || "Something Went Wrong");
 
         },
         onSettled: () => {

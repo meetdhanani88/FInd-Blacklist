@@ -59,7 +59,7 @@ const Adduser = ({ openpop, handleClosepop, Listofuser }) => {
         },
         onError: (data) => {
 
-            seterrmsg(data.response.data.message);
+            seterrmsg(data.response.data.message || "Something Went Wrong");
 
         },
         onSettled: () => {

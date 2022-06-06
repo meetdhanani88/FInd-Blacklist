@@ -136,7 +136,7 @@ function LogIn({ setrole, role, location }) {
             setsuceessmsg("");
         },
         onSettled: () => {
-            queryClient.invalidateQueries('user Signup');
+            queryClient.invalidateQueries('user Login');
         }
     });
 

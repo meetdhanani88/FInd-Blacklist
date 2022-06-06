@@ -120,11 +120,11 @@ function ResetPass() {
 
         onError: (data) => {
             // console.log(data.response.data.message);
-            seterrmsg(data.response.data.message);
+            seterrmsg(data.response.data.message || "Something Went Wrong");
             setsuceessmsg("");
         },
         onSettled: () => {
-            queryClient.invalidateQueries('user Signup');
+            queryClient.invalidateQueries('user reset');
         }
     });
 

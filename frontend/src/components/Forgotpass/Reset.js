@@ -88,9 +88,7 @@ function Reset() {
     const postlogin = async () => {
 
         let res = await axiosInstance.post("/user/updatePassword", {
-
-
-            newPassword: values.newpassword,
+            password: values.newpassword,
             token: code
 
         })
@@ -99,20 +97,16 @@ function Reset() {
 
     const { mutate, isLoading } = useMutation(postlogin, {
         onSuccess: data => {
-            // console.log(data.message);
-            // dispatch(LoginAction.Login(data.user));
-            // localStorage.setItem('token', data.token)
-            // setsuceessmsg(data.message)
+
             Toast({ message: `${data.message}` })
-            // Toast({ message: "Login With New Password ", delay: 500 })
+
             seterrmsg("");
             navigate("/login")
 
         },
 
         onError: (data) => {
-            // console.log(data.response.data.message);
-            seterrmsg(data.response.data.message);
+            seterrmsg(data.response.data.message || "Something went Wrong");
             setsuceessmsg("");
         },
         onSettled: () => {
