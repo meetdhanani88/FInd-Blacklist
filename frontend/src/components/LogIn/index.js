@@ -27,14 +27,14 @@ import { useEffect } from 'react';
 const theme = createTheme();
 const token = localStorage.getItem("token");
 
-function LogIn({ setrole, role }) {
+function LogIn({ setrole, role, path }) {
     const nav = useNavigate();
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
     const [suceessmsg, setsuceessmsg] = useState(false)
     const [errmsg, seterrmsg] = useState(false)
     const [loading, setloading] = useState(true)
-
+    // console.log(path);
 
 
     //password validation
@@ -43,21 +43,24 @@ function LogIn({ setrole, role }) {
     const numericRegEx = /(?=.*[0-9])/;
     const lengthRegEx = /(?=.{6,})/;
 
+
     useLayoutEffect(() => {
 
 
-        if (role === 1 && token) {
+
+        if (role === 1 && token && path.slice(0, 6) === "/admin") {
+
+            nav(path, { replace: true })
+        }
+        else if (role === 2 && token && path.slice(0, 5) === "/user") {
 
 
-            nav("/admin", { replace: true })
+            nav(path, { replace: true })
         }
-        else if (role === 2 && token) {
-            nav("/user", { replace: true })
-        }
-    }, [nav, role])
+    }, [nav, role, path])
 
     useEffect(() => {
-        // console.log("hi2");
+
         setloading(false)
     }, [])
 
@@ -140,7 +143,7 @@ function LogIn({ setrole, role }) {
 
 
     const handelLogin = () => {
-        console.log(values);
+        // console.log(values);
         mutate();
 
     }
@@ -158,7 +161,7 @@ function LogIn({ setrole, role }) {
     })
     return (
         <>
-
+            {/* {console.log("jsx,role", role)} */}
             {loading && <Box sx={{ display: 'flex', mt: 15 }} justifyContent="center">
                 <CircularProgress />
             </Box>}

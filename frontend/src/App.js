@@ -18,21 +18,25 @@ import { useSelector } from 'react-redux';
 import Reset from './components/Forgotpass/Reset';
 
 
+let currentpatharr = []
 const queryClient = new QueryClient()
-
 
 
 function App() {
 
   const [Role, setrole] = useState("");
   const { decodedToken } = useJwt(localStorage.getItem("token"));
-  const location = useLocation();
+  const { pathname } = useLocation();
   const userlist = useSelector(state => state.Login.blacklistedvendorlist)
 
+  if (currentpatharr.length < 1) {
+    currentpatharr.push(pathname)
+  }
+
   useEffect(() => {
-    // console.log(decodedToken);
     setrole(decodedToken?.role?._id)
   }, [decodedToken])
+
 
   return (
 
@@ -47,7 +51,7 @@ function App() {
             }>
             </Route>
 
-            <Route path="/login" element={<LogIn setrole={setrole} role={Role} location={location} />}></Route>
+            <Route path="/login" element={<LogIn setrole={setrole} role={Role} path={currentpatharr[0]} />}></Route>
             <Route path="/forgotpass" element={<Forgotpass></Forgotpass>}></Route>
             <Route path="/forgotpassword/:code" element={<Reset></Reset>}></Route>
             <Route path="/resetpass" element={<ResetPass></ResetPass>}></Route>
