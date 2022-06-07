@@ -45,18 +45,19 @@ function LogIn({ setrole, role, path }) {
 
 
     useLayoutEffect(() => {
-
-
-
         if (role === 1 && token && path.slice(0, 6) === "/admin") {
-
             nav(path, { replace: true })
         }
         else if (role === 2 && token && path.slice(0, 5) === "/user") {
-
-
             nav(path, { replace: true })
         }
+        else if (role === 1 && token) {
+            nav("/admin", { replace: true })
+        }
+        else if (role === 2 && token) {
+            nav("/user", { replace: true })
+        }
+
     }, [nav, role, path])
 
     useEffect(() => {
