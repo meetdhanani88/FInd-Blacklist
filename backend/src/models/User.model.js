@@ -40,16 +40,6 @@ const userSchema = new mongoose.Schema({
         type : Date
     }
 },{timestamps:true,toObject:{virtuals:true}})
-// userSchema.virtual("SubscriptionPlan",{
-//     ref : 'SubscriptionPlan',
-//     foreignField : 'userId',
-//     localField : "_id"
-// })
-// userSchema.virtual("Roles",{
-//     ref : 'Role',
-//     foreignField : '_id',
-//     localField : "roleId"
-// })
 userSchema.pre('save', async function(req,res,next){
     if (!this.isModified('password')) { return next(); }
     this.password = await bcrypt.hash(this.password,10)
