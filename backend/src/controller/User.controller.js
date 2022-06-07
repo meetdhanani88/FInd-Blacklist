@@ -124,9 +124,12 @@ exports.forgotPassword = async(req, res) => {
         if (!user) return res.status(404).json({message : 'User not Found'})
         const subject = "User Password";
         const text = "Forgot User Password";
-        const html = `<p>You have request for Forgot Password</p><br>
-            <p>Click This Link <a href=http://localhost:3000/forgotpassword/${token}> link </a> To Set New Password</p>`;
+        const html = ` Click this Below Link to Reset Password
+        http://localhost:3000/forgotpassword/${token}`
+       // const html = "<p>You have request for Forgot Password</p><br><p>Click This Link <a href='"+link +"'> link </a> To Set New Password</p>";
+           // const html = `Click on Link http://localhost:3000/forgotpassword/${token}`
             await main(email, subject, text, html);
+            
         return res.status(200).json({message : 'Reset Link has sent on your Email'})
       })
       .catch(err => {
