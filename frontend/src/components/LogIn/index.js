@@ -27,7 +27,7 @@ import { useEffect } from 'react';
 const theme = createTheme();
 const token = localStorage.getItem("token");
 
-function LogIn({ setrole, role, location }) {
+function LogIn({ setrole, role }) {
     const nav = useNavigate();
     const queryClient = useQueryClient()
     const dispatch = useDispatch();
@@ -48,6 +48,7 @@ function LogIn({ setrole, role, location }) {
 
         if (role === 1 && token) {
 
+
             nav("/admin", { replace: true })
         }
         else if (role === 2 && token) {
@@ -56,6 +57,7 @@ function LogIn({ setrole, role, location }) {
     }, [nav, role])
 
     useEffect(() => {
+        // console.log("hi2");
         setloading(false)
     }, [])
 
