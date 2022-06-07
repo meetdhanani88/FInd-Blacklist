@@ -248,6 +248,7 @@ function LogIn({ setrole, role, path }) {
                                 fullWidth
                                 loading={isLoading}
                                 variant="contained"
+                                type='submit'
                             >
                                 Log In
                             </LoadingButton>

@@ -26,7 +26,7 @@ const EditSubscription = ({ openEditsubpop, handleCloseEditsubpop, listofuser })
     const queryClient = useQueryClient()
     const userlist = useSelector(state => state.Login.blacklistedvendorlist)
     const userEditId = useSelector(state => state.Login.blacklistedvendorlistId)
-    const [option, setoption] = React.useState("Blacklist");
+    const [option, setoption] = React.useState("Blacklisted");
 
     useLayoutEffect(() => {
 
@@ -129,7 +129,7 @@ const EditSubscription = ({ openEditsubpop, handleCloseEditsubpop, listofuser })
                                         onChange={(e) => setoption(e.target.value)}
 
                                     >
-                                        <MenuItem value={"Blacklist"}>Blacklist</MenuItem>
+                                        <MenuItem value={"Blacklisted"}>Blacklisted</MenuItem>
                                         <MenuItem value={"Highly Cautious"}>Highly Cautious</MenuItem>
                                         <MenuItem value={"Cautious"}>Cautious</MenuItem>
 

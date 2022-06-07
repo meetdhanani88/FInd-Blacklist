@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useSelector } from "react-redux"
 import img from '../../../Images/undraw_online_stats_0g94.png'
+import { imgurl } from '../../../../config';
 
 
 
@@ -78,7 +79,7 @@ const BlacklistedDetails = () => {
                                                 <span>Date of Blacklist:</span> {new Date(vendor.createdAt).toISOString().substring(0, 10)}
                                             </li>
                                             <li>
-                                                {vendor.image ? <Link href={`http://localhost:7600/${vendor.image}`} underline="hover" target="_blank" rel="noreferrer" >
+                                                {vendor.image ? <Link href={`${imgurl}/${vendor.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
                                                 </Link> : <p>No Photo Proof</p>}
                                             </li>

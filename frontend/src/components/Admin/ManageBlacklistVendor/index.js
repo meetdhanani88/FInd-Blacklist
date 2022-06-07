@@ -39,6 +39,7 @@ import Toast from '../../../Helper/Toast';
 import Addblacklist from './Addblacklist';
 import EditBlacklistedVendor from './EditBlacklistedVendor';
 import EditSubscription from './EditSubscription';
+import { imgurl } from '../../../config';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -362,7 +363,7 @@ function ManageBlacklistVendor() {
 
 
                                             <TableCell style={{ width: 70 }} >
-                                                {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
+                                                {row.image ? <Link href={`${imgurl}/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
                                                 </Link> : <p>No Photo Proof</p>}
                                             </TableCell>

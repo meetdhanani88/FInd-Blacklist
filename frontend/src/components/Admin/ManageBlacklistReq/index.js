@@ -28,6 +28,7 @@ import Toast from '../../../Helper/Toast';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import Rejectreq from './Rejectreq';
+import { imgurl } from '../../../config';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -274,7 +275,7 @@ function ManageBlacklistVendor() {
                                                 {row.userId?.firstName + " " + row.userId?.lastName}
                                             </TableCell>
                                             <TableCell style={{ width: 100 }} >
-                                                {row.image ? <Link href={`http://localhost:7600/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
+                                                {row.image ? <Link href={`${imgurl}/${row.image}`} underline="hover" target="_blank" rel="noreferrer" >
                                                     Photo Proof
                                                 </Link> : <p>No Photo Proof</p>}
                                             </TableCell>
